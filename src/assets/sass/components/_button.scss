@@ -1,0 +1,98 @@
+@use '../abstract/variables';
+@use '../abstract/mediaQuery';
+
+@mixin btn1($color: #333) {
+    display: inline-block;
+    width: fit-content;
+    font-size: 0.938rem;
+    font-family: 'Play', sans-serif;
+    font-weight: 700;
+    color: $color;
+    transition: color .3s, font-weight .3s;
+
+    @keyframes circleHover {
+        0% {
+            width:45px; height:40px;
+        }
+        50% {
+            width:100%; height:100%;
+        }
+        100% {
+            width:45px; height:40px;
+        }
+    }
+
+    .arrow {
+        position: relative;
+        display: inline-block;
+        width: 67px;
+        height: 67px;
+        background-color: rgba(variables.$company-color,0.1);
+        border-radius: 50%;
+        text-align: center;
+        margin-right: 18px;
+
+        i {
+            position: relative;
+            font-size: 1em;
+            color: #fff;
+            line-height: 66px;
+            z-index: 2;
+            left: 0;
+            transition: left 0.3s;
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 45px;
+            height: 45px;
+            background-color: variables.$company-color;
+            border-radius: 50%;
+            z-index: 1;
+            transition: all 0.3s;
+        }
+    }
+
+    &:hover .arrow::after {
+        animation: circleHover 0.8s both;
+    }
+
+    @content;
+
+    @include mediaQuery.media-query(mobile-s) {
+        .arrow {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+
+            i {
+                line-height: 40px;
+            }
+
+            &::after {
+                width: 30px;
+                height: 30px;
+            }
+        }
+    }
+}
+
+@mixin diagonal-arrow {
+    .arrow {
+        display: inline-block;
+        transition: opacity .35s, transform .35s;
+
+        @content;
+
+        i {
+            font-size: 20px;
+            color: #fff;
+            font-weight: 500;
+            transform: rotate(-45deg);
+        }
+    }
+}
