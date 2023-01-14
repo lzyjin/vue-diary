@@ -1204,6 +1204,14 @@ header h1 a {
   padding: 10px 0;
 }
 
+.calendar .cal-header .day:nth-of-type(7n - 1) {
+  color: blue;
+}
+
+.calendar .cal-header .day:nth-of-type(7n) {
+  color: red;
+}
+
 .calendar .cal-content {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -1223,6 +1231,14 @@ header h1 a {
 .calendar .cal-content .date.today {
   background: #eee;
   font-weight: 700;
+}
+
+.calendar .cal-content .date:nth-of-type(7n - 1) {
+  color: blue;
+}
+
+.calendar .cal-content .date:nth-of-type(7n) {
+  color: red;
 }
 
 /*# sourceMappingURL=style.css.map */

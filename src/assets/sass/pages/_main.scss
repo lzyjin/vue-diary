@@ -29,6 +29,13 @@
         .day {
             text-align: center;
             padding: 10px 0;
+
+            &:nth-of-type(7n - 1) {
+                color: blue;
+            }
+            &:nth-of-type(7n) {
+                color: red;
+            }
         }
     }
     .cal-content {
@@ -48,6 +55,13 @@
             &.today {
                 background: #eee;
                 font-weight: 700;
+            }
+
+            &:nth-of-type(7n - 1) {
+                color: blue;
+            }
+            &:nth-of-type(7n) {
+                color: red;
             }
         }
     }
