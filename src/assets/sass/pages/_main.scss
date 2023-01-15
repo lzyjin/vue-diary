@@ -48,6 +48,13 @@
             padding: 5px;
             border-bottom: 1px solid #eee;
 
+            &:nth-of-type(7n - 1) {
+                color: blue;
+            }
+            &:nth-of-type(7n) {
+                color: red;
+            }
+
             &.disable {
                 color: #ddd;
             }
@@ -55,13 +62,6 @@
             &.today {
                 background: #eee;
                 font-weight: 700;
-            }
-
-            &:nth-of-type(7n - 1) {
-                color: blue;
-            }
-            &:nth-of-type(7n) {
-                color: red;
             }
         }
     }

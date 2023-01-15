@@ -1224,6 +1224,14 @@ header h1 a {
   border-bottom: 1px solid #eee;
 }
 
+.calendar .cal-content .date:nth-of-type(7n - 1) {
+  color: blue;
+}
+
+.calendar .cal-content .date:nth-of-type(7n) {
+  color: red;
+}
+
 .calendar .cal-content .date.disable {
   color: #ddd;
 }
@@ -1231,14 +1239,6 @@ header h1 a {
 .calendar .cal-content .date.today {
   background: #eee;
   font-weight: 700;
-}
-
-.calendar .cal-content .date:nth-of-type(7n - 1) {
-  color: blue;
-}
-
-.calendar .cal-content .date:nth-of-type(7n) {
-  color: red;
 }
 
 /*# sourceMappingURL=style.css.map */
