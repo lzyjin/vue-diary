@@ -1,8 +1,22 @@
 <template>
   <div>
     <header>
-      <p>다이어리</p>
+      <div class="wrap">
+        <p class="home">Diary</p>
+        <div class="ham">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
     </header>
+
+<!--    <div class="menu">-->
+<!--      <nav>-->
+<!--        <a href="">회원가입</a>-->
+<!--        <a href="">로그아웃</a>-->
+<!--      </nav>-->
+<!--    </div>-->
   </div>
 </template>
 
