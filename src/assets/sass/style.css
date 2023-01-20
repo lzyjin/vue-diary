@@ -1212,19 +1212,23 @@ header .ham i {
   font-size: 1.5rem;
 }
 
-.menu nav a {
+.menu nav .link {
   display: block;
   padding: 1em;
   position: relative;
 }
 
-.menu nav a::after {
+.menu nav .link::after {
   content: "\e93f";
   font-family: xeicon;
   position: absolute;
   right: 20px;
   top: 50%;
   transform: translate3d(0, -50%, 0);
+}
+
+.content {
+  margin-top: 60px;
 }
 
 #container {

@@ -2,7 +2,7 @@
   <div>
     <header>
       <div class="wrap">
-        <p class="home">다이어리</p>
+        <router-link to="/" class="home" tag="p">다이어리</router-link>
         <div class="ham" @click="openMenu">
           <i class="xi-bars"></i>
         </div>
@@ -16,9 +16,8 @@
         </div>
       </div>
       <nav>
-<!--        <a href="">회원가입</a>-->
-<!--        <a href="">로그아웃</a>-->
-        <router-link></router-link>
+        <router-link to="/signup" class="link">회원가입</router-link>
+        <router-link to="/signout" class="link">로그아웃</router-link>
       </nav>
     </div>
   </div>
