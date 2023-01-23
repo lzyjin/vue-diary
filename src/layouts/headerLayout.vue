@@ -2,7 +2,7 @@
   <div>
     <header>
       <div class="wrap">
-        <router-link to="/" class="home" tag="p">다이어리</router-link>
+        <router-link to="/" class="home">다이어리</router-link>
         <div class="ham" @click="openMenu">
           <i class="xi-bars"></i>
         </div>
