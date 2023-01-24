@@ -1166,8 +1166,8 @@ em.mo-br {
   display: block;
   text-align: center;
   color: #888;
-  text-decoration: underline;
   margin-top: 20px;
+  font-size: 0.8rem;
 }
 
 .reveal {
@@ -1377,8 +1377,8 @@ header .ham i {
   display: block;
   text-align: center;
   color: #888;
-  text-decoration: underline;
   margin-top: 20px;
+  font-size: 0.8rem;
 }
 
 /*# sourceMappingURL=style.css.map */

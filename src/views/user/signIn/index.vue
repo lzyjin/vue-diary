@@ -15,9 +15,8 @@
           <p class="alert"></p>
         </div>
         <div class="item">
-          {{ count }}
-          <button type="button" @click="increment">로그인</button>
-          <router-link to="/signup" class="link" @click="decrement">회원가입은 여기로</router-link>
+          <button type="button">로그인</button>
+          <router-link to="/signup" class="link">회원가입은 여기로</router-link>
         </div>
       </form>
     </div>
