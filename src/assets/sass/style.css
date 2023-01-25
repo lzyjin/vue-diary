@@ -1152,6 +1152,13 @@ em.mo-br {
   height: 40px;
 }
 
+.form .item .alert {
+  font-size: 0.8rem;
+  color: red;
+  margin-top: 0.5em;
+  line-height: 1.4;
+}
+
 .form .item button {
   display: block;
   width: 100%;
@@ -1361,6 +1368,13 @@ header .ham i {
   border-radius: 5px;
   padding: 15px;
   height: 40px;
+}
+
+.form .item .alert {
+  font-size: 0.8rem;
+  color: red;
+  margin-top: 0.5em;
+  line-height: 1.4;
 }
 
 .form .item button {
