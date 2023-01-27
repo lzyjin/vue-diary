@@ -16,7 +16,8 @@
         </div>
         <div class="item">
           <button type="button" @click="signUp">회원가입</button>
-          <p>회원가입 결과: {{  }}</p>
+          <!-- vuex 4단계: state에 접근 -->
+          <p>회원가입 결과: {{ $store.state.signUpState }}</p>
         </div>
       </form>
     </div>
@@ -58,7 +59,9 @@ export default {
     signUp() {
       // console.log(this.validateId(), this.validatePassword());
       if (this.validateId() && this.validatePassword()) {
-        this.$store.commit('signUp', {
+
+        // vuex 1단계: store.dispatch로 action 실행
+        this.$store.dispatch('SIGN_UP', {
           id: this.id,
           password: this.password,
         });

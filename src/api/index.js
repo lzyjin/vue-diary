@@ -1,14 +1,12 @@
 import axios from 'axios';
 
-export function signUp(userId, password) {
-    axios.post('121.161.237.50:50005', {
-        method: 'post',
-        url: '/api/user/up',
-        data: {
+export async function signUp(userId, password) {
+    try {
+        return await axios.post('http://121.161.237.50:50005/api/user/up', {
             userId,
             password,
-        },
-    }).then(function (response) {
-        console.log(response.data);
-    });
+        });
+    } catch (e) {
+        console.error(e);
+    }
 }
