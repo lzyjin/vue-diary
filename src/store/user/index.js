@@ -9,13 +9,10 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     namespaced: true,
     state: {
-        // lastLoginDate: '',
-        // regDate: '',
-        // userId: '',
-        // userNo: 0,
-        // userStatus: '',
-        // withdrawalDate: '',
         signUpState: false,
+
+        userId: '',
+        userPassword: '',
     },
     mutations,
     getters,

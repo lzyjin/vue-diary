@@ -15,7 +15,7 @@
           <p class="alert">{{ alertPassword }}</p>
         </div>
         <div class="item">
-          <button type="button" @click="signUp">회원가입</button>
+          <button type="button" @click="signUp" @keyup.enter="signUp">회원가입</button>
           <!-- vuex 4단계: state에 접근 -->
           <!--<p>회원가입 결과: {{ $store.state.signUpState }}</p>-->
         </div>
@@ -73,7 +73,7 @@ export default {
         .then(response => {
           console.log(response);
 
-          if (confirm('회원가입되었습니다. 로그인을 해주세요.')) {
+          if (confirm('회원가입 되었습니다. 로그인을 해주세요.')) {
             router.push({
               name: 'SignIn',
             });

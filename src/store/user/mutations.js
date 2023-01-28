@@ -4,4 +4,9 @@ export default {
     SIGN_UP(state) {
         state.signUpState = true;
     },
+
+    SIGN_IN(state, payload) {
+        state.userId = payload.userId;
+        state.userPassword = payload.password;
+    },
 }
