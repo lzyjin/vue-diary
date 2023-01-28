@@ -17,7 +17,7 @@
         <div class="item">
           <button type="button" @click="signUp">회원가입</button>
           <!-- vuex 4단계: state에 접근 -->
-          <p>회원가입 결과: {{ $store.state.signUpState }}</p>
+          <!--<p>회원가입 결과: {{ $store.state.signUpState }}</p>-->
         </div>
       </form>
     </div>
@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import { router } from "@/routes";
+
 export default {
   name: "index",
   data() {
@@ -46,6 +48,7 @@ export default {
       }
       return true;
     },
+
     validatePassword() {
       // 최소 8자리 이상 영문 대소문자, 숫자, 특수문자가 각각 1개 이상
       const regExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
@@ -56,17 +59,38 @@ export default {
       }
       return true;
     },
+
     signUp() {
-      // console.log(this.validateId(), this.validatePassword());
       if (this.validateId() && this.validatePassword()) {
+        console.log(this.id, this.password);
 
         // vuex 1단계: store.dispatch로 action 실행
+        // store.dispatch가 트리거 된 액션 핸들러에 의해 반환된 Promise를 처리 할 수 있으며 Promise를 반환한다.
         this.$store.dispatch('SIGN_UP', {
           id: this.id,
           password: this.password,
+        })
+        .then(response => {
+          console.log(response);
+
+          if (confirm('회원가입되었습니다. 로그인을 해주세요.')) {
+            router.push({
+              name: 'SignIn',
+            });
+          }
+
+          console.log(router);
+        })
+        .catch((e) => {
+          console.error(e);
+
+          alert(e.response.data.msg);
+          this.id = '';
+          this.password = '';
         });
       }
     },
+
   },
 }
 </script>
