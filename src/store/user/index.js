@@ -7,12 +7,12 @@ import mutations from './mutations';
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
-    namespaced: true,
+    // namespaced: true,
     state: {
         signUpState: false,
 
-        userId: '',
-        userPassword: '',
+        signedInUserId: '',
+        // signedInUserPassword: '',
     },
     mutations,
     getters,

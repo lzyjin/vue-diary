@@ -6,7 +6,7 @@ export default {
     },
 
     SIGN_IN(state, payload) {
-        state.userId = payload.userId;
-        state.userPassword = payload.password;
+        state.signedInUserId = payload.id;
+        // state.signedInUserPassword = payload.password;
     },
 }

@@ -17,6 +17,7 @@
         <div class="item">
           <button type="button" @click="signIn" @keyup.enter="signIn">로그인</button>
           <router-link to="/signup" class="link">회원가입은 여기로</router-link>
+
         </div>
       </form>
     </div>
@@ -37,7 +38,7 @@ export default {
     }
   },
   methods: {
-    signIn() {
+    async signIn() {
       console.log(this.id, this.password);
 
       if (this.id === '') {
@@ -49,13 +50,12 @@ export default {
       }
 
       if (this.id !== '' && this.password !== '') {
-        this.$store.dispatch('SIGN_UP', {
+        this.$store.dispatch('SIGN_IN', {
           id: this.id,
           password: this.password,
         })
-        .then(response => {
-          console.log(response);
-
+        .then((response) => {
+          console.log(response)
           if (confirm('로그인 되었습니다.')) {
             router.push({
               name: 'Calendar',
@@ -64,7 +64,6 @@ export default {
         })
         .catch(e => {
           console.log(e);
-
           alert(e.response.data.msg);
           this.id = '';
           this.password = '';
