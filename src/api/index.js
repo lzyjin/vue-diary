@@ -15,14 +15,10 @@ export async function signUp(userId, password) {
 export async function signIn(userId, password) {
     console.log('api: ', userId, password);
 
-    // try {
-        return await axios.get('http://121.161.237.50:50005/api/user/in', {
-            params: {
-                userId,
-                password,
-            },
-        });
-    // } catch (e) {
-    //     console.error(e);
-    // }
+    return await axios.get('http://121.161.237.50:50005/api/user/in', {
+        params: {
+            userId,
+            password,
+        },
+    });
 }
