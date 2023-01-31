@@ -45,3 +45,22 @@
     }
   }
 }
+
+.btn-write-cal {
+  position: absolute;
+  right: 5%;
+  bottom: 5%;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background-color: variables.$company-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);
+
+  i {
+    color: #fff;
+    font-size: 1.1rem;
+  }
+}

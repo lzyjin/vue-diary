@@ -18,17 +18,32 @@
         </div>
         <div class="cal-content">
           <div v-for="(item, index) in calendarData" :key="index"
-               class="date"
-               :class="{ disable: item.disable, today: currentYear === today.year && currentMonth === today.month && item.date === today.date }">{{ item.date }}</div>
+                class="date"
+                :class="{
+                  disable: item.disable,
+                  today: currentYear === today.year && currentMonth === today.month && item.date === today.date }">{{ item.date }}</div>
         </div>
       </div>
     </div>
+
+<!--    <button class="btn-write-cal" @click="writeCal">-->
+<!--      <i class="xi-pen"></i>-->
+<!--    </button>-->
+
+    <modal-view></modal-view>
+
   </div>
 </template>
 
 <script>
+import ModalView from '@/components/modalView';
+
 export default {
   name: "CalendarList",
+
+  components: {
+    ModalView,
+  },
 
   data() {
     return {
@@ -118,7 +133,9 @@ export default {
       this.renderCalendar(new Date(this.currentYear, this.currentMonth + 1, 1));
     },
 
+    writeCal() {
 
+    },
 
   },
 

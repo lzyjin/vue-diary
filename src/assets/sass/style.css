@@ -1131,6 +1131,64 @@ em.mo-br {
   opacity: 0;
 }
 
+.modal {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  background: #fff;
+  z-index: 1;
+  border-radius: 25px 25px 0 0;
+  transition: 0.4s eaes-in-out;
+}
+
+.modal-top {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-top .date {
+  font-weight: 700;
+}
+
+.modal-content {
+  padding: 0 20px 20px;
+  overflow-y: scroll;
+}
+
+.modal-content .m-count {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.modal-content ul li {
+  padding: 10px 0;
+}
+
+.modal.opened {
+  top: auto;
+  bottom: 0;
+}
+
+.dimmed {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal.opened + .dimmed {
+  opacity: 1;
+}
+
 .form {
   padding: 15px;
 }
@@ -1175,6 +1233,25 @@ em.mo-br {
   color: #888;
   margin-top: 20px;
   font-size: 0.8rem;
+}
+
+.btn-write-cal {
+  position: absolute;
+  right: 5%;
+  bottom: 5%;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background-color: #A25AFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);
+}
+
+.btn-write-cal i {
+  color: #fff;
+  font-size: 1.1rem;
 }
 
 .reveal {
@@ -1393,6 +1470,25 @@ header .ham i {
   color: #888;
   margin-top: 20px;
   font-size: 0.8rem;
+}
+
+.btn-write-cal {
+  position: absolute;
+  right: 5%;
+  bottom: 5%;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background-color: #A25AFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);
+}
+
+.btn-write-cal i {
+  color: #fff;
+  font-size: 1.1rem;
 }
 
 /*# sourceMappingURL=style.css.map */
