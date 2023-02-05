@@ -32,7 +32,49 @@
 <!--      <i class="xi-pen"></i>-->
 <!--    </button>-->
 
-    <modal-view :modal-opened="modalOpened"></modal-view>
+    <modal-view v-if="true">
+      <div class="modal" :class="{opened: this.modalOpened}">
+        <div class="modal-top">
+          <p class="date">2023년 1월 1일</p>
+          <button>
+            <i class="xi-close" @click="closeModal"></i>
+          </button>
+        </div>
+        <div class="modal-content">
+          <p class="m-count">총 0개</p>
+          <ul>
+            <li>
+              <p class="m-content">월급날 키키키</p>
+            </li>
+            <li>
+              <p class="m-content"><i class="xi-plus"></i> 내역 추가</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="dimmed"></div>
+    </modal-view>
+
+    <modal-view v-if="false">
+      <div class="modal" :class="{opened: this.modalOpened}">
+        <div class="modal-top">
+          <p class="date">2023년 1월 1일</p>
+          <button>
+            <i class="xi-close" @click="closeModal"></i>
+          </button>
+        </div>
+        <div class="modal-content">
+          <textarea class="content-wrap"></textarea>
+          <div class="btn-wrap">
+            <button class="btn-delete">
+              <i class="xi-trash"></i>
+            </button>
+            <button class="btn-save">저장</button>
+          </div>
+        </div>
+      </div>
+      <div class="dimmed"></div>
+    </modal-view>
 
   </div>
 </template>
@@ -141,6 +183,14 @@ export default {
     writeCal() {
       this.modalOpened = true;
     },
+
+    closeModal() {
+      this.modalOpened = false;
+    },
+
+  },
+
+  beforeMount() {
 
   },
 
