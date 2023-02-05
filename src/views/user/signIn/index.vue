@@ -16,7 +16,7 @@
         </div>
         <div class="item">
           <button type="button" @click="signIn" @keyup.enter="signIn">로그인</button>
-          <router-link to="/signup" class="link">회원가입은 여기로</router-link>
+          <router-link to="SignUp" class="link">회원가입은 여기로</router-link>
 
         </div>
       </form>
@@ -55,7 +55,8 @@ export default {
           password: this.password,
         })
         .then((response) => {
-          console.log(response)
+          console.log(response);
+          this.$cookies.set('userId', this.id, '1d');
           if (confirm('로그인 되었습니다.')) {
             router.push({
               name: 'Calendar',

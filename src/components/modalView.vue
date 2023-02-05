@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="modal" :class="{opened: this.opened}">
+    <div class="modal" :class="{opened: this.modalOpened}">
       <div class="modal-top">
         <p class="date">2023년 1월 1일</p>
         <button>
@@ -17,7 +17,7 @@
             <p class="m-content">점심시간에 산책</p>
           </li>
           <li>
-            <p class="m-content">도시락 반찬 싸기</p>
+            <p class="m-content"><i class="xi-plus"></i> 내역 추가</p>
           </li>
         </ul>
       </div>
@@ -29,14 +29,15 @@
 <script>
 export default {
   name: "modalView",
+  props: ['modalOpened'],
   data() {
     return {
-      opened: false,
+
     }
   },
   methods: {
     closeModal() {
-      this.opened = false;
+      this.modalOpened = false;
     },
   },
 }

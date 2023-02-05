@@ -5,7 +5,8 @@ import { router } from "@/routes";
 import {store} from './store/user'
 Vue.config.productionTip = false;
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
+    .use(require('vue-cookies'));
 
 new Vue({
   render: h => h(App),

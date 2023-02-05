@@ -1141,7 +1141,7 @@ em.mo-br {
   background: #fff;
   z-index: 1;
   border-radius: 25px 25px 0 0;
-  transition: 0.4s eaes-in-out;
+  transition: top 0.4s, bottom 0.4s;
 }
 
 .modal-top {
@@ -1183,6 +1183,7 @@ em.mo-br {
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
   pointer-events: none;
+  transition: opacity 0.4s;
 }
 
 .modal.opened + .dimmed {

@@ -21,7 +21,9 @@
                 class="date"
                 :class="{
                   disable: item.disable,
-                  today: currentYear === today.year && currentMonth === today.month && item.date === today.date }">{{ item.date }}</div>
+                  today: currentYear === today.year && currentMonth === today.month && item.date === today.date }"
+                @click="writeCal"
+          >{{ item.date }}</div>
         </div>
       </div>
     </div>
@@ -30,7 +32,7 @@
 <!--      <i class="xi-pen"></i>-->
 <!--    </button>-->
 
-    <modal-view></modal-view>
+    <modal-view :modal-opened="modalOpened"></modal-view>
 
   </div>
 </template>
@@ -62,7 +64,10 @@ export default {
       currentMonth: 0,
       currentDate: 0,
 
-      calendarData: []
+      calendarData: [],
+
+      modalOpened: false,
+
     }
   },
 
@@ -134,7 +139,7 @@ export default {
     },
 
     writeCal() {
-
+      this.modalOpened = true;
     },
 
   },

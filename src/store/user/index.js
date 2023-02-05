@@ -9,10 +9,7 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     // namespaced: true,
     state: {
-        signUpState: false,
-
         signedInUserId: '',
-        // signedInUserPassword: '',
     },
     mutations,
     getters,

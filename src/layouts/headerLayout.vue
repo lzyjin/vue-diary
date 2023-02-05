@@ -16,8 +16,8 @@
         </div>
       </div>
       <nav>
-        <router-link to="/signup" class="link">회원가입</router-link>
-        <router-link to="/signout" class="link">로그아웃</router-link>
+        <router-link to="SignUp" class="link">회원가입</router-link>
+        <router-link to="SignOut" class="link" @click.native="closeMenu">로그아웃</router-link>
       </nav>
     </div>
   </div>

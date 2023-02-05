@@ -16,7 +16,7 @@
         </div>
         <div class="item">
           <button type="button" @click="signUp" @keyup.enter="signUp">회원가입</button>
-          <router-link to="/signin" class="link">로그인은 여기로</router-link>
+          <router-link to="SignIn" class="link">로그인은 여기로</router-link>
           <!-- vuex 4단계: state에 접근 -->
           <!--<p>회원가입 결과: {{ $store.state.signUpState }}</p>-->
         </div>
