@@ -22,3 +22,13 @@ export async function signIn(userId, password) {
         },
     });
 }
+
+export async function calendarList(userNo, year, month) {
+    return await axios.get('http://121.161.237.50:50005/api/diary/list', {
+        params: {
+            userNo,
+            year,
+            month,
+        }
+    });
+}
