@@ -1,5 +1,5 @@
 export default {
-    calendarList(state, payload) {
-        state.calendarList = payload;
+    CALENDAR_LIST(state, payload) {
+        state.moduleCalendar.calendarList = payload;
     },
 }

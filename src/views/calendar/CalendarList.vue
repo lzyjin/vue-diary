@@ -190,10 +190,6 @@ export default {
 
   },
 
-  beforeMount() {
-
-  },
-
   mounted() {
     // 참고 블로그: https://songsong.dev/11
     // API: 121.161.237.50:50005/swagger-ui/index.html
@@ -210,6 +206,23 @@ export default {
     this.currentDate = today.getDate();
 
     this.renderCalendar( new Date( this.currentYear, this.currentMonth, this.currentDate ) );
+
+
+
+    const userNo = this.$store.state.moduleUser.userData.userNo;
+    let currentYear = this.currentYear;
+    let currentMonth = this.currentMonth;
+    this.$store.dispatch('CALENDAR_LIST', {
+      userNo,
+      year: currentYear,
+      month: currentMonth + 1,
+    })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
 
   },
 }

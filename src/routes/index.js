@@ -21,15 +21,6 @@ export const router = new VueRouter({
         {
             path: '/signout',
             name:'SignOut',
-            // beforeEnter(to, from, next) {
-            //     console.log(to, from, next);
-            //
-            //     cookies.remove('userId');
-            //     if (!cookies.get('userId')) {
-            //         alert('로그아웃되었습니다. 다시 로그인을 해 주세요.');
-            //         next("/signin");
-            //     }
-            // },
         },
         {
             path: '/signup',
@@ -40,25 +31,11 @@ export const router = new VueRouter({
             path: '/calendar',
             name:'Calendar',
             component: CalendarList,
-            // beforeEnter: (to, from, next) => {
-            //     console.log(to, from, next);
-            //
-            //     if (!cookies.get('userId')) {
-            //         alert("로그인이 필요합니다.");
-            //         next("/signin");
-            //         return;
-            //     }
-            //     next();
-            // },
         },
     ],
 });
 
 router.beforeEach((to, from, next) => {
-    console.log(to);
-    console.log(from);
-    console.log(next);
-
     if (to.name === 'SignOut') {
         cookies.remove('userId');
         if (!cookies.get('userId')) {

@@ -1,3 +1,5 @@
 export default {
-    signedInUserId: '',
+    userData: {
+
+    },
 }

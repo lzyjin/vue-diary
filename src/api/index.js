@@ -10,8 +10,8 @@ export async function signUp(userId, password) {
     } catch (e) {
         console.error(e);
     }
-
 }
+
 export async function signIn(userId, password) {
     console.log('api: ', userId, password);
 
