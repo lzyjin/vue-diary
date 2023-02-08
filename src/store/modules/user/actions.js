@@ -1,4 +1,4 @@
-import { signUp, signIn } from '@/api/index';
+import { signUp, signIn } from '@/api';
 
 export default {
     // vuex 2단계: api 호출해서 받은 데이터로 mutation에 commit
@@ -24,6 +24,6 @@ export default {
                 // mutation을 commit
                 commit('SIGN_IN', response.data.data.userData);
                 return response;
-            })
+            });
     },
 }

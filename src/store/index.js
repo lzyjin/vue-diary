@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import moduleUser from './user/index';
-import moduleCalendar from './calendar/index';
+import moduleUser from './modules/user/index';
+import moduleCalendar from './modules/calendar/index';
 
 
 Vue.use(Vuex);

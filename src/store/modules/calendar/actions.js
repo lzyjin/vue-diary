@@ -10,6 +10,6 @@ export default {
 
                 commit('CALENDAR_LIST', response.data.data);
                 return response;
-            })
+            });
     },
 }

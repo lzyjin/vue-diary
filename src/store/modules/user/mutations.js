@@ -2,12 +2,11 @@
 
 export default {
     SIGN_UP(state) {
-        state.moduleUser.states.signUpState = true;
+        state.signUpState = true;
     },
 
     SIGN_IN(state, userData) {
         console.log('mutation: ', userData);
-        state.moduleUser.states.userData = userData;
-        // state.userData = userData;
+        state.userData = userData;
     },
 }

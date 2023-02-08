@@ -209,10 +209,10 @@ export default {
 
 
 
-    const userNo = this.$store.state.moduleUser.userData.userNo;
+    const userNo = this.$cookies.get('userNo');
     let currentYear = this.currentYear;
     let currentMonth = this.currentMonth;
-    this.$store.dispatch('CALENDAR_LIST', {
+    this.$store.dispatch('moduleCalendar/CALENDAR_LIST', {
       userNo,
       year: currentYear,
       month: currentMonth + 1,

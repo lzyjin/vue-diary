@@ -67,7 +67,7 @@ export default {
 
         // vuex 1단계: store.dispatch로 action 실행
         // store.dispatch가 트리거 된 액션 핸들러에 의해 반환된 Promise를 처리 할 수 있으며 Promise를 반환한다.
-        this.$store.dispatch('SIGN_UP', {
+        this.$store.dispatch('moduleUser/SIGN_UP', {
           id: this.id,
           password: this.password,
         })
