@@ -1446,6 +1446,7 @@ header .ham i {
   height: 60px;
   padding: 5px;
   border-bottom: 1px solid #eee;
+  position: relative;
 }
 
 .calendar .cal-content .date:nth-of-type(7n - 1) {
@@ -1463,6 +1464,13 @@ header .ham i {
 .calendar .cal-content .date.today {
   background: #eee;
   font-weight: 700;
+}
+
+.calendar .cal-content .date .mark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%);
 }
 
 .form {

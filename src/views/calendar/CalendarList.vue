@@ -16,14 +16,18 @@
           <div class="day">토</div>
           <div class="day">일</div>
         </div>
+<!--        {{ new Date(calendarList[0].regDate).getDate() }}-->
         <div class="cal-content">
           <div v-for="(item, index) in calendarData" :key="index"
                 class="date"
                 :class="{
                   disable: item.disable,
+                  scheduled: item.scheduled,
                   today: currentYear === today.year && currentMonth === today.month && item.date === today.date }"
-                @click="writeCal"
-          >{{ item.date }}</div>
+                @click="writeCal">
+            <span>{{ item.date }}</span>
+            <em v-if="item.scheduled" class="mark">💜</em>
+          </div>
         </div>
       </div>
     </div>
@@ -84,6 +88,19 @@ import ModalView from '@/components/modalView';
 
 export default {
   name: "CalendarList",
+
+  computed: {
+    calendarList () {
+      // console.log(this.$store.getters["moduleCalendar/calendarList"]);
+      return this.$store.getters["moduleCalendar/calendarList"];
+    },
+    calendarListDateCheck () {
+      // console.log(this.$store.getters["moduleCalendar/calendarList"]);
+      return this.$store.getters["moduleCalendar/calendarList"].filter((v, i, arr) => {
+        return i === arr.findIndex(e => e.regDate === v.regDate);
+      });
+    },
+  },
 
   components: {
     ModalView,
@@ -153,11 +170,33 @@ export default {
       }
 
       // 이번달 렌더링
+      // for (let i = 1; i < this.thisMonthLastDate + 1; i++) {
+      //   calendarData.push({
+      //     date : i,
+      //     disable: false,
+      //   });
+      // }
+
       for (let i = 1; i < this.thisMonthLastDate + 1; i++) {
-        calendarData.push({
-          date : i,
-          disable: false,
-        });
+        console.log(this.calendarList);
+        console.log(this.calendarListDateCheck);
+        // console.log(this.calendarList[i]?.regDate);
+        // console.log(new Date(this.calendarList[i]?.regDate)?.getDate());
+        if (new Date(this.calendarList[i]?.regDate)?.getDate() == i
+          && new Date(this.calendarList[i]?.regDate)?.getMonth() == this.currentMonth
+          && new Date(this.calendarList[i]?.regDate)?.getFullYear() == this.currentYear) {
+          calendarData.push({
+            date : i,
+            disable: false,
+            scheduled: true,
+          });
+        } else {
+          calendarData.push({
+            date : i,
+            disable: false,
+            scheduled: false,
+          });
+        }
       }
 
       // 다음달 렌더링
@@ -205,7 +244,7 @@ export default {
     this.currentMonth = today.getMonth();
     this.currentDate = today.getDate();
 
-    this.renderCalendar( new Date( this.currentYear, this.currentMonth, this.currentDate ) );
+    // this.renderCalendar( new Date( this.currentYear, this.currentMonth, this.currentDate ) );
 
 
 
@@ -217,12 +256,13 @@ export default {
       year: currentYear,
       month: currentMonth + 1,
     })
-      .then(response => {
-        console.log(response);
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    .then(response => {
+      console.log(response);
+      this.renderCalendar( new Date( this.currentYear, this.currentMonth, this.currentDate ) );
+    })
+    .catch(e => {
+      console.log(e);
+    });
 
   },
 }
