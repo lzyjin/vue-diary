@@ -1,3 +1,5 @@
+@use '../abstract/variables';
+
 #container {
     position: relative;
     max-width: 375px;
@@ -48,7 +50,7 @@
 
         .date {
             text-align: center;
-            height: 60px;
+            height: 65px;
             padding: 5px;
             border-bottom: 1px solid #eee;
             position: relative;
@@ -65,14 +67,14 @@
             }
 
             &.today {
-                background: #eee;
+                background: rgb(variables.$company-color, 0.15);
                 font-weight: 700;
             }
 
             .mark {
                 position: absolute;
                 left: 50%;
-                top: 50%;
+                top: 55%;
                 transform: translateX(-50%);
             }
         }

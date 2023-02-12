@@ -56,8 +56,7 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          this.$cookies.set('userId', response.data.data.userData.userId, '1d');
-          this.$cookies.set('userNo', response.data.data.userData.userNo, '1d');
+
           if (confirm('로그인 되었습니다.')) {
             router.push({
               name: 'Calendar',

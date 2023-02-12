@@ -2,7 +2,8 @@ import VueRouter from "vue-router";
 import SignIn from '@/views/user/signIn';
 import SignUp from "@/views/user/signUp";
 import CalendarList from "@/views/calendar/CalendarList";
-import cookies from 'vue-cookies';
+import { store } from '@/store/index';
+// import cookies from 'vue-cookies';
 
 
 export const router = new VueRouter({
@@ -40,20 +41,23 @@ export const router = new VueRouter({
 // TODO: cookie가 아니라 LocalStorage에 저장하기
 // TODO: state의 값을 사용할 때는 state에 직접 접근하지 말고 무조건 getters로 접근하자.
 router.beforeEach((to, from, next) => {
+
     if (to.name === 'SignOut') {
-        cookies.remove('userId');
-        cookies.remove('userNo');
-        if (!cookies.get('userId')) {
+        localStorage.removeItem('userData');
+        if (!store.getters["moduleUser/getSignedInUserData"]) {
             alert('로그아웃되었습니다. 다시 로그인을 해 주세요.');
             next("/signin");
         }
+
     } else if (to.name === 'Calendar') {
-        if (!cookies.get('userId')) {
+        if (!store.getters["moduleUser/getSignedInUserData"]) {
             alert("로그인이 필요합니다.");
             next("/signin");
             return;
         }
+
         next();
+
     } else {
         next();
     }

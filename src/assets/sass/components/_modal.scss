@@ -1,4 +1,5 @@
 @use '../abstract/variables';
+@use '../abstract/mixins';
 
 .modal {
     position: absolute;
@@ -37,8 +38,14 @@
             li {
                 padding: 10px 0;
 
-                .m-content {
+                @include mixins.list-marker(rgba(variables.$company-color, 0.5), 15, 5, 15);
+            }
 
+            .m-content {
+                padding-left: 0;
+
+                &::before {
+                    display: none;
                 }
             }
         }

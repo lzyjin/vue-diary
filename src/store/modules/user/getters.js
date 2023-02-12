@@ -1,5 +1,8 @@
 export default {
-    getSignedInUserId(state){
-        return state.signedInUserId
-    }
+    getSignedInUserData(state) {
+        if (!state.userData) {
+            state.userData = JSON.parse(localStorage.getItem('userData'));
+        }
+        return state.userData;
+    },
 }

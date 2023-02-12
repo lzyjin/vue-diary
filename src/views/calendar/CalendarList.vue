@@ -16,17 +16,15 @@
           <div class="day">토</div>
           <div class="day">일</div>
         </div>
-<!--        {{ new Date(calendarList[0].regDate).getDate() }}-->
         <div class="cal-content">
           <div v-for="(item, index) in calendarData" :key="index"
                 class="date"
                 :class="{
                   disable: item.disable,
-                  scheduled: item.scheduled,
                   today: currentYear === today.year && currentMonth === today.month && item.date === today.date }"
-                @click="writeCal">
+                @click="openModal(item)">
             <span>{{ item.date }}</span>
-            <em v-if="item.scheduled" class="mark">💜</em>
+            <em v-if="item?.data && item?.data?.length > 0" class="mark">💜</em>
           </div>
         </div>
       </div>
@@ -36,31 +34,31 @@
 <!--      <i class="xi-pen"></i>-->
 <!--    </button>-->
 
-    <modal-view v-if="true">
-      <div class="modal" :class="{opened: this.modalOpened}">
+    <div v-if="true">
+      <div class="modal" :class="{opened: this.modal.opened}">
         <div class="modal-top">
-          <p class="date">2023년 1월 1일</p>
+          <p class="date">{{ this.modal.date }}일 {{ this.modal.day }}요일</p>
           <button>
             <i class="xi-close" @click="closeModal"></i>
           </button>
         </div>
         <div class="modal-content">
-          <p class="m-count">총 0개</p>
+          <p class="m-count">총 {{ this.modal.scheduleList.length }}개</p>
           <ul>
-            <li>
-              <p class="m-content">월급날 키키키</p>
+            <li v-for="(schedule, index) in this.modal.scheduleList" :key="index">
+              <p class="m-content">{{ schedule.contents }}</p>
             </li>
-            <li>
-              <p class="m-content"><i class="xi-plus"></i> 내역 추가</p>
+            <li class="m-content">
+              <p><i class="xi-plus"></i> 일정 추가하기</p>
             </li>
           </ul>
         </div>
       </div>
       <div class="dimmed"></div>
-    </modal-view>
+    </div>
 
-    <modal-view v-if="false">
-      <div class="modal" :class="{opened: this.modalOpened}">
+    <div v-if="false">
+      <div class="modal" :class="{opened: this.modal.opened}">
         <div class="modal-top">
           <p class="date">2023년 1월 1일</p>
           <button>
@@ -78,32 +76,25 @@
         </div>
       </div>
       <div class="dimmed"></div>
-    </modal-view>
+    </div>
 
   </div>
 </template>
 
 <script>
-import ModalView from '@/components/modalView';
+// import ModalView from '@/components/modalView';
 
 export default {
   name: "CalendarList",
 
   computed: {
     calendarList () {
-      // console.log(this.$store.getters["moduleCalendar/calendarList"]);
       return this.$store.getters["moduleCalendar/calendarList"];
-    },
-    calendarListDateCheck () {
-      // console.log(this.$store.getters["moduleCalendar/calendarList"]);
-      return this.$store.getters["moduleCalendar/calendarList"].filter((v, i, arr) => {
-        return i === arr.findIndex(e => e.regDate === v.regDate);
-      });
     },
   },
 
   components: {
-    ModalView,
+    // ModalView,
   },
 
   data() {
@@ -114,6 +105,7 @@ export default {
         date: '',
         day: ''
       },
+
       lastMonthLastDate: 0,
       lastMonthLastDay: 0,
       thisMonthLastDate: 0,
@@ -125,7 +117,12 @@ export default {
 
       calendarData: [],
 
-      modalOpened: false,
+      modal: {
+        opened: false,
+        date: '',
+        day: '',
+        scheduleList: [],
+      }
 
     }
   },
@@ -146,17 +143,11 @@ export default {
       const lastMonthLastD = new Date(this.currentYear, this.currentMonth, 0);
       this.lastMonthLastDate = lastMonthLastD.getDate();
       this.lastMonthLastDay = lastMonthLastD.getDay();
-      // console.log( `지난 달의 마지막 날 : ${ lastMonthLastD }`);
-      // console.log( `지난 달의 마지막 날의 일 : ${ this.lastMonthLastDate }`);
-      // console.log( `지난 달의 마지막 날의 요일 : ${ this.lastMonthLastDay }`);
 
       // 이번 달의 마지막 날의 날짜와 요일
       const thisMonthLastD = new Date(this.currentYear, this.currentMonth + 1, 0);
       this.thisMonthLastDate = thisMonthLastD.getDate();
       this.thisMonthLastDay = thisMonthLastD.getDay();
-      // console.log( `이번 달의 마지막 날 : ${ thisMonthLastD }`);
-      // console.log( `이번 달의 마지막 날의 일 : ${ this.thisMonthLastDate }`);
-      // console.log( `이번 달의 마지막 날의 요일 : ${ this.thisMonthLastDay }`);
 
 
       let calendarData = [];
@@ -170,33 +161,19 @@ export default {
       }
 
       // 이번달 렌더링
-      // for (let i = 1; i < this.thisMonthLastDate + 1; i++) {
-      //   calendarData.push({
-      //     date : i,
-      //     disable: false,
-      //   });
-      // }
-
       for (let i = 1; i < this.thisMonthLastDate + 1; i++) {
-        console.log(this.calendarList);
-        console.log(this.calendarListDateCheck);
-        // console.log(this.calendarList[i]?.regDate);
-        // console.log(new Date(this.calendarList[i]?.regDate)?.getDate());
-        if (new Date(this.calendarList[i]?.regDate)?.getDate() == i
-          && new Date(this.calendarList[i]?.regDate)?.getMonth() == this.currentMonth
-          && new Date(this.calendarList[i]?.regDate)?.getFullYear() == this.currentYear) {
-          calendarData.push({
-            date : i,
-            disable: false,
-            scheduled: true,
-          });
-        } else {
-          calendarData.push({
-            date : i,
-            disable: false,
-            scheduled: false,
-          });
-        }
+        calendarData.push({
+          date : i,
+          disable: false,
+          data: [],
+        });
+
+        // 이번달의 날짜에 해당하는 일정을 calendarDate.data 배열에 push
+        this.$store.getters["moduleCalendar/calendarList"].filter((v) => {
+          if (i ===  new Date(v.regDate).getDate()) {
+            calendarData[i+1].data.push(v);
+          }
+        });
       }
 
       // 다음달 렌더링
@@ -212,19 +189,48 @@ export default {
     },
 
     renderPrevMonth() {
+      // TODO: 캘린더 리스트 불러오는 통신 해야함
       this.renderCalendar(new Date(this.currentYear, this.currentMonth - 1, 1));
     },
 
     renderNextMonth() {
+      // TODO: 캘린더 리스트 불러오는 통신 해야함
       this.renderCalendar(new Date(this.currentYear, this.currentMonth + 1, 1));
     },
 
-    writeCal() {
-      this.modalOpened = true;
+    openModal(item) {
+      this.modal.opened = true;
+      this.modal.scheduleList = item.data;
+      this.modal.date = item.date;
+      let day = new Date(this.currentYear, this.currentMonth, item.date).getDay();
+      switch (day) {
+        case 1:
+          day = '월';
+          break;
+        case 2:
+          day = '화';
+          break;
+        case 3:
+          day = '수';
+          break;
+        case 4:
+          day = '목';
+          break;
+        case 5:
+          day = '금';
+          break;
+        case 6:
+          day = '토';
+          break;
+        case 0:
+          day = '일';
+          break;
+      }
+      this.modal.day = day;
     },
 
     closeModal() {
-      this.modalOpened = false;
+      this.modal.opened = false;
     },
 
   },
@@ -248,13 +254,11 @@ export default {
 
 
 
-    const userNo = this.$cookies.get('userNo');
-    let currentYear = this.currentYear;
-    let currentMonth = this.currentMonth;
+    const userNo = this.$store.getters["moduleUser/getSignedInUserData"].userNo;
     this.$store.dispatch('moduleCalendar/CALENDAR_LIST', {
       userNo,
-      year: currentYear,
-      month: currentMonth + 1,
+      year: this.currentYear,
+      month: this.currentMonth + 1,
     })
     .then(response => {
       console.log(response);

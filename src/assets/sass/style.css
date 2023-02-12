@@ -1167,6 +1167,27 @@ em.mo-br {
 
 .modal-content ul li {
   padding: 10px 0;
+  position: relative;
+  padding-left: 15px;
+}
+
+.modal-content ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 15px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: rgba(162, 90, 255, 0.5);
+}
+
+.modal-content ul .m-content {
+  padding-left: 0;
+}
+
+.modal-content ul .m-content::before {
+  display: none;
 }
 
 .modal-content .content-wrap {
@@ -1443,7 +1464,7 @@ header .ham i {
 
 .calendar .cal-content .date {
   text-align: center;
-  height: 60px;
+  height: 65px;
   padding: 5px;
   border-bottom: 1px solid #eee;
   position: relative;
@@ -1462,14 +1483,14 @@ header .ham i {
 }
 
 .calendar .cal-content .date.today {
-  background: #eee;
+  background: rgba(162, 90, 255, 0.15);
   font-weight: 700;
 }
 
 .calendar .cal-content .date .mark {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 55%;
   transform: translateX(-50%);
 }
 

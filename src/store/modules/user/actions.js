@@ -12,8 +12,6 @@ export default {
         .catch(e => {
             console.error(e);
         });
-
-        // return signUp(payload.id, payload.password);
     },
 
     SIGN_IN({ commit }, payload) {
@@ -23,6 +21,8 @@ export default {
 
                 // mutation을 commit
                 commit('SIGN_IN', response.data.data.userData);
+                localStorage.setItem('userData', JSON.stringify(response.data.data.userData));
+
                 return response;
             });
     },
