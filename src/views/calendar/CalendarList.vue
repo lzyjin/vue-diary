@@ -75,26 +75,26 @@
           </div>
         </div>
       </div>
-      <div class="dimmed"></div>
+<!--      <div class="dimmed"></div>-->
     </div>
 
   </div>
 </template>
 
 <script>
-// import ModalView from '@/components/modalView';
+import { mapGetters } from "vuex";
 
 export default {
   name: "CalendarList",
 
   computed: {
-    calendarList () {
-      return this.$store.getters["moduleCalendar/calendarList"];
-    },
+    ...mapGetters({
+      calendarList: 'moduleCalendar/calendarList',
+      getSignedInUserData: 'moduleUser/getSignedInUserData',
+    }),
   },
 
   components: {
-    // ModalView,
   },
 
   data() {
@@ -171,7 +171,7 @@ export default {
         });
 
         // 이번달의 날짜에 해당하는 일정을 calendarDate.data 배열에 push
-        this.$store.getters["moduleCalendar/calendarList"].filter((v) => {
+        this.calendarList.filter((v) => {
           if (i ===  new Date(v.regDate).getDate()) {
             calendarData[i+1].data.push(v);
           }
@@ -191,7 +191,8 @@ export default {
     },
 
     fetchCalendar() {
-      const userNo = this.$store.getters["moduleUser/getSignedInUserData"].userNo;
+      // const userNo = this.$store.getters["moduleUser/getSignedInUserData"].userNo;
+      const userNo = this.getSignedInUserData.userNo;
       this.$store.dispatch('moduleCalendar/CALENDAR_LIST', {
         userNo,
         year: this.currentYear,
