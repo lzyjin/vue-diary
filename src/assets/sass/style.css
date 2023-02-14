@@ -1184,6 +1184,7 @@ em.mo-br {
 
 .modal-content ul .m-content {
   padding-left: 0;
+  cursor: pointer;
 }
 
 .modal-content ul .m-content::before {
@@ -1468,6 +1469,7 @@ header .ham i {
   padding: 5px;
   border-bottom: 1px solid #eee;
   position: relative;
+  cursor: pointer;
 }
 
 .calendar .cal-content .date:nth-of-type(7n - 1) {

@@ -32,3 +32,8 @@ export async function calendarList(userNo, year, month) {
         }
     });
 }
+
+// parameter: userNo, content, regDate
+export async function writeCalendar() {
+
+}

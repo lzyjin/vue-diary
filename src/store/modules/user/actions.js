@@ -17,7 +17,7 @@ export default {
     SIGN_IN({ commit }, payload) {
         return signIn(payload.id, payload.password)
             .then(response => {
-                console.log(response);
+                // console.log(response);
 
                 // mutation을 commit
                 commit('SIGN_IN', response.data.data.userData);

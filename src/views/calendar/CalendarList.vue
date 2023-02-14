@@ -22,7 +22,7 @@
                 :class="{
                   disable: item.disable,
                   today: currentYear === today.year && currentMonth === today.month && item.date === today.date }"
-                @click="openModal(item)">
+                @click="openListModal(item)">
             <span>{{ item.date }}</span>
             <em v-if="item?.data && item?.data?.length > 0" class="mark">💜</em>
           </div>
@@ -34,21 +34,21 @@
 <!--      <i class="xi-pen"></i>-->
 <!--    </button>-->
 
-    <div v-if="true">
-      <div class="modal" :class="{opened: this.modal.opened}">
+    <div v-if="this.modal.listModalOpened">
+      <div class="modal" :class="{opened: this.modal.listModalOpened}">
         <div class="modal-top">
           <p class="date">{{ this.modal.date }}일 {{ this.modal.day }}요일</p>
           <button>
-            <i class="xi-close" @click="closeModal"></i>
+            <i class="xi-close" @click="closeListModal"></i>
           </button>
         </div>
         <div class="modal-content">
           <p class="m-count">총 {{ this.modal.scheduleList.length }}개</p>
           <ul>
             <li v-for="(schedule, index) in this.modal.scheduleList" :key="index">
-              <p class="m-content">{{ schedule.contents }}</p>
+              <p>{{ schedule.contents }}</p>
             </li>
-            <li class="m-content">
+            <li class="m-content" @click="openViewModal">
               <p><i class="xi-plus"></i> 일정 추가하기</p>
             </li>
           </ul>
@@ -57,12 +57,12 @@
       <div class="dimmed"></div>
     </div>
 
-    <div v-if="false">
-      <div class="modal" :class="{opened: this.modal.opened}">
+    <div v-if="this.modal.viewModalOpened">
+      <div class="modal" :class="{opened: this.modal.viewModalOpened}">
         <div class="modal-top">
-          <p class="date">2023년 1월 1일</p>
+          <p class="date">{{ this.modal.date }}일 {{ this.modal.day }}요일</p>
           <button>
-            <i class="xi-close" @click="closeModal"></i>
+            <i class="xi-close" @click="closeViewModal"></i>
           </button>
         </div>
         <div class="modal-content">
@@ -118,7 +118,9 @@ export default {
       calendarData: [],
 
       modal: {
-        opened: false,
+        // opened: false,
+        listModalOpened: false,
+        viewModalOpened: false,
         date: '',
         day: '',
         scheduleList: [],
@@ -188,18 +190,38 @@ export default {
 
     },
 
+    fetchCalendar() {
+      const userNo = this.$store.getters["moduleUser/getSignedInUserData"].userNo;
+      this.$store.dispatch('moduleCalendar/CALENDAR_LIST', {
+        userNo,
+        year: this.currentYear,
+        month: this.currentMonth + 1,
+      })
+          .then(response => {
+            console.log(response);
+            this.renderCalendar( new Date( this.currentYear, this.currentMonth, this.currentDate ) );
+          })
+          .catch(e => {
+            console.log(e);
+          });
+    },
+
     renderPrevMonth() {
-      // TODO: 캘린더 리스트 불러오는 통신 해야함
-      this.renderCalendar(new Date(this.currentYear, this.currentMonth - 1, 1));
+      // this.renderCalendar(new Date(this.currentYear, this.currentMonth - 1, 1));
+
+      this.currentMonth = this.currentMonth - 1;
+      this.fetchCalendar();
     },
 
     renderNextMonth() {
-      // TODO: 캘린더 리스트 불러오는 통신 해야함
-      this.renderCalendar(new Date(this.currentYear, this.currentMonth + 1, 1));
+      // this.renderCalendar(new Date(this.currentYear, this.currentMonth + 1, 1));
+
+      this.currentMonth = this.currentMonth + 1;
+      this.fetchCalendar();
     },
 
-    openModal(item) {
-      this.modal.opened = true;
+    openListModal(item) {
+      this.modal.listModalOpened = true;
       this.modal.scheduleList = item.data;
       this.modal.date = item.date;
       let day = new Date(this.currentYear, this.currentMonth, item.date).getDay();
@@ -229,8 +251,16 @@ export default {
       this.modal.day = day;
     },
 
-    closeModal() {
-      this.modal.opened = false;
+    closeListModal() {
+      this.modal.listModalOpened = false;
+    },
+
+    openViewModal() {
+      this.modal.viewModalOpened = true;
+    },
+
+    closeViewModal() {
+      this.modal.viewModalOpened = false;
     },
 
   },
@@ -251,22 +281,7 @@ export default {
     this.currentDate = today.getDate();
 
     // this.renderCalendar( new Date( this.currentYear, this.currentMonth, this.currentDate ) );
-
-
-
-    const userNo = this.$store.getters["moduleUser/getSignedInUserData"].userNo;
-    this.$store.dispatch('moduleCalendar/CALENDAR_LIST', {
-      userNo,
-      year: this.currentYear,
-      month: this.currentMonth + 1,
-    })
-    .then(response => {
-      console.log(response);
-      this.renderCalendar( new Date( this.currentYear, this.currentMonth, this.currentDate ) );
-    })
-    .catch(e => {
-      console.log(e);
-    });
+    this.fetchCalendar();
 
   },
 }
