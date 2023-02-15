@@ -1376,6 +1376,7 @@ header .ham i {
   width: 100%;
   height: 100vh;
   background-color: #fff;
+  z-index: 1;
 }
 
 .menu .top {

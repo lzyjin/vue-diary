@@ -71,16 +71,14 @@ export default {
           id: this.id,
           password: this.password,
         })
-        .then(response => {
-          console.log(response);
+        .then(() => {
+          // console.log(response);
 
           if (confirm('회원가입 되었습니다. 로그인을 해주세요.')) {
             router.push({
               name: 'SignIn',
             });
           }
-
-          console.log(router);
         })
         .catch((e) => {
           console.error(e);

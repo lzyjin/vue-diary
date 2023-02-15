@@ -66,12 +66,12 @@
           </button>
         </div>
         <div class="modal-content">
-          <textarea class="content-wrap"></textarea>
+          <textarea class="content-wrap" v-model="calContent"></textarea>
           <div class="btn-wrap">
             <button class="btn-delete">
               <i class="xi-trash"></i>
             </button>
-            <button class="btn-save">저장</button>
+            <button class="btn-save" @click="saveCalendar">저장</button>
           </div>
         </div>
       </div>
@@ -124,7 +124,9 @@ export default {
         date: '',
         day: '',
         scheduleList: [],
-      }
+      },
+
+      calContent: '',
 
     }
   },
@@ -191,32 +193,27 @@ export default {
     },
 
     fetchCalendar() {
-      // const userNo = this.$store.getters["moduleUser/getSignedInUserData"].userNo;
       const userNo = this.getSignedInUserData.userNo;
       this.$store.dispatch('moduleCalendar/CALENDAR_LIST', {
         userNo,
         year: this.currentYear,
         month: this.currentMonth + 1,
       })
-          .then(response => {
-            console.log(response);
-            this.renderCalendar( new Date( this.currentYear, this.currentMonth, this.currentDate ) );
-          })
-          .catch(e => {
-            console.log(e);
-          });
+      .then(() => {
+        // console.log(response);
+        this.renderCalendar( new Date( this.currentYear, this.currentMonth, this.currentDate ) );
+      })
+      .catch(e => {
+        console.log(e);
+      });
     },
 
     renderPrevMonth() {
-      // this.renderCalendar(new Date(this.currentYear, this.currentMonth - 1, 1));
-
       this.currentMonth = this.currentMonth - 1;
       this.fetchCalendar();
     },
 
     renderNextMonth() {
-      // this.renderCalendar(new Date(this.currentYear, this.currentMonth + 1, 1));
-
       this.currentMonth = this.currentMonth + 1;
       this.fetchCalendar();
     },
@@ -264,6 +261,25 @@ export default {
       this.modal.viewModalOpened = false;
     },
 
+    saveCalendar() {
+      const userNo = this.getSignedInUserData.userNo;
+      const content = this.calContent;
+      const regDate = new Date(this.currentYear, this.currentMonth,  this.modal.date).toISOString().split('T')[0];
+      console.log(userNo, content, regDate);
+      // TODO: 한국시간으로 안맞는듯 -> 날짜 안맞음 & 컨텐츠 안불러와짐
+      this.$store.dispatch('moduleCalendar/CALENDAR_SAVE', {
+        userNo,
+        content,
+        regDate,
+      })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    },
+
   },
 
   mounted() {
@@ -281,7 +297,6 @@ export default {
     this.currentMonth = today.getMonth();
     this.currentDate = today.getDate();
 
-    // this.renderCalendar( new Date( this.currentYear, this.currentMonth, this.currentDate ) );
     this.fetchCalendar();
 
   },

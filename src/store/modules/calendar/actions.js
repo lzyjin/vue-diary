@@ -1,14 +1,23 @@
-import { calendarList } from "@/api";
+import { listCalendar, saveCalendar } from "@/api";
 
 
 export default {
     CALENDAR_LIST({ commit }, payload) {
-        return calendarList(payload.userNo, payload.year, payload.month)
+        return listCalendar(payload.userNo, payload.year, payload.month)
             .then(response => {
                 // console.log(response);
                 // console.log(commit);
 
                 commit('CALENDAR_LIST', response.data.data);
+                return response;
+            });
+    },
+
+    CALENDAR_SAVE({ commit }, payload) {
+        console.log(commit, payload);
+        return saveCalendar(payload.userNo, payload.content, payload.regDate)
+            .then(response => {
+                console.log(response);
                 return response;
             });
     },

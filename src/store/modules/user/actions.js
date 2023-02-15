@@ -16,14 +16,18 @@ export default {
 
     SIGN_IN({ commit }, payload) {
         return signIn(payload.id, payload.password)
-            .then(response => {
-                // console.log(response);
+        .then(response => {
+            // console.log(response);
 
-                // mutation을 commit
-                commit('SIGN_IN', response.data.data.userData);
-                localStorage.setItem('userData', JSON.stringify(response.data.data.userData));
+            // mutation을 commit
+            commit('SIGN_IN', response.data.data.userData);
+            localStorage.setItem('userData', JSON.stringify(response.data.data.userData));
 
-                return response;
-            });
+            return response;
+        });
+    },
+
+    SIGN_OUT({ commit }) {
+        commit('SIGN_OUT');
     },
 }

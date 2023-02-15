@@ -6,7 +6,11 @@ export default {
     },
 
     SIGN_IN(state, userData) {
-        console.log('mutation: ', userData);
+        // console.log('mutation: ', userData);
         state.userData = userData;
+    },
+
+    SIGN_OUT(state) {
+        state.userData = {};
     },
 }

@@ -54,8 +54,8 @@ export default {
           id: this.id,
           password: this.password,
         })
-        .then((response) => {
-          console.log(response);
+        .then(() => {
+          // console.log(response);
 
           if (confirm('로그인 되었습니다.')) {
             router.push({
