@@ -15,7 +15,7 @@ export default {
 
     CALENDAR_SAVE({ commit }, payload) {
         console.log(commit, payload);
-        return saveCalendar(payload.userNo, payload.content, payload.regDate)
+        return saveCalendar(payload.userNo, payload.contents, payload.regDate)
             .then(response => {
                 console.log(response);
                 return response;

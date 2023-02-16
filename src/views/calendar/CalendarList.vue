@@ -258,26 +258,42 @@ export default {
     },
 
     closeViewModal() {
+      this.calContent= '';
       this.modal.viewModalOpened = false;
     },
 
     saveCalendar() {
+      // 참고 블로그: https://gurtn.tistory.com/65
+      const TIME_ZONE = 3240 * 10000; // 9시간
       const userNo = this.getSignedInUserData.userNo;
-      const content = this.calContent;
-      const regDate = new Date(this.currentYear, this.currentMonth,  this.modal.date).toISOString().split('T')[0];
-      console.log(userNo, content, regDate);
-      // TODO: 한국시간으로 안맞는듯 -> 날짜 안맞음 & 컨텐츠 안불러와짐
-      this.$store.dispatch('moduleCalendar/CALENDAR_SAVE', {
-        userNo,
-        content,
-        regDate,
-      })
-      .then(response => {
-        console.log(response);
-      })
-      .catch(e => {
-        console.log(e);
-      });
+      const contents = this.calContent;
+      const date = new Date(this.currentYear, this.currentMonth,  this.modal.date);
+      // 한국시간으로 안맞는듯 -> 날짜 안맞음 & 컨텐츠 안불러와짐 -> toISOString() 메서드가 UTC기준이라고 함
+      const regDate = new Date(+date + TIME_ZONE).toISOString().split('T')[0];
+
+      // console.log(userNo, contents, regDate);
+
+      if ( confirm('저장하시겠습니까?') ) {
+        this.$store.dispatch('moduleCalendar/CALENDAR_SAVE', {
+          userNo,
+          contents,
+          regDate,
+        })
+        .then(response => {
+          console.log(response);
+
+          if (confirm('저장되었습니다.')) {
+            this.fetchCalendar();
+            this.closeViewModal();
+            this.closeListModal();
+          }
+
+        })
+        .catch(e => {
+          console.log(e);
+        });
+      }
+
     },
 
   },
