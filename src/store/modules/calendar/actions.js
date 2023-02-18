@@ -1,4 +1,4 @@
-import { listCalendar, saveCalendar } from "@/api";
+import { listCalendar, saveCalendar, removeCalendar, } from "@/api";
 
 
 export default {
@@ -16,6 +16,15 @@ export default {
     CALENDAR_SAVE({ commit }, payload) {
         console.log(commit, payload);
         return saveCalendar(payload.userNo, payload.contents, payload.regDate)
+            .then(response => {
+                console.log(response);
+                return response;
+            });
+    },
+
+    CALENDAR_REMOVE({ commit }, diaryNo) {
+        console.log(commit, diaryNo);
+        return removeCalendar(diaryNo)
             .then(response => {
                 console.log(response);
                 return response;

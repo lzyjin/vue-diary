@@ -41,3 +41,8 @@ export async function saveCalendar(userNo, contents, regDate) {
         regDate,
     });
 }
+
+// parameter:
+export async function removeCalendar(diaryNo) {
+    return await axios.delete(`http://121.161.237.50:50005/api/diary/remove/${ diaryNo }`);
+}

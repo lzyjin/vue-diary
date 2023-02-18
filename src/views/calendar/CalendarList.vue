@@ -34,44 +34,52 @@
 <!--      <i class="xi-pen"></i>-->
 <!--    </button>-->
 
-    <div v-if="this.modal.listModalOpened">
-      <div class="modal" :class="{opened: this.modal.listModalOpened}">
+    <div v-if="modal.listModalOpened">
+      <div class="modal" :class="{opened: modal.listModalOpened}">
         <div class="modal-top">
-          <p class="date">{{ this.modal.date }}일 {{ this.modal.day }}요일</p>
+          <p class="date">{{ modal.date }}일 {{ modal.day }}요일</p>
           <button>
             <i class="xi-close" @click="closeListModal"></i>
           </button>
         </div>
         <div class="modal-content">
-          <p class="m-count">총 {{ this.modal.scheduleList.length }}개</p>
+          <p class="m-count">총 {{ modal.scheduleList.length }}개</p>
           <ul>
-            <li v-for="(schedule, index) in this.modal.scheduleList" :key="index">
+
+            <li v-for="(schedule, index) in modal.scheduleList" :key="index" @click="openViewModal(schedule)">
               <p>{{ schedule.contents }}</p>
             </li>
-            <li class="m-content" @click="openViewModal">
+
+            <li class="m-content" @click="openViewModal({
+              contents: '',
+              diaryNo: 0,
+              regDate: '',
+              userNo: 0,
+            })">
               <p><i class="xi-plus"></i> 일정 추가하기</p>
             </li>
+
           </ul>
         </div>
       </div>
       <div class="dimmed"></div>
     </div>
 
-    <div v-if="this.modal.viewModalOpened">
-      <div class="modal" :class="{opened: this.modal.viewModalOpened}">
+    <div v-if="modal.viewModalOpened">
+      <div class="modal" :class="{opened: modal.viewModalOpened}">
         <div class="modal-top">
-          <p class="date">{{ this.modal.date }}일 {{ this.modal.day }}요일</p>
-          <button>
-            <i class="xi-close" @click="closeViewModal"></i>
+          <p class="date">{{ modal.date }}일 {{ modal.day }}요일</p>
+          <button @click="closeViewModal">
+            <i class="xi-close"></i>
           </button>
         </div>
         <div class="modal-content">
           <textarea class="content-wrap" v-model="calContent"></textarea>
           <div class="btn-wrap">
-            <button class="btn-delete">
+            <button class="btn-delete" v-if="diaryNo !== 0" @click="removeCalendar(diaryNo);">
               <i class="xi-trash"></i>
             </button>
-            <button class="btn-save" @click="saveCalendar">저장</button>
+            <button class="btn-save" @click="saveCalendar()">{{ diaryNo === 0 ? '저장' : '수정' }}</button>
           </div>
         </div>
       </div>
@@ -118,7 +126,6 @@ export default {
       calendarData: [],
 
       modal: {
-        // opened: false,
         listModalOpened: false,
         viewModalOpened: false,
         date: '',
@@ -127,6 +134,7 @@ export default {
       },
 
       calContent: '',
+      diaryNo: 0,
 
     }
   },
@@ -253,8 +261,11 @@ export default {
       this.modal.listModalOpened = false;
     },
 
-    openViewModal() {
+    openViewModal(schedule) {
+      console.log(schedule);
       this.modal.viewModalOpened = true;
+      this.calContent = schedule?.contents;
+      this.diaryNo = schedule?.diaryNo;
     },
 
     closeViewModal() {
@@ -267,7 +278,7 @@ export default {
       const TIME_ZONE = 3240 * 10000; // 9시간
       const userNo = this.getSignedInUserData.userNo;
       const contents = this.calContent;
-      const date = new Date(this.currentYear, this.currentMonth,  this.modal.date);
+      const date = new Date(this.currentYear, this.currentMonth, this.modal.date);
       // 한국시간으로 안맞는듯 -> 날짜 안맞음 & 컨텐츠 안불러와짐 -> toISOString() 메서드가 UTC기준이라고 함
       const regDate = new Date(+date + TIME_ZONE).toISOString().split('T')[0];
 
@@ -294,6 +305,26 @@ export default {
         });
       }
 
+    },
+
+    removeCalendar(diaryNo) {
+      console.log('캘린더 삭제', diaryNo);
+
+      if ( confirm('삭제하시겠습니까?')) {
+        this.$store.dispatch('moduleCalendar/CALENDAR_REMOVE', diaryNo)
+            .then(response => {
+              console.log(response);
+
+              if ( confirm('삭제되었습니다.') ) {
+                this.fetchCalendar();
+                this.closeViewModal();
+                this.closeListModal();
+              }
+            })
+            .catch(e => {
+              console.log(e);
+            })
+      }
     },
 
   },
