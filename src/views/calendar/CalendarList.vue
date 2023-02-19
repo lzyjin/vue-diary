@@ -76,10 +76,10 @@
         <div class="modal-content">
           <textarea class="content-wrap" v-model="calContent"></textarea>
           <div class="btn-wrap">
-            <button class="btn-delete" v-if="diaryNo !== 0" @click="removeCalendar(diaryNo);">
+            <button class="btn-delete" v-if="diaryNo !== ''" @click="removeCalendar(diaryNo);">
               <i class="xi-trash"></i>
             </button>
-            <button class="btn-save" @click="saveCalendar()">{{ diaryNo === 0 ? '저장' : '수정' }}</button>
+            <button class="btn-save" @click="saveCalendar()">{{ diaryNo === '' ? '저장' : '수정' }}</button>
           </div>
         </div>
       </div>
@@ -134,7 +134,7 @@ export default {
       },
 
       calContent: '',
-      diaryNo: 0,
+      diaryNo: '',
 
     }
   },
@@ -189,7 +189,7 @@ export default {
       }
 
       // 다음달 렌더링
-      for (let i = 1; i <= 7 - this.thisMonthLastDay; i++) {
+      for (let i = 1; i <= (this.thisMonthLastDay === 0 ? 0 : 7 - this.thisMonthLastDay); i++) {
         calendarData.push({
           date : i,
           disable: true,
@@ -277,6 +277,7 @@ export default {
       // 참고 블로그: https://gurtn.tistory.com/65
       const TIME_ZONE = 3240 * 10000; // 9시간
       const userNo = this.getSignedInUserData.userNo;
+      const diaryNo = this.diaryNo;
       const contents = this.calContent;
       const date = new Date(this.currentYear, this.currentMonth, this.modal.date);
       // 한국시간으로 안맞는듯 -> 날짜 안맞음 & 컨텐츠 안불러와짐 -> toISOString() 메서드가 UTC기준이라고 함
@@ -284,16 +285,17 @@ export default {
 
       // console.log(userNo, contents, regDate);
 
-      if ( confirm('저장하시겠습니까?') ) {
+      if ( confirm(diaryNo === '' ? '저장하시겠습니까?' : '수정하시겠습니까?') ) {
         this.$store.dispatch('moduleCalendar/CALENDAR_SAVE', {
           userNo,
           contents,
           regDate,
+          diaryNo,
         })
         .then(response => {
           console.log(response);
 
-          if (confirm('저장되었습니다.')) {
+          if (confirm(diaryNo === '' ? '저장되었습니다.' : '수정되었습니다.')) {
             this.fetchCalendar();
             this.closeViewModal();
             this.closeListModal();
@@ -312,18 +314,18 @@ export default {
 
       if ( confirm('삭제하시겠습니까?')) {
         this.$store.dispatch('moduleCalendar/CALENDAR_REMOVE', diaryNo)
-            .then(response => {
-              console.log(response);
+        .then(response => {
+          console.log(response);
 
-              if ( confirm('삭제되었습니다.') ) {
-                this.fetchCalendar();
-                this.closeViewModal();
-                this.closeListModal();
-              }
-            })
-            .catch(e => {
-              console.log(e);
-            })
+          if ( confirm('삭제되었습니다.') ) {
+            this.fetchCalendar();
+            this.closeViewModal();
+            this.closeListModal();
+          }
+        })
+        .catch(e => {
+          console.log(e);
+        })
       }
     },
 

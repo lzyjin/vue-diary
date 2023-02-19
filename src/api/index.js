@@ -34,11 +34,12 @@ export async function listCalendar(userNo, year, month) {
 }
 
 // parameter: userNo, content, regDate
-export async function saveCalendar(userNo, contents, regDate) {
+export async function saveCalendar(payload) {
     return await axios.post('http://121.161.237.50:50005/api/diary/save', {
-        userNo,
-        contents,
-        regDate,
+        userNo: payload.userNo,
+        contents: payload.contents,
+        regDate: payload.regDate,
+        diaryNo: payload.diaryNo,
     });
 }
 
