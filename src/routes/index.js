@@ -2,7 +2,8 @@ import VueRouter from "vue-router";
 import SignIn from '@/views/user/signIn';
 import SignUp from "@/views/user/signUp";
 import CalendarList from "@/views/calendar/CalendarList";
-import { store } from '@/store/index';
+import MemoryList from "@/views/memory/MemoryList";
+import { store } from '@/store';
 // import cookies from 'vue-cookies';
 
 
@@ -33,6 +34,11 @@ export const router = new VueRouter({
             name:'Calendar',
             component: CalendarList,
         },
+        {
+            path: '/memory',
+            name: 'Memory',
+            component: MemoryList,
+        }
     ],
 });
 
@@ -42,6 +48,8 @@ export const router = new VueRouter({
 // TODO: state의 값을 사용할 때는 state에 직접 접근하지 말고 무조건 getters로 접근하자.
 router.beforeEach((to, from, next) => {
 
+    store.dispatch('common/CLOSE_MENU');
+
     if (to.name === 'SignOut') {
         localStorage.removeItem('userData');
         store.dispatch('moduleUser/SIGN_OUT')
@@ -49,10 +57,6 @@ router.beforeEach((to, from, next) => {
             alert('로그아웃되었습니다. 다시 로그인을 해 주세요.');
             next("/signin");
         });
-        // if (!store.getters["moduleUser/getSignedInUserData"]) {
-        //     alert('로그아웃되었습니다. 다시 로그인을 해 주세요.');
-        //     next("/signin");
-        // }
 
     } else if (to.name === 'Calendar') {
         if (!store.getters["moduleUser/getSignedInUserData"]) {

@@ -16,6 +16,8 @@
         </div>
       </div>
       <nav>
+        <router-link to="Calendar" class="link">캘린더</router-link>
+        <router-link to="Memory" class="link">추억</router-link>
         <router-link to="SignUp" class="link">회원가입</router-link>
         <router-link to="SignOut" class="link" @click.native="closeMenu">로그아웃</router-link>
       </nav>
@@ -24,19 +26,29 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "headerLayout",
   data() {
     return {
-      menuState: false,
+      // menuState: false,
     }
+  },
+  computed: {
+    ...mapGetters({
+      menuState: 'common/menuState',
+    }),
   },
   methods: {
     openMenu() {
-      this.menuState = true;
+      // this.menuState = true;
+      this.$store.dispatch('common/OPEN_MENU');
     },
+
     closeMenu() {
-      this.menuState = false;
+      // this.menuState = false;
+      this.$store.dispatch('common/CLOSE_MENU');
     },
   },
 }
