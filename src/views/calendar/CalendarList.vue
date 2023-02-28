@@ -30,10 +30,6 @@
       </div>
     </div>
 
-<!--    <button class="btn-write-cal" @click="writeCal">-->
-<!--      <i class="xi-pen"></i>-->
-<!--    </button>-->
-
     <div v-if="modal.listModalOpened">
       <div class="modal" :class="{opened: modal.listModalOpened}">
         <div class="modal-top">
