@@ -31,7 +31,7 @@
       <div class="modal" :class="{opened: modal.editModalOpened}">
         <div class="modal-top">
           <button @click="" style="margin-left: auto;">
-            <i class="xi-close"></i>5
+            <i class="xi-close"></i>
           </button>
         </div>
         <div class="modal-content">
@@ -42,27 +42,40 @@
               <strong>키테고리</strong>
               <div class="select-wrap">
                 <select name="" id="">
-                  <option value="">음식</option>
-                  <option value="">쇼핑</option>
-                  <option value="">여행</option>
-                  <option value="">전시</option>
+                  <option value="food">음식</option>
+                  <option value="shoping">쇼핑</option>
+                  <option value="trip">여행</option>
+                  <option value="movie">영화</option>
+                  <option value="study">공부</option>
+                  <option value="cafe">카페</option>
+                  <option value="exotic">이색적인</option>
+                  <option value="cultural_life">문화생활</option>
+                  <option value="exhibition">전시회</option>
+                  <option value="review">후기</option>
                 </select>
               </div>
             </div>
             <div class="c-item">
               <strong>일자</strong>
-              <input type="date" name="" id="">
+              <input type="date" name="" id="" required>
             </div>
             <div class="c-item">
               <strong>주소</strong>
-              <input type="text" name="" id="">
+              <input type="text" name="" id="" @click="openKakaoAPI" readonly required placeholder="클릭하여 주소를 검색하세요.">
             </div>
             <div class="c-item">
               <strong>내용</strong>
-              <textarea name="" id=""></textarea>
+              <textarea name="" id="" required></textarea>
             </div>
             <div class="c-item">
-              사진추가영역
+              <div class="add-photo">
+                <label for="btnFileUpload">
+                  <i class="xi-plus"></i>
+                </label>
+                <input type="file" name="" id="btnFileUpload" multiple @change="selectPhoto">
+                <i class="xi-ellipsis-h"></i>
+              </div>
+
             </div>
           </div>
 
@@ -89,6 +102,29 @@ export default {
       }
     }
   },
+  methods: {
+    openKakaoAPI: (e) => {
+      new daum.Postcode({
+        oncomplete: function(data) {
+          console.log(data);
+          console.log(data.address);
+          e.target.value = data.address;
+        }
+      }).open();
+    },
+
+    selectPhoto: (e) => {
+      // console.log(e.target.files);
+
+      if (e.target.files.length > 3) {
+        alert('이미지 첨부는 최대 3개까지 가능합니다.');
+      }
+
+      console.log(e.target.files);
+
+      const fileReader = new FileReader();
+    }
+  }
 }
 </script>
 

@@ -1247,10 +1247,31 @@ em.mo-br {
   display: block;
   background: #f7f7f7;
   border-radius: 10px;
-  padding: 20px 20px 50px;
+  padding: 10px 10px;
   min-height: 150px;
   line-height: 1.6;
   border: none;
+}
+
+.modal-content .category .c-item .add-photo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-content .category .c-item label[for=btnFileUpload] {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content .category .c-item #btnFileUpload {
+  display: none;
 }
 
 .modal-content .btn-wrap {
