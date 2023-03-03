@@ -1,88 +1,85 @@
 <template>
-  <div>
-    <div class="calendar-wrap">
-      <div class="month-wrap">
-        <button class="btn-prev-month" @click="renderPrevMonth">&lt;</button>
-        <p class="curr-month">{{ currentYear }}년 {{ currentMonth + 1 }}월</p>
-        <button class="btn-next-month" @click="renderNextMonth">&gt;</button>
-      </div>
-      <div class="calendar">
-        <div class="cal-header">
-          <div class="day">월</div>
-          <div class="day">화</div>
-          <div class="day">수</div>
-          <div class="day">목</div>
-          <div class="day">금</div>
-          <div class="day">토</div>
-          <div class="day">일</div>
+    <div>
+        <div class="calendar-wrap">
+            <div class="month-wrap">
+                <button class="btn-prev-month" @click="renderPrevMonth">&lt;</button>
+                <p class="curr-month">{{ currentYear }}년 {{ currentMonth + 1 }}월</p>
+                <button class="btn-next-month" @click="renderNextMonth">&gt;</button>
+            </div>
+            <div class="calendar">
+                <div class="cal-header">
+                    <div class="day">월</div>
+                    <div class="day">화</div>
+                    <div class="day">수</div>
+                    <div class="day">목</div>
+                    <div class="day">금</div>
+                    <div class="day">토</div>
+                    <div class="day">일</div>
+                </div>
+                <div class="cal-content">
+                    <div v-for="(item, index) in calendarData" :key="index"
+                        class="date"
+                        :class="{
+                            disable: item.disable,
+                            today: currentYear === today.year && currentMonth === today.month && item.date === today.date }"
+                        @click="openListModal(item)">
+                        <span>{{ item.date }}</span>
+                        <em v-if="item?.data && item?.data?.length > 0" class="mark">💜</em>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="cal-content">
-          <div v-for="(item, index) in calendarData" :key="index"
-                class="date"
-                :class="{
-                  disable: item.disable,
-                  today: currentYear === today.year && currentMonth === today.month && item.date === today.date }"
-                @click="openListModal(item)">
-            <span>{{ item.date }}</span>
-            <em v-if="item?.data && item?.data?.length > 0" class="mark">💜</em>
+        <div v-if="modal.listModalOpened">
+            <div class="modal" :class="{opened: modal.listModalOpened}">
+            <div class="modal-top">
+              <p class="date">{{ modal.date }}일 {{ modal.day }}요일</p>
+              <button>
+                <i class="xi-close" @click="closeListModal"></i>
+              </button>
+            </div>
+            <div class="modal-content">
+              <p class="m-count">총 {{ modal.scheduleList.length }}개</p>
+              <ul>
+
+                <li v-for="(schedule, index) in modal.scheduleList" :key="index" @click="openViewModal(schedule)">
+                  <p>{{ schedule.contents }}</p>
+                </li>
+
+                <li class="m-content" @click="openViewModal({
+                  contents: '',
+                  diaryNo: 0,
+                  regDate: '',
+                  userNo: 0,
+                })">
+                  <p><i class="xi-plus"></i> 일정 추가하기</p>
+                </li>
+
+              </ul>
+            </div>
+            </div>
+            <div class="dimmed"></div>
+        </div>
+        <div v-if="modal.viewModalOpened">
+            <div class="modal" :class="{opened: modal.viewModalOpened}">
+            <div class="modal-top">
+              <p class="date">{{ modal.date }}일 {{ modal.day }}요일</p>
+              <button @click="closeViewModal">
+                <i class="xi-close"></i>
+              </button>
+            </div>
+            <div class="modal-content">
+              <textarea class="content-wrap" v-model="calContent"></textarea>
+              <div class="btn-wrap">
+                <button class="btn-delete" v-if="diaryNo !== ''" @click="removeCalendar(diaryNo);">
+                  <i class="xi-trash"></i>
+                </button>
+                <button class="btn-save" @click="saveCalendar()">{{ diaryNo === '' ? '저장' : '수정' }}</button>
+              </div>
+            </div>
           </div>
+            <!--<div class="dimmed"></div>-->
         </div>
-      </div>
     </div>
-
-    <div v-if="modal.listModalOpened">
-      <div class="modal" :class="{opened: modal.listModalOpened}">
-        <div class="modal-top">
-          <p class="date">{{ modal.date }}일 {{ modal.day }}요일</p>
-          <button>
-            <i class="xi-close" @click="closeListModal"></i>
-          </button>
-        </div>
-        <div class="modal-content">
-          <p class="m-count">총 {{ modal.scheduleList.length }}개</p>
-          <ul>
-
-            <li v-for="(schedule, index) in modal.scheduleList" :key="index" @click="openViewModal(schedule)">
-              <p>{{ schedule.contents }}</p>
-            </li>
-
-            <li class="m-content" @click="openViewModal({
-              contents: '',
-              diaryNo: 0,
-              regDate: '',
-              userNo: 0,
-            })">
-              <p><i class="xi-plus"></i> 일정 추가하기</p>
-            </li>
-
-          </ul>
-        </div>
-      </div>
-      <div class="dimmed"></div>
-    </div>
-
-    <div v-if="modal.viewModalOpened">
-      <div class="modal" :class="{opened: modal.viewModalOpened}">
-        <div class="modal-top">
-          <p class="date">{{ modal.date }}일 {{ modal.day }}요일</p>
-          <button @click="closeViewModal">
-            <i class="xi-close"></i>
-          </button>
-        </div>
-        <div class="modal-content">
-          <textarea class="content-wrap" v-model="calContent"></textarea>
-          <div class="btn-wrap">
-            <button class="btn-delete" v-if="diaryNo !== ''" @click="removeCalendar(diaryNo);">
-              <i class="xi-trash"></i>
-            </button>
-            <button class="btn-save" @click="saveCalendar()">{{ diaryNo === '' ? '저장' : '수정' }}</button>
-          </div>
-        </div>
-      </div>
-<!--      <div class="dimmed"></div>-->
-    </div>
-
-  </div>
 </template>
 
 <script>

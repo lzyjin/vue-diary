@@ -1274,6 +1274,36 @@ em.mo-br {
   display: none;
 }
 
+.modal-content .category .c-item .thumb {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.modal-content .category .c-item .thumb .btn-delete {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.modal-content .category .c-item .thumb .btn-delete i {
+  color: #fff;
+  font-size: 0.5rem;
+}
+
 .modal-content .btn-wrap {
   margin-top: 20px;
   display: flex;
