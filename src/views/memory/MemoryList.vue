@@ -33,54 +33,55 @@
                         <i class="xi-close"></i>
                     </button>
                 </div>
+<!--                {{ modal.formData }}-->
                 <div class="modal-content">
                     <!--  카테고리(셀렉트), 일자(피커), 주소(다음 우편번호검색), 내용(최대500자), 사진추가(최대3개)-->
                     <div class="category">
-                        <div class="c-item">
-                            <strong>키테고리</strong>
-                            <div class="select-wrap">
-                            <select name="" id="">
-                              <option value="food">음식</option>
-                              <option value="shoping">쇼핑</option>
-                              <option value="trip">여행</option>
-                              <option value="movie">영화</option>
-                              <option value="study">공부</option>
-                              <option value="cafe">카페</option>
-                              <option value="exotic">이색적인</option>
-                              <option value="cultural_life">문화생활</option>
-                              <option value="exhibition">전시회</option>
-                              <option value="review">후기</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="c-item">
-                            <strong>일자</strong>
-                            <input type="date" name="" id="" required>
-                        </div>
-                        <div class="c-item">
-                            <strong>주소</strong>
-                            <input type="text" name="" id="" @click="openKakaoAPI" readonly required placeholder="클릭하여 주소를 검색하세요.">
-                        </div>
-                        <div class="c-item">
-                            <strong>내용</strong>
-                            <textarea name="" id="" required placeholder="추억할 내용을 적어보세요. :)"></textarea>
-                        </div>
-                        <div class="c-item">
-                            <strong>사진첨부</strong>
-                            <div class="add-photo">
-                                <div class="thumb" v-for="(v, i) in modal.fileList" :key="i"
-                                     :style="{ 'background-image' : `url('${v}')` }">
-                                    <div class="btn-delete" @click="deleteThumb(i)">
-                                        <i class="xi-close"></i>
-                                    </div>
+                            <div class="c-item">
+                                <strong>카테고리 <span class="asterisk">*</span></strong>
+                                <div class="select-wrap">
+                                    <select name="" id="" required v-model="modal.formData.category">
+                                        <option value="" disabled>카테고리를 선택하세요.</option>
+                                        <option value="food">음식</option>
+                                        <option value="shoping">쇼핑</option>
+                                        <option value="trip">여행</option>
+                                        <option value="movie">영화</option>
+                                        <option value="study">공부</option>
+                                        <option value="cafe">카페</option>
+                                        <option value="exotic">이색적인</option>
+                                        <option value="cultural_life">문화생활</option>
+                                        <option value="exhibition">전시회</option>
+                                        <option value="review">후기</option>
+                                    </select>
                                 </div>
-                                <label for="btnFileUpload" v-if="modal.fileList.length < 3">
-                                    <i class="xi-plus"></i>
-                                </label>
-                                <input type="file" name="" id="btnFileUpload" multiple @change="selectPhoto">
+                            </div>
+                            <div class="c-item">
+                                <strong>일자 <span class="asterisk">*</span></strong>
+                                <input type="date" name="" id="" v-model="modal.formData.regDate" required>
+                            </div>
+                            <div class="c-item">
+                                <strong>주소 <span class="asterisk">*</span></strong>
+                                <input type="text" name="" id="" @click="openKakaoAPI" readonly required placeholder="클릭하여 주소를 검색하세요." v-model="modal.formData.address">
+                            </div>
+                            <div class="c-item">
+                                <strong>내용 <span class="asterisk">*</span></strong>
+                                <textarea name="" id="" required placeholder="추억할 내용을 적어보세요 :)" v-model="modal.formData.contents"></textarea>
+                            </div>
+                            <div class="c-item">
+                                <strong>사진첨부</strong>
+                                <div class="add-photo">
+                                    <div class="thumb" v-for="(v, i) in modal.thumbList" :key="i" :style="{ 'background-image' : `url('${v}')` }">
+                                        <div class="btn-delete" @click="deletePhoto(i)">
+                                            <i class="xi-close"></i>
+                                        </div>
+                                    </div>
+                                    <label for="btnFileUpload" v-if="modal.formData.fileList.length < 3">
+                                        <i class="xi-plus"></i>
+                                    </label>
+                                    <input type="file" name="" id="btnFileUpload" multiple @change="uploadPhoto">
+                                </div>
                             </div>
                         </div>
-                    </div>
                     <div class="btn-wrap">
                         <button class="btn-delete">
                             <i class="xi-trash"></i>
@@ -101,46 +102,78 @@ export default {
         return {
             modal: {
                 editModalOpened: true,
-                fileList: [],
+
+                thumbList: [],
+
+                formData: {
+                    // 사용자 정보(필수)
+                    user: {}, // store의 state 넣기
+
+                    // 입력한 값(필수)
+                    category: '',
+                    address: '',
+                    memoryNo: null, // 서버에서 없으면 등록, 있으면 수정으로 인식함
+                    regDate: '',
+                    contents: '',
+
+                    // 이미지 파일(선택)
+                    fileList: [],
+                    // firstMultipartFile: null,
+                    // firstPhoto: {
+                    //     photoNo: null,
+                    //     photoUrl: null,
+                    // },
+                    // secondMultipartFile: null,
+                    // secondPhoto: {
+                    //     photoNo: null,
+                    //     photoUrl: null,
+                    // },
+                    // thirdMultipartFile: null,
+                    // thirdPhoto: {
+                    //     photoNo: null,
+                    //     photoUrl: null,
+                    // }
+                },
             }
         }
     },
     methods: {
+        // TODO: npm으로 바꾸기
         openKakaoAPI: function(e) {
             new daum.Postcode({
-                oncomplete: function(data) {
-                    console.log(data);
-                    console.log(data.address);
-                    e.target.value = data.address;
+                oncomplete: (data) => {
+                    // console.log(this); // vue
+                    this.modal.formData.address = data.address;
                 }
             }).open();
         },
 
-        selectPhoto: function(e) {
-            console.log(e.target.files);
+        uploadPhoto: function(e) {
+            const files = [...e.target.files];
+            // const formData = new FormData(); // 지금 필요 없음, 등록 버튼 누를 때 필요하겠네.
 
-            if (e.target.files.length > 3 || (e.target.files.length + this.modal.fileList.length) > 3) {
+            if (files.length > 3 || (files.length + this.modal.formData.fileList.length) > 3) {
                 alert('이미지 첨부는 최대 3개까지 가능합니다.');
                 return;
             }
 
-            const selectedFiles = [...e.target.files];
-            const fileReader = new FileReader();
-
-            for (let i = 0; i < selectedFiles.length; i++) {
+            for (let i = 0; i < files.length; i++) {
                 const fileReader = new FileReader();
-                fileReader.readAsDataURL(selectedFiles[i]);
+                fileReader.readAsDataURL(files[i]);
                 fileReader.onload = () => {
-                    console.log(this);
-                    console.log(this.modal);
-                    // this.modal.fileList.push(fileReader.result);
-                    this.modal.fileList.unshift(fileReader.result);
+                    this.modal.thumbList.push(fileReader.result);
+                    this.modal.formData.fileList.push(files[i]);
                 }
             }
+
+            console.log(this.modal.formData.fileList); // 파일
+            // console.log(formData);
+            // console.log(formData.getAll('files'));
         },
 
-        deleteThumb: function(fileIndex) {
-            this.modal.fileList.splice(fileIndex, 1);
+        deletePhoto: function(fileIndex) {
+            this.modal.thumbList.splice(fileIndex, 1);
+            this.modal.formData.fileList.splice(fileIndex, 1);
         },
     }
 }

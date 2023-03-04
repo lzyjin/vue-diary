@@ -75,7 +75,11 @@
 
                 strong {
                     width: 25%;
-                    color: #ccc;
+                    color: #aaa;
+
+                    .asterisk {
+                        color: variables.$company-color;
+                    }
                 }
 
                 strong+* {

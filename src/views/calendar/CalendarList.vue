@@ -77,7 +77,6 @@
               </div>
             </div>
           </div>
-            <!--<div class="dimmed"></div>-->
         </div>
     </div>
 </template>
@@ -86,262 +85,246 @@
 import { mapGetters } from "vuex";
 
 export default {
-  name: "CalendarList",
+    name: "CalendarList",
 
-  computed: {
+    computed: {
     ...mapGetters({
-      calendarList: 'moduleCalendar/calendarList',
-      getSignedInUserData: 'moduleUser/getSignedInUserData',
-    }),
-  },
-
-  components: {
-  },
-
-  data() {
-    return {
-      today: {
-        year: '',
-        month: '',
-        date: '',
-        day: ''
-      },
-
-      lastMonthLastDate: 0,
-      lastMonthLastDay: 0,
-      thisMonthLastDate: 0,
-      thisMonthLastDay: 0,
-
-      currentYear: 0,
-      currentMonth: 0,
-      currentDate: 0,
-
-      calendarData: [],
-
-      modal: {
-        listModalOpened: false,
-        viewModalOpened: false,
-        date: '',
-        day: '',
-        scheduleList: [],
-      },
-
-      calContent: '',
-      diaryNo: '',
-
-    }
-  },
-
-  methods: {
-    renderCalendar(thisMonthDate)  {
-      // month 는 0이 1월, 1이 2월 ... 11이 12월
-      // day는 0이 일요일, 1이 월요일 ... 6이 토요일
-
-      this.currentYear = thisMonthDate.getFullYear();
-      this.currentMonth = thisMonthDate.getMonth();
-      this.currentDate = thisMonthDate.getDate();
-
-
-      // Date 객체를 만들 때 날짜를 0으로 지정하면 지난 달의 마지막 날짜를 가진 Date 객체가 반환된다.
-
-      // 지난 달의 마지막 날의 날짜와 요일
-      const lastMonthLastD = new Date(this.currentYear, this.currentMonth, 0);
-      this.lastMonthLastDate = lastMonthLastD.getDate();
-      this.lastMonthLastDay = lastMonthLastD.getDay();
-
-      // 이번 달의 마지막 날의 날짜와 요일
-      const thisMonthLastD = new Date(this.currentYear, this.currentMonth + 1, 0);
-      this.thisMonthLastDate = thisMonthLastD.getDate();
-      this.thisMonthLastDay = thisMonthLastD.getDay();
-
-
-      let calendarData = [];
-
-      // 지난달 렌더링
-      for (let i = this.lastMonthLastDate - this.lastMonthLastDay + 1; i <= this.lastMonthLastDate; i++) {
-        calendarData.push({
-          date : i,
-          disable: true,
-        });
-      }
-
-      // 이번달 렌더링
-      for (let i = 1; i < this.thisMonthLastDate + 1; i++) {
-        calendarData.push({
-          date : i,
-          disable: false,
-          data: [],
-        });
-
-        // 이번달의 날짜에 해당하는 일정을 calendarDate.data 배열에 push
-        this.calendarList.filter((v) => {
-          if (i ===  new Date(v.regDate).getDate()) {
-            calendarData[i+1].data.push(v);
-          }
-        });
-      }
-
-      // 다음달 렌더링
-      for (let i = 1; i <= (this.thisMonthLastDay === 0 ? 0 : 7 - this.thisMonthLastDay); i++) {
-        calendarData.push({
-          date : i,
-          disable: true,
-        });
-      }
-
-      this.calendarData = calendarData;
-
+            calendarList: 'moduleCalendar/calendarList',
+            getSignedInUserData: 'moduleUser/getSignedInUserData',
+        }),
     },
 
-    fetchCalendar() {
-      const userNo = this.getSignedInUserData.userNo;
-      this.$store.dispatch('moduleCalendar/CALENDAR_LIST', {
-        userNo,
-        year: this.currentYear,
-        month: this.currentMonth + 1,
-      })
-      .then(() => {
-        // console.log(response);
-        this.renderCalendar( new Date( this.currentYear, this.currentMonth, this.currentDate ) );
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    components: {
     },
 
-    renderPrevMonth() {
-      this.currentMonth = this.currentMonth - 1;
-      this.fetchCalendar();
+    data() {
+        return {
+            today: {
+                year: '',
+                month: '',
+                date: '',
+                day: ''
+            },
+
+            lastMonthLastDate: 0,
+            lastMonthLastDay: 0,
+            thisMonthLastDate: 0,
+            thisMonthLastDay: 0,
+
+            currentYear: 0,
+            currentMonth: 0,
+            currentDate: 0,
+
+            calendarData: [],
+
+            modal: {
+                listModalOpened: false,
+                viewModalOpened: false,
+                date: '',
+                day: '',
+                scheduleList: [],
+            },
+
+            calContent: '',
+            diaryNo: '',
+        }
     },
 
-    renderNextMonth() {
-      this.currentMonth = this.currentMonth + 1;
-      this.fetchCalendar();
-    },
+    methods: {
+        renderCalendar(thisMonthDate)  {
+            // month 는 0이 1월, 1이 2월 ... 11이 12월
+            // day는 0이 일요일, 1이 월요일 ... 6이 토요일
+            this.currentYear = thisMonthDate.getFullYear();
+            this.currentMonth = thisMonthDate.getMonth();
+            this.currentDate = thisMonthDate.getDate();
 
-    openListModal(item) {
-      this.modal.listModalOpened = true;
-      this.modal.scheduleList = item.data;
-      this.modal.date = item.date;
-      let day = new Date(this.currentYear, this.currentMonth, item.date).getDay();
-      switch (day) {
-        case 1:
-          day = '월';
-          break;
-        case 2:
-          day = '화';
-          break;
-        case 3:
-          day = '수';
-          break;
-        case 4:
-          day = '목';
-          break;
-        case 5:
-          day = '금';
-          break;
-        case 6:
-          day = '토';
-          break;
-        case 0:
-          day = '일';
-          break;
-      }
-      this.modal.day = day;
-    },
+            // Date 객체를 만들 때 날짜를 0으로 지정하면 지난 달의 마지막 날짜를 가진 Date 객체가 반환된다.
 
-    closeListModal() {
-      this.modal.listModalOpened = false;
-    },
+            // 지난 달의 마지막 날의 날짜와 요일
+            const lastMonthLastD = new Date(this.currentYear, this.currentMonth, 0);
+            this.lastMonthLastDate = lastMonthLastD.getDate();
+            this.lastMonthLastDay = lastMonthLastD.getDay();
 
-    openViewModal(schedule) {
-      console.log(schedule);
-      this.modal.viewModalOpened = true;
-      this.calContent = schedule?.contents;
-      this.diaryNo = schedule?.diaryNo;
-    },
+            // 이번 달의 마지막 날의 날짜와 요일
+            const thisMonthLastD = new Date(this.currentYear, this.currentMonth + 1, 0);
+            this.thisMonthLastDate = thisMonthLastD.getDate();
+            this.thisMonthLastDay = thisMonthLastD.getDay();
 
-    closeViewModal() {
-      this.calContent= '';
-      this.modal.viewModalOpened = false;
-    },
+            let calendarData = [];
 
-    saveCalendar() {
-      // 참고 블로그: https://gurtn.tistory.com/65
-      const TIME_ZONE = 3240 * 10000; // 9시간
-      const userNo = this.getSignedInUserData.userNo;
-      const diaryNo = this.diaryNo;
-      const contents = this.calContent;
-      const date = new Date(this.currentYear, this.currentMonth, this.modal.date);
-      // 한국시간으로 안맞는듯 -> 날짜 안맞음 & 컨텐츠 안불러와짐 -> toISOString() 메서드가 UTC기준이라고 함
-      const regDate = new Date(+date + TIME_ZONE).toISOString().split('T')[0];
+            // 지난달 렌더링
+            for (let i = this.lastMonthLastDate - this.lastMonthLastDay + 1; i <= this.lastMonthLastDate; i++) {
+                calendarData.push({
+                    date : i,
+                    disable: true,
+                });
+            }
 
-      // console.log(userNo, contents, regDate);
+            // 이번달 렌더링
+            for (let i = 1; i < this.thisMonthLastDate + 1; i++) {
+                calendarData.push({
+                    date : i,
+                    disable: false,
+                    data: [],
+                });
 
-      if ( confirm(diaryNo === '' ? '저장하시겠습니까?' : '수정하시겠습니까?') ) {
-        this.$store.dispatch('moduleCalendar/CALENDAR_SAVE', {
-          userNo,
-          contents,
-          regDate,
-          diaryNo,
-        })
-        .then(response => {
-          console.log(response);
+                // 이번달의 날짜에 해당하는 일정을 calendarDate.data 배열에 push
+                this.calendarList.filter((v) => {
+                    if (i ===  new Date(v.regDate).getDate()) {
+                        calendarData[i+1].data.push(v);
+                    }
+                });
+            }
 
-          if (confirm(diaryNo === '' ? '저장되었습니다.' : '수정되었습니다.')) {
+            // 다음달 렌더링
+            for (let i = 1; i <= (this.thisMonthLastDay === 0 ? 0 : 7 - this.thisMonthLastDay); i++) {
+                calendarData.push({
+                    date : i,
+                    disable: true,
+                });
+            }
+
+            this.calendarData = calendarData;
+
+        },
+
+        fetchCalendar() {
+            const userNo = this.getSignedInUserData.userNo;
+            this.$store.dispatch('moduleCalendar/CALENDAR_LIST', {
+                userNo,
+                year: this.currentYear,
+                month: this.currentMonth + 1,
+            })
+            .then(() => {
+                this.renderCalendar( new Date( this.currentYear, this.currentMonth, this.currentDate ) );
+            })
+            .catch(e => {
+                console.log(e);
+            });
+        },
+
+        renderPrevMonth() {
+            this.currentMonth = this.currentMonth - 1;
             this.fetchCalendar();
-            this.closeViewModal();
-            this.closeListModal();
-          }
+        },
 
-        })
-        .catch(e => {
-          console.log(e);
-        });
-      }
-
-    },
-
-    removeCalendar(diaryNo) {
-      console.log('캘린더 삭제', diaryNo);
-
-      if ( confirm('삭제하시겠습니까?')) {
-        this.$store.dispatch('moduleCalendar/CALENDAR_REMOVE', diaryNo)
-        .then(response => {
-          console.log(response);
-
-          if ( confirm('삭제되었습니다.') ) {
+        renderNextMonth() {
+            this.currentMonth = this.currentMonth + 1;
             this.fetchCalendar();
-            this.closeViewModal();
-            this.closeListModal();
-          }
-        })
-        .catch(e => {
-          console.log(e);
-        })
-      }
+        },
+
+        openListModal(item) {
+            this.modal.listModalOpened = true;
+            this.modal.scheduleList = item.data;
+            this.modal.date = item.date;
+            let day = new Date(this.currentYear, this.currentMonth, item.date).getDay();
+            switch (day) {
+                case 1:
+                    day = '월';
+                    break;
+                case 2:
+                    day = '화';
+                    break;
+                case 3:
+                    day = '수';
+                    break;
+                case 4:
+                    day = '목';
+                    break;
+                case 5:
+                    day = '금';
+                    break;
+                case 6:
+                    day = '토';
+                    break;
+                case 0:
+                    day = '일';
+                    break;
+            }
+            this.modal.day = day;
+        },
+
+        closeListModal() {
+            this.modal.listModalOpened = false;
+        },
+
+        openViewModal(schedule) {
+            this.modal.viewModalOpened = true;
+            this.calContent = schedule?.contents;
+            this.diaryNo = schedule?.diaryNo;
+        },
+
+        closeViewModal() {
+            this.calContent= '';
+            this.modal.viewModalOpened = false;
+        },
+
+        saveCalendar() {
+            // 참고 블로그: https://gurtn.tistory.com/65
+            const TIME_ZONE = 3240 * 10000; // 9시간
+            const userNo = this.getSignedInUserData.userNo;
+            const diaryNo = this.diaryNo;
+            const contents = this.calContent;
+            const date = new Date(this.currentYear, this.currentMonth, this.modal.date);
+            // 한국시간으로 안맞는듯 -> 날짜 안맞음 & 컨텐츠 안불러와짐 -> toISOString() 메서드가 UTC기준이라고 함
+            const regDate = new Date(+date + TIME_ZONE).toISOString().split('T')[0];
+
+            // console.log(userNo, contents, regDate);
+
+            if ( confirm(diaryNo === '' ? '저장하시겠습니까?' : '수정하시겠습니까?') ) {
+                this.$store.dispatch('moduleCalendar/CALENDAR_SAVE', {
+                    userNo,
+                    contents,
+                    regDate,
+                    diaryNo,
+                })
+                .then(response => {
+                    if (confirm(diaryNo === '' ? '저장되었습니다.' : '수정되었습니다.')) {
+                        this.fetchCalendar();
+                        this.closeViewModal();
+                        this.closeListModal();
+                    }
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+            }
+        },
+
+        removeCalendar(diaryNo) {
+            if ( confirm('삭제하시겠습니까?')) {
+                this.$store.dispatch('moduleCalendar/CALENDAR_REMOVE', diaryNo)
+                .then(response => {
+                    if ( confirm('삭제되었습니다.') ) {
+                        this.fetchCalendar();
+                        this.closeViewModal();
+                        this.closeListModal();
+                    }
+                })
+                .catch(e => {
+                    console.log(e);
+                })
+            }
+        },
     },
 
-  },
+    mounted() {
+        // 참고 블로그: https://songsong.dev/11
+        // API: 121.161.237.50:50005/swagger-ui/index.html
 
-  mounted() {
-    // 참고 블로그: https://songsong.dev/11
-    // API: 121.161.237.50:50005/swagger-ui/index.html
+        const today = new Date();
+        this.today.year = today.getFullYear();
+        this.today.month = today.getMonth();
+        this.today.date = today.getDate();
+        this.today.day = today.getDay();
 
-    const today = new Date();
-    this.today.year = today.getFullYear();
-    this.today.month = today.getMonth();
-    this.today.date = today.getDate();
-    this.today.day = today.getDay();
+        // 달력에서 표기하는 년, 월, 일
+        this.currentYear = today.getFullYear();
+        this.currentMonth = today.getMonth();
+        this.currentDate = today.getDate();
 
-    // 달력에서 표기하는 년, 월, 일
-    this.currentYear = today.getFullYear();
-    this.currentMonth = today.getMonth();
-    this.currentDate = today.getDate();
-
-    this.fetchCalendar();
-
-  },
+        this.fetchCalendar();
+    },
 }
 </script>
 

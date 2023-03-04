@@ -1217,7 +1217,11 @@ em.mo-br {
 
 .modal-content .category .c-item strong {
   width: 25%;
-  color: #ccc;
+  color: #aaa;
+}
+
+.modal-content .category .c-item strong .asterisk {
+  color: #A25AFF;
 }
 
 .modal-content .category .c-item strong + * {
