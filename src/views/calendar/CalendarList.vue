@@ -89,8 +89,8 @@ export default {
 
     computed: {
     ...mapGetters({
-            calendarList: 'moduleCalendar/calendarList',
-            getSignedInUserData: 'moduleUser/getSignedInUserData',
+            calendarList: 'calendar/calendarList',
+            getSignedInUserData: 'user/getSignedInUserData',
         }),
     },
 
@@ -190,7 +190,7 @@ export default {
 
         fetchCalendar() {
             const userNo = this.getSignedInUserData.userNo;
-            this.$store.dispatch('moduleCalendar/CALENDAR_LIST', {
+            this.$store.dispatch('calendar/CALENDAR_LIST', {
                 userNo,
                 year: this.currentYear,
                 month: this.currentMonth + 1,
@@ -272,7 +272,7 @@ export default {
             // console.log(userNo, contents, regDate);
 
             if ( confirm(diaryNo === '' ? '저장하시겠습니까?' : '수정하시겠습니까?') ) {
-                this.$store.dispatch('moduleCalendar/CALENDAR_SAVE', {
+                this.$store.dispatch('calendar/CALENDAR_SAVE', {
                     userNo,
                     contents,
                     regDate,
@@ -293,7 +293,7 @@ export default {
 
         removeCalendar(diaryNo) {
             if ( confirm('삭제하시겠습니까?')) {
-                this.$store.dispatch('moduleCalendar/CALENDAR_REMOVE', diaryNo)
+                this.$store.dispatch('calendar/CALENDAR_REMOVE', diaryNo)
                 .then(response => {
                     if ( confirm('삭제되었습니다.') ) {
                         this.fetchCalendar();

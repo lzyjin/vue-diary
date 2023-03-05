@@ -33,7 +33,6 @@
                         <i class="xi-close"></i>
                     </button>
                 </div>
-<!--                {{ modal.formData }}-->
                 <div class="modal-content">
                     <!--  카테고리(셀렉트), 일자(피커), 주소(다음 우편번호검색), 내용(최대500자), 사진추가(최대3개)-->
                     <div class="category">
@@ -41,7 +40,7 @@
                                 <strong>카테고리 <span class="asterisk">*</span></strong>
                                 <div class="select-wrap">
                                     <select name="" id="" required v-model="modal.formData.category">
-                                        <option value="" disabled>카테고리를 선택하세요.</option>
+                                        <option value="" disabled>카테고리 선택</option>
                                         <option value="food">음식</option>
                                         <option value="shoping">쇼핑</option>
                                         <option value="trip">여행</option>
@@ -57,11 +56,14 @@
                             </div>
                             <div class="c-item">
                                 <strong>일자 <span class="asterisk">*</span></strong>
-                                <input type="date" name="" id="" v-model="modal.formData.regDate" required>
+                                <!--<input type="date" name="" id="" v-model="modal.formData.regDate" required>-->
+                                <date-picker v-model="modal.formData.regDate" valueType="format" placeholder="날짜 선택"></date-picker>
                             </div>
                             <div class="c-item">
                                 <strong>주소 <span class="asterisk">*</span></strong>
-                                <input type="text" name="" id="" @click="openKakaoAPI" readonly required placeholder="클릭하여 주소를 검색하세요." v-model="modal.formData.address">
+                                <div class="input-wrap address">
+                                    <input type="text" name="" id="" @click="openKakaoAPI" readonly required placeholder="주소 검색" v-model="modal.formData.address">
+                                </div>
                             </div>
                             <div class="c-item">
                                 <strong>내용 <span class="asterisk">*</span></strong>
@@ -83,10 +85,10 @@
                             </div>
                         </div>
                     <div class="btn-wrap">
-                        <button class="btn-delete">
-                            <i class="xi-trash"></i>
-                        </button>
-                        <button class="btn-save">등록하기</button>
+                        <!--<button class="btn-delete">-->
+                        <!--<i class="xi-trash"></i>-->
+                        <!--</button>-->
+                        <button class="btn-save" @click="saveMemory">등록하기</button>
                     </div>
                 </div>
             </div>
@@ -96,8 +98,14 @@
 </template>
 
 <script>
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
+
 export default {
     name: "MemoryList",
+    components: {
+        DatePicker,
+    },
     data() {
         return {
             modal: {
@@ -107,7 +115,7 @@ export default {
 
                 formData: {
                     // 사용자 정보(필수)
-                    user: {}, // store의 state 넣기
+                    user: {...this.$store.getters["user/getSignedInUserData"]}, // store의 state 넣기
 
                     // 입력한 값(필수)
                     category: '',
@@ -165,16 +173,38 @@ export default {
                     this.modal.formData.fileList.push(files[i]);
                 }
             }
-
-            console.log(this.modal.formData.fileList); // 파일
-            // console.log(formData);
-            // console.log(formData.getAll('files'));
         },
 
         deletePhoto: function(fileIndex) {
             this.modal.thumbList.splice(fileIndex, 1);
             this.modal.formData.fileList.splice(fileIndex, 1);
         },
+
+        saveMemory: function() {
+            const user = this.modal.formData.user;
+            const category = this.modal.formData.category;
+            const address = this.modal.formData.address;
+            const regDate = this.modal.formData.regDate;
+            const contents = this.modal.formData.contents;
+            const firstMultipartFile = this.modal.formData.fileList[0];
+            const secondMultipartFile = this.modal.formData.fileList[1];
+            const thirdMultipartFile = this.modal.formData.fileList[2];
+
+            this.$store.dispatch('memory/MEMORY_SAVE', {
+                user,
+                category,
+                address,
+                regDate,
+                contents,
+                firstMultipartFile,
+                secondMultipartFile,
+                thirdMultipartFile,
+            })
+            .then()
+            .catch(e => {
+                console.log(e);
+            });
+        }
     }
 }
 </script>

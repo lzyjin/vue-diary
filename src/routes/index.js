@@ -52,14 +52,14 @@ router.beforeEach((to, from, next) => {
 
     if (to.name === 'SignOut') {
         localStorage.removeItem('userData');
-        store.dispatch('moduleUser/SIGN_OUT')
+        store.dispatch('user/SIGN_OUT')
         .then(() => {
             alert('로그아웃되었습니다. 다시 로그인을 해 주세요.');
             next("/signin");
         });
 
     } else if (to.name === 'Calendar') {
-        if (!store.getters["moduleUser/getSignedInUserData"]) {
+        if (!store.getters["user/getSignedInUserData"]) {
             alert("로그인이 필요합니다.");
             next("/signin");
             return;

@@ -50,7 +50,7 @@ export default {
       }
 
       if (this.id !== '' && this.password !== '') {
-        this.$store.dispatch('moduleUser/SIGN_IN', {
+        this.$store.dispatch('user/SIGN_IN', {
           id: this.id,
           password: this.password,
         })

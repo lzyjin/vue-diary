@@ -1,7 +1,7 @@
-import state from './state';
-import actions from './actions';
-import getters from './getters';
-import mutations from './mutations';
+import state from '@/store/modules/memory/state';
+import actions from '@/store/modules/memory/actions';
+import getters from '@/store/modules/memory/getters';
+import mutations from '@/store/modules/memory/mutations';
 
 export default {
     namespaced: true,

@@ -1228,23 +1228,70 @@ em.mo-br {
   width: 75%;
 }
 
+.modal-content .category .c-item .mx-input {
+  font-size: inherit;
+}
+
+.modal-content .category .c-item .mx-input::placeholder {
+  font-size: inherit;
+}
+
+.modal-content .category .c-item input[type=text] {
+  display: inline-block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 30px 6px 10px;
+  line-height: 1.4;
+  color: #555;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.modal-content .category .c-item .input-wrap.address {
+  position: relative;
+}
+
+.modal-content .category .c-item .input-wrap.address::before {
+  content: "\e97a";
+  font-family: xeicon;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translate3d(0, -50%, 0);
+  pointer-events: none;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 1rem;
+}
+
 .modal-content .category .c-item .select-wrap {
   position: relative;
 }
 
 .modal-content .category .c-item .select-wrap select {
-  border: none;
+  display: inline-block;
   width: 100%;
-  padding-right: 40px;
+  height: 34px;
+  padding: 6px 30px 6px 10px;
+  line-height: 1.4;
+  color: #555;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08);
 }
 
 .modal-content .category .c-item .select-wrap::before {
   content: "\e941";
   font-family: xeicon;
   position: absolute;
-  right: 0;
+  right: 10px;
   top: 50%;
   transform: translate3d(0, -50%, 0);
+  pointer-events: none;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 0.9rem;
 }
 
 .modal-content .category .c-item textarea {
