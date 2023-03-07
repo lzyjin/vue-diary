@@ -16,7 +16,7 @@
             <div class="list">
                 <div class="item">
                     <div class="img">
-                        <img src="https://lipsum.app/random/200x200" alt="">
+<!--                        <img src="https://lipsum.app/random/200x200" alt="">-->
                     </div>
                     <div class="text">
                         <div class="edit"><i class="xi-ellipsis-h"></i></div>
@@ -41,16 +41,16 @@
                                 <div class="select-wrap">
                                     <select name="" id="" required v-model="modal.formData.category">
                                         <option value="" disabled>카테고리 선택</option>
-                                        <option value="food">음식</option>
-                                        <option value="shoping">쇼핑</option>
-                                        <option value="trip">여행</option>
-                                        <option value="movie">영화</option>
-                                        <option value="study">공부</option>
-                                        <option value="cafe">카페</option>
-                                        <option value="exotic">이색적인</option>
-                                        <option value="cultural_life">문화생활</option>
-                                        <option value="exhibition">전시회</option>
-                                        <option value="review">후기</option>
+                                        <option value="FOOD">음식</option>
+                                        <option value="SHOPING">쇼핑</option>
+                                        <option value="TRIP">여행</option>
+                                        <option value="MOVIE">영화</option>
+                                        <option value="STUDY">공부</option>
+                                        <option value="CAFE">카페</option>
+                                        <option value="EXOTIC">이색적인</option>
+                                        <option value="CULTURAL_LIFE">문화생활</option>
+                                        <option value="EXHIBITION">전시회</option>
+                                        <option value="REVIEW">후기</option>
                                     </select>
                                 </div>
                             </div>
@@ -158,7 +158,6 @@ export default {
 
         uploadPhoto: function(e) {
             const files = [...e.target.files];
-            // const formData = new FormData(); // 지금 필요 없음, 등록 버튼 누를 때 필요하겠네.
 
             if (files.length > 3 || (files.length + this.modal.formData.fileList.length) > 3) {
                 alert('이미지 첨부는 최대 3개까지 가능합니다.');
@@ -181,26 +180,29 @@ export default {
         },
 
         saveMemory: function() {
-            const user = this.modal.formData.user;
-            const category = this.modal.formData.category;
-            const address = this.modal.formData.address;
-            const regDate = this.modal.formData.regDate;
-            const contents = this.modal.formData.contents;
-            const firstMultipartFile = this.modal.formData.fileList[0];
-            const secondMultipartFile = this.modal.formData.fileList[1];
-            const thirdMultipartFile = this.modal.formData.fileList[2];
+            const formData = new FormData();
 
-            this.$store.dispatch('memory/MEMORY_SAVE', {
-                user,
-                category,
-                address,
-                regDate,
-                contents,
-                firstMultipartFile,
-                secondMultipartFile,
-                thirdMultipartFile,
+            formData.append('user', this.modal.formData.user);
+            formData.append('category', this.modal.formData.category);
+            formData.append('address', this.modal.formData.address);
+            formData.append('regDate', this.modal.formData.regDate);
+            formData.append('contents', this.modal.formData.contents);
+            formData.append('firstMultipartFile', this.modal.formData.fileList[0]);
+            formData.append('secondMultipartFile', this.modal.formData.fileList[1]);
+            formData.append('thirdMultipartFile', this.modal.formData.fileList[2]);
+
+            console.log(this.modal.formData);
+
+            this.$store.dispatch('memory/MEMORY_SAVE', formData)
+            .then((response) => {
+                console.log(response);
+
+                if (confirm('등록되었습니다.')) {
+                    // this.fetchCalendar();
+                    // this.closeViewModal();
+                    // this.closeListModal();
+                }
             })
-            .then()
             .catch(e => {
                 console.log(e);
             });
