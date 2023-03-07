@@ -57,7 +57,8 @@
                             <div class="c-item">
                                 <strong>일자 <span class="asterisk">*</span></strong>
                                 <!--<input type="date" name="" id="" v-model="modal.formData.regDate" required>-->
-                                <date-picker v-model="modal.formData.regDate" valueType="format" placeholder="날짜 선택"></date-picker>
+<!--                                <date-picker v-model="modal.formData.regDate" valueType="format" placeholder="날짜 선택"></date-picker>-->
+                                <date-picker v-model="modal.formData.regDate" type="datetime" valueType="format" placeholder="날짜 선택"></date-picker>
                             </div>
                             <div class="c-item">
                                 <strong>주소 <span class="asterisk">*</span></strong>
@@ -159,6 +160,8 @@ export default {
         uploadPhoto: function(e) {
             const files = [...e.target.files];
 
+            console.log(files);
+
             if (files.length > 3 || (files.length + this.modal.formData.fileList.length) > 3) {
                 alert('이미지 첨부는 최대 3개까지 가능합니다.');
                 return;
@@ -172,6 +175,8 @@ export default {
                     this.modal.formData.fileList.push(files[i]);
                 }
             }
+
+            e.target.value = '';
         },
 
         deletePhoto: function(fileIndex) {
