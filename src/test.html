@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .text {
+            width: fit-content;
+            background-image: linear-gradient(-90deg, black, black, blue, blue);
+            background-size: 300%;
+            font-weight: 900;
+            font-size: 5vw;
+            text-transform: uppercase;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            background-position: 100% 50%;
+            transition: background-position 3s;
+        }
+
+        .text:hover {
+            background-position: 0 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="text">hello world</div>
+</body>
+</html>

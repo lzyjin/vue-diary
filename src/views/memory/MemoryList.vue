@@ -56,14 +56,13 @@
                             </div>
                             <div class="c-item">
                                 <strong>일자 <span class="asterisk">*</span></strong>
-                                <!--<input type="date" name="" id="" v-model="modal.formData.regDate" required>-->
-<!--                                <date-picker v-model="modal.formData.regDate" valueType="format" placeholder="날짜 선택"></date-picker>-->
-                                <date-picker v-model="modal.formData.regDate" type="datetime" valueType="format" placeholder="날짜 선택"></date-picker>
+                                <date-picker v-model="modal.formData.regDate" valueType="format" placeholder="날짜 선택"></date-picker>
                             </div>
                             <div class="c-item">
                                 <strong>주소 <span class="asterisk">*</span></strong>
                                 <div class="input-wrap address">
                                     <input type="text" name="" id="" @click="openKakaoAPI" readonly required placeholder="주소 검색" v-model="modal.formData.address">
+                                    <DaumPostcode :on-complete=handleAddress />
                                 </div>
                             </div>
                             <div class="c-item">
@@ -101,11 +100,14 @@
 <script>
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
+import {forEach} from 'lodash';
+import DaumPostcode from 'vuejs-daum-postcode';
 
 export default {
     name: "MemoryList",
     components: {
         DatePicker,
+        DaumPostcode,
     },
     data() {
         return {
@@ -157,6 +159,10 @@ export default {
             }).open();
         },
 
+        handleAddress: function () {
+
+        },
+
         uploadPhoto: function(e) {
             const files = [...e.target.files];
 
@@ -187,14 +193,24 @@ export default {
         saveMemory: function() {
             const formData = new FormData();
 
-            formData.append('user', this.modal.formData.user);
-            formData.append('category', this.modal.formData.category);
-            formData.append('address', this.modal.formData.address);
-            formData.append('regDate', this.modal.formData.regDate);
-            formData.append('contents', this.modal.formData.contents);
-            formData.append('firstMultipartFile', this.modal.formData.fileList[0]);
-            formData.append('secondMultipartFile', this.modal.formData.fileList[1]);
-            formData.append('thirdMultipartFile', this.modal.formData.fileList[2]);
+            forEach(this.modal.formData, (v,k) => {
+                if(k === 'user'){
+                    forEach(v, (v2,k2) => {
+                        formData.append(`${k}.${k2}`, v2);
+                    })
+                } else {
+                    formData.append(k, v);
+                }
+            });
+
+            // formData.append('user.userNo', this.modal.formData.user.userNo);
+            // formData.append('category', this.modal.formData.category);
+            // formData.append('address', this.modal.formData.address);
+            // formData.append('regDate', this.modal.formData.regDate);
+            // formData.append('contents', this.modal.formData.contents);
+            // formData.append('firstMultipartFile', this.modal.formData.fileList[0]);
+            // formData.append('secondMultipartFile', this.modal.formData.fileList[1]);
+            // formData.append('thirdMultipartFile', this.modal.formData.fileList[2]);
 
             console.log(this.modal.formData);
 
