@@ -227,12 +227,13 @@ export default {
             //     }
             // });
 
+            // formData.append('user.userId', this.modal.formData.user.userId);
+            // formData.append('user.regDate', this.modal.formData.user.regDate);
+            // formData.append('user.lastLoginDate', this.modal.formData.user.lastLoginDate);
+            // formData.append('user.userStatus', this.modal.formData.user.userId !== null ? this.modal.formData.user.userId : '');
+            // formData.append('user.withdrawalDate', this.modal.formData.user.withdrawalDate !== null ? this.modal.formData.user.withdrawalDate : '');
             formData.append('user.userNo', this.modal.formData.user.userNo);
-            formData.append('user.userId', this.modal.formData.user.userId);
-            formData.append('user.regDate', this.modal.formData.user.regDate);
-            formData.append('user.lastLoginDate', this.modal.formData.user.lastLoginDate);
-            formData.append('user.userStatus', this.modal.formData.user.userId !== null ? this.modal.formData.user.userId : '');
-            formData.append('user.withdrawalDate', this.modal.formData.user.withdrawalDate !== null ? this.modal.formData.user.withdrawalDate : '');
+
             formData.append('memory', this.modal.formData.memoryNo !== null ? this.modal.formData.memoryNo : '');
             formData.append('category', this.modal.formData.category);
             formData.append('address', this.modal.formData.address);
