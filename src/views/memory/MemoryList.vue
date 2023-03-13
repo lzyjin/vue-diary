@@ -16,7 +16,7 @@
             <div class="list">
                 <div class="item">
                     <div class="img">
-<!--                        <img src="https://lipsum.app/random/200x200" alt="">-->
+                        <img src="https://lipsum.app/random/200x200" alt="">
                     </div>
                     <div class="text">
                         <div class="edit"><i class="xi-ellipsis-h"></i></div>
@@ -42,7 +42,7 @@
                                     <select name="" id="" required v-model="modal.formData.category">
                                         <option value="" disabled>카테고리 선택</option>
                                         <option value="FOOD">음식</option>
-                                        <option value="SHOPING">쇼핑</option>
+                                        <option value="SHOPPING">쇼핑</option>
                                         <option value="TRIP">여행</option>
                                         <option value="MOVIE">영화</option>
                                         <option value="STUDY">공부</option>
@@ -61,8 +61,7 @@
                             <div class="c-item">
                                 <strong>주소 <span class="asterisk">*</span></strong>
                                 <div class="input-wrap address">
-                                    <input type="text" name="" id="" @click="openKakaoAPI" readonly required placeholder="주소 검색" v-model="modal.formData.address">
-                                    <DaumPostcode :on-complete=handleAddress />
+                                    <input type="text" name="" id="" @click="openDaumPostModal" readonly required placeholder="주소 검색" v-model="modal.formData.address">
                                 </div>
                             </div>
                             <div class="c-item">
@@ -94,6 +93,19 @@
             </div>
             <div class="dimmed"></div>
         </div>
+
+        <div v-if="modal.daumPostModalOpened">
+            <div class="modal" :class="{opened: modal.daumPostModalOpened}">
+                <div class="modal-top">
+                    <button @click="closeDaumPostModal" style="margin-left: auto;">
+                        <i class="xi-close"></i>
+                    </button>
+                </div>
+                <div class="modal-content">
+                    <DaumPostcode :on-complete=handleAddress />
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -113,6 +125,7 @@ export default {
         return {
             modal: {
                 editModalOpened: true,
+                daumPostModalOpened: false,
 
                 thumbList: [],
 
@@ -149,18 +162,29 @@ export default {
         }
     },
     methods: {
-        // TODO: npm으로 바꾸기
-        openKakaoAPI: function(e) {
-            new daum.Postcode({
-                oncomplete: (data) => {
-                    // console.log(this); // vue
-                    this.modal.formData.address = data.address;
-                }
-            }).open();
+        openDaumPostModal: function(e) {
+            this.modal.daumPostModalOpened = true;
         },
 
-        handleAddress: function () {
+        closeDaumPostModal() {
+            this.modal.daumPostModalOpened = false;
+        },
 
+        handleAddress: function (data) {
+            let fullAddress = data.address;
+            let extraAddress = '';
+            if (data.addressType === 'R') {
+                if (data.bname !== '') {
+                    extraAddress += data.bname;
+                }
+                if (data.buildingName !== '') {
+                    extraAddress += (extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName);
+                }
+                fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '');
+            }
+            console.log(fullAddress);
+            this.modal.formData.address = fullAddress;
+            this.closeDaumPostModal();
         },
 
         uploadPhoto: function(e) {
@@ -193,24 +217,31 @@ export default {
         saveMemory: function() {
             const formData = new FormData();
 
-            forEach(this.modal.formData, (v,k) => {
-                if(k === 'user'){
-                    forEach(v, (v2,k2) => {
-                        formData.append(`${k}.${k2}`, v2);
-                    })
-                } else {
-                    formData.append(k, v);
-                }
-            });
+            // forEach(this.modal.formData, (v,k) => {
+            //     if (k === 'user') {
+            //         forEach(v, (v2,k2) => {
+            //             formData.append(`${k}.${k2}`, v2);
+            //         });
+            //     } else {
+            //         formData.append(k, v);
+            //     }
+            // });
 
-            // formData.append('user.userNo', this.modal.formData.user.userNo);
-            // formData.append('category', this.modal.formData.category);
-            // formData.append('address', this.modal.formData.address);
-            // formData.append('regDate', this.modal.formData.regDate);
-            // formData.append('contents', this.modal.formData.contents);
-            // formData.append('firstMultipartFile', this.modal.formData.fileList[0]);
-            // formData.append('secondMultipartFile', this.modal.formData.fileList[1]);
-            // formData.append('thirdMultipartFile', this.modal.formData.fileList[2]);
+            formData.append('user.userNo', this.modal.formData.user.userNo);
+            formData.append('user.userId', this.modal.formData.user.userId);
+            formData.append('user.regDate', this.modal.formData.user.regDate);
+            formData.append('user.lastLoginDate', this.modal.formData.user.lastLoginDate);
+            formData.append('user.userStatus', this.modal.formData.user.userId !== null ? this.modal.formData.user.userId : '');
+            formData.append('user.withdrawalDate', this.modal.formData.user.withdrawalDate !== null ? this.modal.formData.user.withdrawalDate : '');
+            formData.append('memory', this.modal.formData.memoryNo !== null ? this.modal.formData.memoryNo : '');
+            formData.append('category', this.modal.formData.category);
+            formData.append('address', this.modal.formData.address);
+            formData.append('regDate', this.modal.formData.regDate);
+            formData.append('contents', this.modal.formData.contents);
+
+            formData.append('firstMultipartFile', this.modal.formData.fileList[0]);
+            formData.append('secondMultipartFile', this.modal.formData.fileList[1]);
+            formData.append('thirdMultipartFile', this.modal.formData.fileList[2]);
 
             console.log(this.modal.formData);
 

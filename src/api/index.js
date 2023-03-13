@@ -59,5 +59,10 @@ export async function removeCalendar(diaryNo) {
 
 // 추억 - 등록
 export async function saveMemory(payload) {
-    return await axios.post(`http://121.161.237.50:50005/api/memory/save`, payload);
+    return await axios.post(`http://121.161.237.50:50005/api/memory/save`, payload,
+        {
+            headers: {
+                'Content-Type': 'multipart/formed-data',
+            }
+        });
 }

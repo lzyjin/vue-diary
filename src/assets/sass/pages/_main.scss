@@ -3,10 +3,10 @@
 
 #container {
     position: relative;
-    max-width: 375px;
-    height: 812px;
-    margin: 0 auto;
-    border: 1px solid #000;
+    height: 100vh;
+    //max-width: 375px;
+    //height: 812px;
+    //border: 1px solid #000;
 }
 
 .page-title {
@@ -51,7 +51,8 @@
 
         .date {
             text-align: center;
-            height: 65px;
+            //height: 65px;
+            height: 10vh;
             padding: 5px;
             border-bottom: 1px solid #eee;
             position: relative;
@@ -139,7 +140,8 @@
     }
 
     .list {
-        height: 640px;
+        //height: 640px;
+        height: calc(100vh - 170px);
         overflow-y: scroll;
 
         .item {

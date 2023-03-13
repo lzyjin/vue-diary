@@ -1132,9 +1132,9 @@ em.mo-br {
 }
 
 .modal {
-  position: absolute;
+  position: fixed;
   left: 0;
-  top: 100%;
+  bottom: -100%;
   width: 100%;
   height: auto;
   max-height: 100%;
@@ -1388,7 +1388,6 @@ em.mo-br {
 }
 
 .modal.opened {
-  top: auto;
   bottom: 0;
 }
 
@@ -1576,10 +1575,7 @@ header .ham i {
 
 #container {
   position: relative;
-  max-width: 375px;
-  height: 812px;
-  margin: 0 auto;
-  border: 1px solid #000;
+  height: 100vh;
 }
 
 .page-title {
@@ -1624,7 +1620,7 @@ header .ham i {
 
 .calendar .cal-content .date {
   text-align: center;
-  height: 65px;
+  height: 10vh;
   padding: 5px;
   border-bottom: 1px solid #eee;
   position: relative;
@@ -1707,7 +1703,7 @@ header .ham i {
 }
 
 .memory-wrap .list {
-  height: 640px;
+  height: calc(100vh - 170px);
   overflow-y: scroll;
 }
 

@@ -61,22 +61,22 @@
         </div>
         <div v-if="modal.viewModalOpened">
             <div class="modal" :class="{opened: modal.viewModalOpened}">
-            <div class="modal-top">
-              <p class="date">{{ modal.date }}일 {{ modal.day }}요일</p>
-              <button @click="closeViewModal">
-                <i class="xi-close"></i>
-              </button>
+                <div class="modal-top">
+                    <p class="date">{{ modal.date }}일 {{ modal.day }}요일</p>
+                    <button @click="closeViewModal">
+                    <i class="xi-close"></i>
+                  </button>
+                </div>
+                <div class="modal-content">
+                    <textarea class="content-wrap" v-model="calContent"></textarea>
+                    <div class="btn-wrap">
+                        <button class="btn-delete" v-if="diaryNo !== ''" @click="removeCalendar(diaryNo);">
+                        <i class="xi-trash"></i>
+                        </button>
+                    <button class="btn-save" @click="saveCalendar()">{{ diaryNo === '' ? '저장' : '수정' }}</button>
+                    </div>
+                </div>
             </div>
-            <div class="modal-content">
-              <textarea class="content-wrap" v-model="calContent"></textarea>
-              <div class="btn-wrap">
-                <button class="btn-delete" v-if="diaryNo !== ''" @click="removeCalendar(diaryNo);">
-                  <i class="xi-trash"></i>
-                </button>
-                <button class="btn-save" @click="saveCalendar()">{{ diaryNo === '' ? '저장' : '수정' }}</button>
-              </div>
-            </div>
-          </div>
         </div>
     </div>
 </template>
