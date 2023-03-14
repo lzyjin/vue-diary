@@ -1367,11 +1367,12 @@ em.mo-br {
   height: 50px;
   border: 1px solid #ddd;
   border-radius: 10px;
-  color: #ddd;
+  color: #ccc;
 }
 
 .modal-content .btn-wrap .btn-delete i {
   font-size: 1.5em;
+  color: inherit;
 }
 
 .modal-content .btn-wrap .btn-save {
@@ -1680,6 +1681,7 @@ header .ham i {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .memory-wrap .top .wrap .btn-filter span {
@@ -1695,6 +1697,7 @@ header .ham i {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .memory-wrap .top .wrap .btn-add span {

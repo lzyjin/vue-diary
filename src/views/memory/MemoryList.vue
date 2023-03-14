@@ -4,13 +4,13 @@
             <div class="top">
                 <div class="wrap">
                     <input type="text" name="" id="" placeholder="검색어를 입력해주세요">
-                    <div class="btn-filter">
+                    <div class="btn-filter" @click="openFilterModal">
                         <span>필터</span>
                     </div>
                 </div>
                 <div class="wrap">
                     <p class="total">전체 n개 중 k개</p>
-                    <div class="btn-add">등록</div>
+                    <div class="btn-add" @click="openEditModal">등록</div>
                 </div>
             </div>
             <div class="list">
@@ -29,7 +29,7 @@
         <div v-if="modal.editModalOpened">
             <div class="modal" :class="{opened: modal.editModalOpened}">
                 <div class="modal-top">
-                    <button @click="" style="margin-left: auto;">
+                    <button @click="closeEditModal" style="margin-left: auto;">
                         <i class="xi-close"></i>
                     </button>
                 </div>
@@ -106,6 +106,55 @@
                 </div>
             </div>
         </div>
+
+        <div v-if="modal.filterModalOpened">
+            <div class="modal" :class="{opened: modal.filterModalOpened}">
+                <div class="modal-top">
+                    <button @click="closeFilterModal" style="margin-left: auto;">
+                        <i class="xi-close"></i>
+                    </button>
+                </div>
+                <div class="modal-content">
+                    <div class="category">
+                        <div class="c-item">
+                            <strong>카테고리</strong>
+                            <div class="select-wrap">
+                                <select name="" id="" required v-model="modal.formData.category">
+                                    <option value="" disabled>카테고리 선택</option>
+                                    <option value="FOOD">음식</option>
+                                    <option value="SHOPPING">쇼핑</option>
+                                    <option value="TRIP">여행</option>
+                                    <option value="MOVIE">영화</option>
+                                    <option value="STUDY">공부</option>
+                                    <option value="CAFE">카페</option>
+                                    <option value="EXOTIC">이색적인</option>
+                                    <option value="CULTURAL_LIFE">문화생활</option>
+                                    <option value="EXHIBITION">전시회</option>
+                                    <option value="REVIEW">후기</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="c-item">
+                            <strong>일자</strong>
+                            <date-picker v-model="modal.formData.regDate" valueType="format" range placeholder="날짜 선택"></date-picker>
+                        </div>
+                        <div class="c-item">
+                            <strong>주소</strong>
+                            <div class="input-wrap address">
+                                <input type="text" name="" id="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-wrap">
+                        <button class="btn-delete">
+                            <i class="xi-refresh"></i>
+                        </button>
+                        <button class="btn-save" @click="">적용</button>
+                    </div>
+                </div>
+            </div>
+            <div class="dimmed"></div>
+        </div>
     </div>
 </template>
 
@@ -124,8 +173,9 @@ export default {
     data() {
         return {
             modal: {
-                editModalOpened: true,
+                editModalOpened: false,
                 daumPostModalOpened: false,
+                filterModalOpened: false,
 
                 thumbList: [],
 
@@ -162,6 +212,35 @@ export default {
         }
     },
     methods: {
+        fetchMemory(page = 1, limit = 2) {
+            const userNo = this.$store.getters['user/getSignedInUserData'].userNo;
+            this.$store.dispatch('memory/MEMORY_LIST', {
+                userNo,
+                page,
+                limit,
+            })
+            .then(response => {
+                console.log(response);
+            })
+            .catch();
+        },
+
+        openFilterModal() {
+            this.modal.filterModalOpened = true;
+        },
+
+        closeFilterModal() {
+            this.modal.filterModalOpened = false;
+        },
+
+        openEditModal() {
+            this.modal.editModalOpened = true;
+        },
+
+        closeEditModal() {
+            this.modal.editModalOpened = false;
+        },
+
         openDaumPostModal: function(e) {
             this.modal.daumPostModalOpened = true;
         },
@@ -259,8 +338,11 @@ export default {
             .catch(e => {
                 console.log(e);
             });
-        }
-    }
+        },
+    },
+    beforeMount() {
+        this.fetchMemory(1, 2);
+    },
 }
 </script>
 
