@@ -14,14 +14,14 @@
                 </div>
             </div>
             <div class="list">
-                <div class="item">
+                <div v-for="(v, i) in memoryList" :key="`memory_${i}`" class="item">
                     <div class="img">
-                        <img src="https://lipsum.app/random/200x200" alt="">
+                        <img :src="`http://121.161.237.50:9999/origin/${v.firstPhoto.photoUrl}`" alt="">
                     </div>
                     <div class="text">
                         <div class="edit"><i class="xi-ellipsis-h"></i></div>
-                        <p class="desc">성수에서 재밌게 보낸날 - 자전거도 타고 맛있는 것도 먹고 한강도 갔다</p>
-                        <p class="date">2023.02.27</p>
+                        <p class="desc">{{ v.contents }}</p>
+                        <p class="date">{{ v.regDate }}</p>
                     </div>
                 </div>
             </div>
@@ -163,12 +163,18 @@ import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import {forEach} from 'lodash';
 import DaumPostcode from 'vuejs-daum-postcode';
+import {mapGetters} from "vuex";
 
 export default {
     name: "MemoryList",
     components: {
         DatePicker,
         DaumPostcode,
+    },
+    computed: {
+        ...mapGetters({
+            memoryList: "memory/memoryList",
+        }),
     },
     data() {
         return {
@@ -340,8 +346,9 @@ export default {
             });
         },
     },
-    beforeMount() {
-        this.fetchMemory(1, 2);
+
+    mounted() {
+        this.fetchMemory(1, 10);
     },
 }
 </script>
