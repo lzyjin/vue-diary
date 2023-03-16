@@ -3,5 +3,10 @@ export default {
         state.memoryList = payload;
         console.log(state.memoryList);
     },
+
+    MEMORY_PAGEINFO(state, payload) {
+        state.memoryListPageInfo = payload;
+        console.log(state.memoryListPageInfo);
+    },
 }
 

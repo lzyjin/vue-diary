@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 <div class="wrap">
-                    <p class="total">전체 n개 중 k개</p>
+                    <p class="total">전체 개 중 {{ memoryListPageInfo?.totalElement }}개</p>
                     <div class="btn-add" @click="openEditModal">등록</div>
                 </div>
             </div>
@@ -174,6 +174,7 @@ export default {
     computed: {
         ...mapGetters({
             memoryList: "memory/memoryList",
+            memoryListPageInfo: "memory/memoryListPageInfo",
         }),
     },
     data() {
@@ -319,17 +320,17 @@ export default {
             // formData.append('user.withdrawalDate', this.modal.formData.user.withdrawalDate !== null ? this.modal.formData.user.withdrawalDate : '');
             formData.append('user.userNo', this.modal.formData.user.userNo);
 
-            formData.append('memory', this.modal.formData.memoryNo !== null ? this.modal.formData.memoryNo : '');
+            formData.append('memory', this.modal.formData.memoryNo !== undefined ? this.modal.formData.memoryNo : '');
             formData.append('category', this.modal.formData.category);
             formData.append('address', this.modal.formData.address);
             formData.append('regDate', this.modal.formData.regDate);
             formData.append('contents', this.modal.formData.contents);
 
-            formData.append('firstMultipartFile', this.modal.formData.fileList[0]);
-            formData.append('secondMultipartFile', this.modal.formData.fileList[1]);
-            formData.append('thirdMultipartFile', this.modal.formData.fileList[2]);
+            if(this.modal.formData.fileList[0]) formData.append('firstMultipartFile', this.modal.formData.fileList[0]);
+            if(this.modal.formData.fileList[1]) formData.append('secondMultipartFile', this.modal.formData.fileList[1]);
+            if(this.modal.formData.fileList[2]) formData.append('thirdMultipartFile', this.modal.formData.fileList[2]);
 
-            console.log(this.modal.formData);
+            console.log(formData);
 
             this.$store.dispatch('memory/MEMORY_SAVE', formData)
             .then((response) => {

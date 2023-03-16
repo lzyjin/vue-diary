@@ -13,6 +13,7 @@ export default {
         return listMemory(payload.userNo, payload.page, payload.limit)
         .then(response => {
             commit('MEMORY_LIST', response.data.data.list);
+            commit('MEMORY_PAGEINFO', response.data.data.pageInfo);
             console.log(response);
             return response;
         })
