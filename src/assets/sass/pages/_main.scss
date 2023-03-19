@@ -147,11 +147,15 @@
         overflow-y: scroll;
 
         .item {
-            display: flex;
-            padding: 15px 0;
-            background-color: #fff;
-            margin: 0 15px;
-            border-bottom: 1px solid #ddd;
+
+
+            &>a {
+                display: flex;
+                padding: 15px 0;
+                background-color: #fff;
+                margin: 0 15px;
+                border-bottom: 1px solid #ddd;
+            }
 
             .img {
                 //border-radius: 10px;

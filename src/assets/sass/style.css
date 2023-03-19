@@ -1710,7 +1710,7 @@ header .ham i {
   overflow-y: scroll;
 }
 
-.memory-wrap .list .item {
+.memory-wrap .list .item > a {
   display: flex;
   padding: 15px 0;
   background-color: #fff;

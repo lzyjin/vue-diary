@@ -3,9 +3,8 @@ import SignIn from '@/views/user/signIn';
 import SignUp from "@/views/user/signUp";
 import CalendarList from "@/views/calendar/CalendarList";
 import MemoryList from "@/views/memory/MemoryList";
+import MemoryView from "@/views/memory/MemoryView";
 import { store } from '@/store';
-// import cookies from 'vue-cookies';
-
 
 export const router = new VueRouter({
     mode: 'history',
@@ -35,10 +34,15 @@ export const router = new VueRouter({
             component: CalendarList,
         },
         {
-            path: '/memory',
-            name: 'Memory',
+            path: '/memorylist',
+            name: 'MemoryList',
             component: MemoryList,
-        }
+        },
+        {
+            path: '/memoryview',
+            name: 'MemoryView',
+            component: MemoryView,
+        },
     ],
 });
 
