@@ -79,3 +79,9 @@ export async function listMemory(userNo, page, limit) {
         },
     });
 }
+
+
+// 추억 - 상세
+export async function getMemory(memoryNo) {
+    return await axios.get(`http://121.161.237.50:50005/api/memory/${memoryNo}`)
+}

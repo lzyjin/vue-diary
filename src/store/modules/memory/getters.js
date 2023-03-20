@@ -5,5 +5,9 @@ export default {
 
     memoryListPageInfo: (state) => {
         return state.memoryListPageInfo;
+    },
+
+    currentMemory: (state) => {
+        return state.currentMemory;
     }
 }

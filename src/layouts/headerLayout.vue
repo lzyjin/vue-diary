@@ -16,10 +16,10 @@
         </div>
       </div>
       <nav>
-        <router-link to="Calendar" class="link">캘린더</router-link>
-        <router-link to="Memory" class="link">추억</router-link>
-        <router-link to="SignUp" class="link">회원가입</router-link>
-        <router-link to="SignOut" class="link" @click.native="closeMenu">로그아웃</router-link>
+        <router-link to="/calendar" class="link">캘린더</router-link>
+        <router-link to="/memoryList" class="link">추억</router-link>
+        <router-link to="/signup" class="link">회원가입</router-link>
+        <router-link to="/signout" class="link" @click.native="closeMenu">로그아웃</router-link>
       </nav>
     </div>
   </div>

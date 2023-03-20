@@ -15,7 +15,7 @@
             </div>
             <div class="list">
                 <div v-for="(v, i) in memoryList" :key="`memory_${i}`" class="item">
-                    <router-link :to="{ name: 'MemoryView', query: { memoryNo: v.memoryNo, }, }">
+                    <router-link :to="{ path: `/memoryView/${v.memoryNo}`, }">
                         <div class="img">
                             <img :src="`http://121.161.237.50:9999/origin/${v.firstPhoto.photoUrl}`" alt="" v-if="v.firstPhoto.photoUrl !== null">
                             <img :src="require(`@/assets/images/noimage.png`)" alt="" v-else>
@@ -38,7 +38,6 @@
                     </button>
                 </div>
                 <div class="modal-content">
-                    <!--  카테고리(셀렉트), 일자(피커), 주소(다음 우편번호검색), 내용(최대500자), 사진추가(최대3개)-->
                     <div class="category">
                             <div class="c-item">
                                 <strong>카테고리 <span class="asterisk">*</span></strong>
@@ -352,6 +351,9 @@ export default {
         },
     },
 
+    beforeMount() {
+        console.log('test');
+    },
     mounted() {
         this.fetchMemory(1, 10);
     },

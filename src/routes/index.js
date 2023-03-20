@@ -16,8 +16,7 @@ export const router = new VueRouter({
         },
         {
             path: '/signin',
-            name:'SignIn',
-            component: SignIn,
+            redirect: '/'
         },
         {
             path: '/signout',
@@ -34,12 +33,12 @@ export const router = new VueRouter({
             component: CalendarList,
         },
         {
-            path: '/memorylist',
+            path: '/memoryList',
             name: 'MemoryList',
             component: MemoryList,
         },
         {
-            path: '/memoryview',
+            path: '/memoryView/:memoryNo',
             name: 'MemoryView',
             component: MemoryView,
         },
