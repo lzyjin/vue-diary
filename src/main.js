@@ -3,9 +3,12 @@ import App from './App.vue'
 import VueRouter from "vue-router";
 import { router } from "@/routes";
 import {store} from './store'
+import { register } from 'swiper/element/bundle';
 Vue.config.productionTip = false;
 
 Vue.use(VueRouter);
+
+register();
 
 new Vue({
   render: h => h(App),

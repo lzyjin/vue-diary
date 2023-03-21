@@ -1759,6 +1759,54 @@ header .ham i {
   margin-top: 1em;
 }
 
+.memory-wrap.view .swiper-container {
+  height: 100vw;
+  overflow: hidden;
+}
+
+.memory-wrap.view .swiper-slide {
+  width: 100%;
+  height: 100%;
+}
+
+.memory-wrap.view .swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.memory-wrap.view .swiper-pagination-bullet-active {
+  background: #A25AFF !important;
+}
+
+.memory-wrap.view .inner {
+  padding: 15px;
+}
+
+.memory-wrap.view .inner .top {
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.memory-wrap.view .inner .top p {
+  padding-bottom: 10px;
+}
+
+.memory-wrap.view .memory-category {
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid #A25AFF;
+  color: #A25AFF;
+  border-radius: 15px;
+  margin-right: 10px;
+}
+
+.memory-wrap.view .memory-content {
+  line-height: 1.9;
+}
+
 .form {
   padding: 15px;
 }
