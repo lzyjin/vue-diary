@@ -1,4 +1,9 @@
-import { saveMemory, listMemory, getMemory, } from "@/api";
+import {
+    saveMemory,
+    listMemory,
+    getMemory,
+    deleteMemory,
+} from "@/api";
 
 export default {
     MEMORY_SAVE({ commit }, payload) {
@@ -28,5 +33,17 @@ export default {
             return response;
         })
     },
+
+    MEMORY_DELETE({ commit }, memoryNo) {
+        return deleteMemory(memoryNo)
+            .then(response => {
+                console.log(response);
+                return response;
+            });
+    },
+
+    MEMORY_RESET({ commit }) {
+        commit('MEMORY_RESET');
+    }
 
 }

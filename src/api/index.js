@@ -83,5 +83,11 @@ export async function listMemory(userNo, page, limit) {
 
 // 추억 - 상세
 export async function getMemory(memoryNo) {
-    return await axios.get(`http://121.161.237.50:50005/api/memory/${memoryNo}`)
+    return await axios.get(`http://121.161.237.50:50005/api/memory/${memoryNo}`);
+}
+
+
+// 추억 - 삭제
+export async function deleteMemory(memoryNo) {
+    return await axios.delete(`http://121.161.237.50:50005/api/memory/${memoryNo}`);
 }

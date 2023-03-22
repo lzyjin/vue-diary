@@ -219,7 +219,7 @@ export default {
                     //     photoUrl: null,
                     // }
                 },
-            }
+            },
         }
     },
     methods: {
@@ -338,7 +338,7 @@ export default {
 
             this.$store.dispatch('memory/MEMORY_SAVE', formData)
             .then((response) => {
-                console.log(response);
+                // console.log(response);
 
                 if (confirm('등록되었습니다.')) {
                     this.closeEditModal();
@@ -352,7 +352,7 @@ export default {
     },
 
     beforeMount() {
-        console.log('test');
+        this.$store.dispatch('memory/MEMORY_RESET');
     },
     mounted() {
         this.fetchMemory(1, 10);

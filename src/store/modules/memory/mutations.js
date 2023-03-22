@@ -10,5 +10,27 @@ export default {
     MEMORY_PAGEINFO(state, payload) {
         state.memoryListPageInfo = payload;
     },
+
+    MEMORY_RESET(state) {
+        state.currentMemory = {
+            memoryNo: 0,
+                firstPhoto: {
+                photoNo: null,
+                    photoUrl: null,
+            },
+            secondPhoto: {
+                photoNo: null,
+                    photoUrl: null,
+            },
+            thirdPhoto: {
+                photoNo: null,
+                    photoUrl: null,
+            },
+            contents: '',
+                regDate: '',
+                address: '',
+                category: '',
+        };
+    }
 }
 
