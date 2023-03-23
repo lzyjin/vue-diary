@@ -36,7 +36,7 @@
                     </button>
                 </div>
                 <div class="modal-content">
-                    <div class="button">수정하기</div>
+                    <div class="button" @click="openEditModal">수정하기</div>
                     <div class="button" @click="deleteMemory" >삭제하기</div>
                 </div>
             </div>
@@ -115,11 +115,16 @@
 
 <script>
 import { mapGetters } from "vuex";
+import DatePicker from "vue2-datepicker";
+import DaumPostcode from "vuejs-daum-postcode";
 
 
 export default {
     name: "MemoryList",
-
+    components: {
+        DatePicker,
+        DaumPostcode,
+    },
     data() {
         return {
             modal: {
