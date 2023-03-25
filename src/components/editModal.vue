@@ -65,11 +65,14 @@
             </div>
         </div>
         <div class="dimmed"></div>
+
+        <daum-post-modal v-if="modal.daumPostModalOpened" :opened="modal.daumPostModalOpened" @saveAddress="putAddress"></daum-post-modal>
     </div>
 </template>
 
 <script>
 import DatePicker from "vue2-datepicker";
+import DaumPostModal from "@/components/daumPostModal";
 
 export default {
     name: "modalView",
@@ -78,11 +81,15 @@ export default {
     ],
     components: {
         DatePicker,
+        DaumPostModal,
     },
     data() {
         return {
             modal: {
                 opened: this.opened,
+                daumPostModalOpened: false,
+
+                thumbList: [],
 
                 formData: {
                     // 사용자 정보(필수)
@@ -117,8 +124,17 @@ export default {
         }
     },
     methods: {
+        openModal(modalType) {
+            this.modal[`${modalType}`] = true;
+        },
+
         closeModal(modalType) {
             this.modal[`${modalType}`] = false;
+        },
+
+        putAddress(params) {
+            this.modal.formData.address = params;
+            this.closeModal('daumPostModalOpened');
         },
 
         uploadPhoto: function(e) {
@@ -185,8 +201,11 @@ export default {
                     // console.log(response);
 
                     if (confirm('등록되었습니다.')) {
-                        this.closeEditModal();
-                        this.fetchMemory(1, 10);
+                        // 아래 2개를 상위 컴포넌트에서 실행해야 함.
+                        // this.closeEditModal();
+                        // this.fetchMemory(1, 10);
+
+                        this.$emit('editSuccess');
                     }
                 })
                 .catch(e => {
