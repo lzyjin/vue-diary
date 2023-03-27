@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <edit-modal v-if="modal.editModalOpened" :opened="modal.editModalOpened" @editSuccess="editSuccess"></edit-modal>
+        <edit-modal v-if="modal.editModalOpened" :opened="modal.editModalOpened" @editSuccess="editSuccess" @closeEditModal="closeModal('editModalOpened')"></edit-modal>
         <filter-modal v-if="modal.filterModalOpened" :opened="modal.filterModalOpened"></filter-modal>
     </div>
 </template>
@@ -39,8 +39,8 @@
 import 'vue2-datepicker/index.css';
 import { mapGetters } from "vuex";
 // import {forEach} from 'lodash';
-import EditModal from "@/components/editModal";
-import FilterModal from "@/components/filterModal";
+import EditModal from "@/components/modal/editModal.vue";
+import FilterModal from "@/components/modal/filterModal.vue";
 
 export default {
     name: "MemoryList",

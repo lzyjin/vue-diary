@@ -8,6 +8,7 @@
             </div>
             <div class="modal-content">
                 <div class="category">
+
                     <div class="c-item">
                         <strong>카테고리 <span class="asterisk">*</span></strong>
                         <div class="select-wrap">
@@ -26,10 +27,12 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="c-item">
                         <strong>일자 <span class="asterisk">*</span></strong>
                         <date-picker v-model="modal.formData.regDate" valueType="format" placeholder="날짜 선택"></date-picker>
                     </div>
+
                     <div class="c-item">
                         <strong>주소 <span class="asterisk">*</span></strong>
                         <div class="input-wrap address">
@@ -37,10 +40,12 @@
                             <!--<input type="text" name="" id="" required placeholder="주소 입력" v-model="modal.formData.address">-->
                         </div>
                     </div>
+
                     <div class="c-item">
                         <strong>내용 <span class="asterisk">*</span></strong>
                         <textarea name="" id="" required placeholder="추억할 내용을 적어보세요 :)" v-model="modal.formData.contents"></textarea>
                     </div>
+
                     <div class="c-item">
                         <strong>사진첨부</strong>
                         <div class="add-photo">
@@ -55,6 +60,7 @@
                             <input type="file" name="" id="btnFileUpload" multiple @change="uploadPhoto">
                         </div>
                     </div>
+
                 </div>
                 <div class="btn-wrap">
                     <!--<button class="btn-delete">-->
@@ -72,22 +78,30 @@
 
 <script>
 import DatePicker from "vue2-datepicker";
-import DaumPostModal from "@/components/daumPostModal";
+import DaumPostModal from "@/components/modal/daumPostModal.vue";
+import {mapGetters} from "vuex";
 
 export default {
-    name: "modalView",
+    name: "editModal",
     props: [
         'opened',
+        'isModify',
     ],
     components: {
         DatePicker,
         DaumPostModal,
+    },
+    computed: {
+        ...mapGetters({
+            currentMemory: 'memory/currentMemory',
+        }),
     },
     data() {
         return {
             modal: {
                 opened: this.opened,
                 daumPostModalOpened: false,
+                isModify: false,
 
                 thumbList: [],
 
@@ -130,6 +144,10 @@ export default {
 
         closeModal(modalType) {
             this.modal[`${modalType}`] = false;
+
+            if (modalType === 'editModalOpened') {
+                this.$emit('closeEditModal');
+            }
         },
 
         putAddress(params) {
@@ -212,6 +230,13 @@ export default {
                     console.log(e);
                 });
         },
+    },
+    mounted() {
+        console.log(this.isModify);
+
+        if (this.isModify) {
+            this.modal.formData.contents = this.currentMemory.contents;
+        }
     },
 }
 </script>
