@@ -118,21 +118,6 @@ export default {
 
                     // 이미지 파일(선택)
                     fileList: [],
-                    // firstMultipartFile: null,
-                    // firstPhoto: {
-                    //     photoNo: null,
-                    //     photoUrl: null,
-                    // },
-                    // secondMultipartFile: null,
-                    // secondPhoto: {
-                    //     photoNo: null,
-                    //     photoUrl: null,
-                    // },
-                    // thirdMultipartFile: null,
-                    // thirdPhoto: {
-                    //     photoNo: null,
-                    //     photoUrl: null,
-                    // }
                 },
             },
         }
@@ -232,10 +217,22 @@ export default {
         },
     },
     mounted() {
-        console.log(this.isModify);
-
         if (this.isModify) {
             this.modal.formData.contents = this.currentMemory.contents;
+            this.modal.formData.category = this.currentMemory.category;
+            this.modal.formData.regDate = this.currentMemory.regDate;
+            this.modal.formData.address = this.currentMemory.address;
+
+            if (this.currentMemory.firstPhoto.photoUrl) {
+                this.modal.thumbList.push(`http://121.161.237.50:9999/origin/${this.currentMemory.firstPhoto.photoUrl}`);
+            }
+            if (this.currentMemory.secondPhoto.photoUrl) {
+                this.modal.thumbList.push(`http://121.161.237.50:9999/origin/${this.currentMemory.secondPhoto.photoUrl}`);
+            }
+            if (this.currentMemory.thirdPhoto.photoUrl) {
+                this.modal.thumbList.push(`http://121.161.237.50:9999/origin/${this.currentMemory.thirdPhoto.photoUrl}`);
+            }
+
         }
     },
 }

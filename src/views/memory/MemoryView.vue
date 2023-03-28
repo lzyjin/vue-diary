@@ -1,6 +1,7 @@
 <template>
     <div>
         <div class="memory-wrap view">
+            <!-- TODO: 이미지 없을때 노이미지 하나 나오게 하기 -->
             <swiper-container pagination="true" class="swiper-container" v-if="currentMemory?.firstPhoto?.photoUrl !== null">
                 <swiper-slide class="swiper-slide" v-if="currentMemory?.firstPhoto?.photoUrl !== null">
                     <img :src="`http://121.161.237.50:9999/origin/${currentMemory?.firstPhoto?.photoUrl}`" alt="">
@@ -16,7 +17,7 @@
             <div class="inner">
                 <div class="top">
                     <p>
-                        <span class="memory-category">{{ currentMemory.category }}</span>
+                        <span class="memory-category">{{ categoryKo }}</span>
                         <span class="memory-regDate">{{ currentMemory.regDate }}</span>
                     </p>
                     <p class="memory-address">{{ currentMemory.address }}</p>
@@ -50,6 +51,7 @@
 <script>
 import { mapGetters } from "vuex";
 import EditModal from "@/components/modal/editModal.vue";
+import memoryCategory from "@/lang/memoryCategory";
 
 export default {
     name: "MemoryList",
@@ -63,6 +65,8 @@ export default {
                 editModalOpened: false,
                 isModify: false,
             },
+
+            categoryKo: '',
         };
     },
     computed: {
@@ -108,38 +112,12 @@ export default {
             console.log(response);
             console.log(this.currentMemory.category);
 
-            switch (this.currentMemory.category) {
-                case 'FOOD':
-                    this.currentMemory.category = '음식';
-                break;
-                case 'SHOPPING':
-                    this.currentMemory.category = '쇼핑';
-                break;
-                case 'TRIP':
-                    this.currentMemory.category = '여행';
-                break;
-                case 'MOVIE':
-                    this.currentMemory.category = '영화';
-                break;
-                case 'STUDY':
-                    this.currentMemory.category = '공부';
-                break;
-                case 'CAFE':
-                    this.currentMemory.category = '카페';
-                break;
-                case 'EXOTIC':
-                    this.currentMemory.category = '이색적인';
-                break;
-                case 'CULTURAL_LIFE':
-                    this.currentMemory.category = '문화생활';
-                break;
-                case 'EXHIBITION':
-                    this.currentMemory.category = '전시회';
-                break;
-                case 'REVIEW':
-                    this.currentMemory.category = '후기';
-                break;
-            }
+            memoryCategory.forEach((v, i) => {
+                if (this.currentMemory.category === v.en) {
+                    this.categoryKo = v.ko;
+                }
+            });
+
         })
         .catch(e => {
             console.log(e);
