@@ -3,13 +3,13 @@
         <div class="memory-wrap">
             <div class="top">
                 <div class="wrap">
-                    <input type="text" name="" id="" placeholder="검색어를 입력해주세요">
+                    <input type="text" v-model="searchKeyword" @input="searchMemory(searchKeyword)" placeholder="검색어를 입력해주세요">
                     <div class="btn-filter" @click="openModal('filterModalOpened')">
                         <span>필터</span>
                     </div>
                 </div>
                 <div class="wrap">
-                    <p class="total">전체 개 중 {{ memoryListPageInfo?.totalElement }}개</p>
+                    <p class="total">전체 {{ memoryListPageInfo?.totalElement }}개 중 {{ memoryListPageInfo?.pageSize * (memoryListPageInfo.page + 1) }}개</p>
                     <div class="btn-add" @click="openModal('editModalOpened')">등록</div>
                 </div>
             </div>
@@ -60,6 +60,7 @@ export default {
                 editModalOpened: false,
                 filterModalOpened: false,
             },
+            searchKeyword: '',
         }
     },
     methods: {
@@ -71,7 +72,7 @@ export default {
                 limit,
             })
             .then(response => {
-                console.log(response);
+                // console.log(response);
             })
             .catch();
         },
@@ -87,7 +88,23 @@ export default {
         editSuccess() {
             this.closeModal('editModalOpened');
             this.fetchMemory(1, 10);
-        }
+        },
+
+        searchMemory() {
+            // console.log('입력중');
+
+            this.memoryList.forEach((v, i) => {
+                // console.log(v.contents);
+
+            });
+
+            const searchResult = this.memoryList.filter((v, i, arr) => {
+                console.log(v.contents.includes(this.searchKeyword));
+                return v.contents.includes(this.searchKeyword) && this.searchKeyword !== '';
+            });
+
+            console.log(searchResult);
+        },
 
     },
 

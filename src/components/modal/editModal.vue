@@ -66,7 +66,7 @@
                     <!--<button class="btn-delete">-->
                     <!--<i class="xi-trash"></i>-->
                     <!--</button>-->
-                    <button class="btn-save" @click="saveMemory">등록하기</button>
+                    <button class="btn-save" @click="saveMemory">{{ currentMemory.memoryNo === 0 ? '등록하기' : '수정하기' }}</button>
                 </div>
             </div>
         </div>
@@ -85,7 +85,6 @@ export default {
     name: "editModal",
     props: [
         'opened',
-        'isModify',
     ],
     components: {
         DatePicker,
@@ -112,7 +111,8 @@ export default {
                     // 입력한 값(필수)
                     category: '',
                     address: '',
-                    memoryNo: null, // 서버에서 없으면 등록, 있으면 수정으로 인식함
+                    // memoryNo: null, // 서버에서 없으면 등록, 있으면 수정으로 인식함
+                    // memoryNo: '',
                     regDate: '',
                     contents: '',
 
@@ -187,7 +187,8 @@ export default {
             // formData.append('user.withdrawalDate', this.modal.formData.user.withdrawalDate !== null ? this.modal.formData.user.withdrawalDate : '');
             formData.append('user.userNo', this.modal.formData.user.userNo);
 
-            formData.append('memory', this.modal.formData.memoryNo !== undefined ? this.modal.formData.memoryNo : '');
+            // formData.append('memory', this.modal.formData.memoryNo !== undefined ? this.modal.formData.memoryNo : '');
+            formData.append('memory', this.currentMemory.memoryNo !== 0 ? this.currentMemory.memoryNo : '');
             formData.append('category', this.modal.formData.category);
             formData.append('address', this.modal.formData.address);
             formData.append('regDate', this.modal.formData.regDate);
@@ -197,13 +198,13 @@ export default {
             if(this.modal.formData.fileList[1]) formData.append('secondMultipartFile', this.modal.formData.fileList[1]);
             if(this.modal.formData.fileList[2]) formData.append('thirdMultipartFile', this.modal.formData.fileList[2]);
 
-            console.log(formData);
+            console.log(formData.get('memory'));
 
             this.$store.dispatch('memory/MEMORY_SAVE', formData)
                 .then((response) => {
                     // console.log(response);
 
-                    if (confirm('등록되었습니다.')) {
+                    if (confirm(this.currentMemory.memoryNo !== 0 ? '수정되었습니다.' : '등록되었습니다.')) {
                         // 아래 2개를 상위 컴포넌트에서 실행해야 함.
                         // this.closeEditModal();
                         // this.fetchMemory(1, 10);
@@ -217,7 +218,7 @@ export default {
         },
     },
     mounted() {
-        if (this.isModify) {
+        if (this.currentMemory.memoryNo !== 0) {
             this.modal.formData.contents = this.currentMemory.contents;
             this.modal.formData.category = this.currentMemory.category;
             this.modal.formData.regDate = this.currentMemory.regDate;

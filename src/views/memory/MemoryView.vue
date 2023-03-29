@@ -1,8 +1,12 @@
 <template>
     <div>
         <div class="memory-wrap view">
-            <!-- TODO: 이미지 없을때 노이미지 하나 나오게 하기 -->
-            <swiper-container pagination="true" class="swiper-container" v-if="currentMemory?.firstPhoto?.photoUrl !== null">
+            <swiper-container pagination="true" class="swiper-container">
+
+                <swiper-slide class="swiper-slide" v-if="currentMemory?.firstPhoto?.photoUrl == null">
+                    <img :src="require(`@/assets/images/noimage.png`)" alt="">
+                </swiper-slide>
+
                 <swiper-slide class="swiper-slide" v-if="currentMemory?.firstPhoto?.photoUrl !== null">
                     <img :src="`http://121.161.237.50:9999/origin/${currentMemory?.firstPhoto?.photoUrl}`" alt="">
                 </swiper-slide>
@@ -44,7 +48,7 @@
             <div class="dimmed"></div>
         </div>
 
-        <edit-modal v-if="modal.editModalOpened" :opened="modal.editModalOpened" :is-modify="modal.isModify" @closeEditModal="closeModal('editModalOpened')"></edit-modal>
+        <edit-modal v-if="modal.editModalOpened" :opened="modal.editModalOpened" :is-modify="modal.isModify" @closeEditModal="closeModal('editModalOpened')" @editSuccess="renderMemory"></edit-modal>
     </div>
 </template>
 
@@ -104,26 +108,27 @@ export default {
                     });
             }
         },
+
+        renderMemory() {
+            const memoryNo = this.$route.params.memoryNo;
+            this.$store.dispatch('memory/MEMORY_GET', memoryNo)
+                .then(response => {
+                    // console.log(response);
+
+                    memoryCategory.forEach((v, i) => {
+                        if (this.currentMemory.category === v.en) {
+                            this.categoryKo = v.ko;
+                        }
+                    });
+
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+        },
     },
     mounted() {
-        const memoryNo = this.$route.params.memoryNo;
-        this.$store.dispatch('memory/MEMORY_GET', memoryNo)
-        .then(response => {
-            console.log(response);
-            console.log(this.currentMemory.category);
-
-            memoryCategory.forEach((v, i) => {
-                if (this.currentMemory.category === v.en) {
-                    this.categoryKo = v.ko;
-                }
-            });
-
-        })
-        .catch(e => {
-            console.log(e);
-        });
-
-
+        this.renderMemory();
     },
 }
 </script>

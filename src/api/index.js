@@ -69,7 +69,7 @@ export async function saveMemory(payload) {
 }
 
 
-// 추억 - 등록
+// 추억 - 목록
 export async function listMemory(userNo, page, limit) {
     return await axios.get(`http://121.161.237.50:50005/api/memory/`, {
         params: {
