@@ -180,25 +180,42 @@ export default {
             //     }
             // });
 
-            // formData.append('user.userId', this.modal.formData.user.userId);
-            // formData.append('user.regDate', this.modal.formData.user.regDate);
-            // formData.append('user.lastLoginDate', this.modal.formData.user.lastLoginDate);
-            // formData.append('user.userStatus', this.modal.formData.user.userId !== null ? this.modal.formData.user.userId : '');
-            // formData.append('user.withdrawalDate', this.modal.formData.user.withdrawalDate !== null ? this.modal.formData.user.withdrawalDate : '');
             formData.append('user.userNo', this.modal.formData.user.userNo);
 
             // formData.append('memory', this.modal.formData.memoryNo !== undefined ? this.modal.formData.memoryNo : '');
-            formData.append('memory', this.currentMemory.memoryNo !== 0 ? this.currentMemory.memoryNo : '');
+            formData.append('memoryNo', this.currentMemory.memoryNo !== 0 ? this.currentMemory.memoryNo : '');
             formData.append('category', this.modal.formData.category);
             formData.append('address', this.modal.formData.address);
             formData.append('regDate', this.modal.formData.regDate);
             formData.append('contents', this.modal.formData.contents);
 
-            if(this.modal.formData.fileList[0]) formData.append('firstMultipartFile', this.modal.formData.fileList[0]);
-            if(this.modal.formData.fileList[1]) formData.append('secondMultipartFile', this.modal.formData.fileList[1]);
-            if(this.modal.formData.fileList[2]) formData.append('thirdMultipartFile', this.modal.formData.fileList[2]);
 
-            console.log(formData.get('memory'));
+            // 파일 업로드를 하면 & 기존 파일이 없으면 ok인데
+            // (추가) 기존 파일이 있으면 firstPhoto 또는 secondPhoto 또는 thirdMultipartFile 객체를 보내야함.
+            if (this.modal.formData.fileList[0].photoNo) {
+                formData.append('firstPhoto.photoNo', this.modal.formData.fileList[0].photoNo);
+                formData.append('firstPhoto.photoUrl', this.modal.formData.fileList[0].photoUrl);
+            }
+            if (this.modal.formData.fileList[1].photoNo) {
+                formData.append('secondPhoto.photoNo', this.modal.formData.fileList[1].photoNo);
+                formData.append('secondPhoto.photoUrl', this.modal.formData.fileList[1].photoUrl);
+            }
+            if (this.modal.formData.fileList[2].photoNo) {
+                formData.append('thirdPhoto.photoNo', this.modal.formData.fileList[2].photoNo);
+                formData.append('thirdPhoto.photoUrl', this.modal.formData.fileList[2].photoUrl);
+            }
+
+            if (this.modal.formData.fileList[0] && !this.modal.formData.fileList[0].photoNo) {
+                formData.append('firstMultipartFile', this.modal.formData.fileList[0]);
+            }
+            if (this.modal.formData.fileList[1] && !this.modal.formData.fileList[1].photoNo) {
+                formData.append('secondMultipartFile', this.modal.formData.fileList[1]);
+            }
+            if (this.modal.formData.fileList[2] && !this.modal.formData.fileList[2].photoNo) {
+                formData.append('thirdMultipartFile', this.modal.formData.fileList[2]);
+            }
+
+            console.log(formData.get('memoryNo'));
 
             this.$store.dispatch('memory/MEMORY_SAVE', formData)
                 .then((response) => {
@@ -209,6 +226,7 @@ export default {
                         // this.closeEditModal();
                         // this.fetchMemory(1, 10);
 
+                        this.closeModal('editModalOpened');
                         this.$emit('editSuccess');
                     }
                 })
@@ -224,14 +242,23 @@ export default {
             this.modal.formData.regDate = this.currentMemory.regDate;
             this.modal.formData.address = this.currentMemory.address;
 
+            // 이미지 파일도 저장했어야지
+            // 아니 그러면 저장이 아니라 수정일 때 이미지 첨부를 처음부터 다시 해야하는겨?
+            // 나는 기존거에 추가로 하나만 하고싶으면 어떻게 하라는거야?
+            // 답변: 이미 있는 이미지칸이거나 첨부안할 이미지 칸은 비워 보내라. 수정한 이미지만 채워 보내라.
+
+            // 썸네일 보여주기 위함
             if (this.currentMemory.firstPhoto.photoUrl) {
                 this.modal.thumbList.push(`http://121.161.237.50:9999/origin/${this.currentMemory.firstPhoto.photoUrl}`);
+                this.modal.formData.fileList.push(this.currentMemory.firstPhoto);
             }
             if (this.currentMemory.secondPhoto.photoUrl) {
                 this.modal.thumbList.push(`http://121.161.237.50:9999/origin/${this.currentMemory.secondPhoto.photoUrl}`);
+                this.modal.formData.fileList.push(this.currentMemory.secondPhoto);
             }
             if (this.currentMemory.thirdPhoto.photoUrl) {
                 this.modal.thumbList.push(`http://121.161.237.50:9999/origin/${this.currentMemory.thirdPhoto.photoUrl}`);
+                this.modal.formData.fileList.push(this.currentMemory.thirdPhoto);
             }
 
         }

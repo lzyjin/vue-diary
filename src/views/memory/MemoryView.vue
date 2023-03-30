@@ -1,6 +1,7 @@
 <template>
     <div>
         <div class="memory-wrap view">
+            <!-- TODO: 수정한 후 리로드할 때 스와이퍼 맨 처음에서 시작하도록 수정하기 -->
             <swiper-container pagination="true" class="swiper-container">
 
                 <swiper-slide class="swiper-slide" v-if="currentMemory?.firstPhoto?.photoUrl == null">
