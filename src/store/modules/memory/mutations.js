@@ -4,11 +4,16 @@ export default {
     },
 
     MEMORY_LIST(state, payload) {
-        state.memoryList = payload;
+        // state.memoryList = payload;
+        state.memoryList = [...state.memoryList, ...payload]
     },
 
     MEMORY_PAGEINFO(state, payload) {
         state.memoryListPageInfo = payload;
+    },
+
+    MEMORY_LIST_RESET(state) {
+        state.memoryList = [];
     },
 
     MEMORY_RESET(state) {

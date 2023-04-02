@@ -15,7 +15,7 @@ export default {
     },
 
     MEMORY_LIST({ commit }, payload) {
-        return listMemory(payload.userNo, payload.page, payload.limit)
+        return listMemory(payload)
         .then(response => {
             commit('MEMORY_LIST', response.data.data.list);
             commit('MEMORY_PAGEINFO', response.data.data.pageInfo);

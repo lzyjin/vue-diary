@@ -4,9 +4,12 @@ import VueRouter from "vue-router";
 import { router } from "@/routes";
 import {store} from './store'
 import { register } from 'swiper/element/bundle';
+import InfiniteLoading from 'vue-infinite-loading';
+
 Vue.config.productionTip = false;
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
+    .use(InfiniteLoading);
 
 register();
 

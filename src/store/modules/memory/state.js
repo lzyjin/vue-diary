@@ -19,5 +19,6 @@ export default {
         category: '',
     },
     memoryList: [],
+    totalMemoryList: [],
     memoryListPageInfo: {},
 }

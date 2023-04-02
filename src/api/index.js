@@ -70,12 +70,19 @@ export async function saveMemory(payload) {
 
 
 // 추억 - 목록
-export async function listMemory(userNo, page, limit) {
+export async function listMemory(payload) {
     return await axios.get(`http://121.161.237.50:50005/api/memory/`, {
         params: {
-            userNo,
-            page,
-            limit,
+            userNo: payload.userNo,
+            page: payload.page,
+            limit: payload.limit,
+
+            address: payload.address,
+            category: payload.category,
+            startDate: payload.startDate,
+            endDate: payload.endDate,
+            offset: payload.offset,
+            searchText:payload.searchText,
         },
     });
 }

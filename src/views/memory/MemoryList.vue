@@ -3,7 +3,7 @@
         <div class="memory-wrap">
             <div class="top">
                 <div class="wrap">
-                    <input type="text" v-model="searchKeyword" @input="searchMemory(searchKeyword)" placeholder="검색어를 입력해주세요">
+                    <input type="text" v-model="searchKeyword" @input="resetMemoryList" placeholder="검색어를 입력해주세요">
                     <div class="btn-filter" @click="openModal('filterModalOpened')">
                         <span>필터</span>
                     </div>
@@ -14,6 +14,7 @@
                 </div>
             </div>
             <div class="list">
+<!--                <div v-for="(v, i) in totalMemoryList" :key="`memory_${i}`" class="item">-->
                 <div v-for="(v, i) in memoryList" :key="`memory_${i}`" class="item">
                     <router-link :to="{ path: `/memoryView/${v.memoryNo}`, }">
                         <div class="img">
@@ -27,6 +28,7 @@
                         </div>
                     </router-link>
                 </div>
+                <infinite-loading @infinite="infiniteHandler" :key="key"></infinite-loading>
             </div>
         </div>
 
@@ -37,7 +39,7 @@
 
 <script>
 import 'vue2-datepicker/index.css';
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 // import {forEach} from 'lodash';
 import EditModal from "@/components/modal/editModal.vue";
 import FilterModal from "@/components/modal/filterModal.vue";
@@ -53,23 +55,74 @@ export default {
             memoryList: "memory/memoryList",
             memoryListPageInfo: "memory/memoryListPageInfo",
         }),
+
+        // 여기서 하든가 mutations에서 하든가
+        // totalMemoryList() {
+        //     this.totalList.push(...this.memoryList);
+        //     return this.totalList;
+        // },
     },
     data() {
         return {
+            key:1,
             modal: {
                 editModalOpened: false,
                 filterModalOpened: false,
             },
             searchKeyword: '',
+            page: 1,
+            limit: 10,
+            // totalList: [],
         }
     },
     methods: {
-        fetchMemory(page = 1, limit = 2) {
+        infiniteHandler($state) {
+                const page = this.page;
+                const limit = this.limit;
+
+                const userNo = this.$store.getters['user/getSignedInUserData'].userNo;
+                this.$store.dispatch('memory/MEMORY_LIST', {
+                    userNo,
+                    page,
+                    limit,
+
+                    address: '',
+                    // category: '', // 얘는 카테고리 검색할때만 보내기
+                    startDate: '',
+                    endDate: '',
+                    searchText: this.searchKeyword,
+                })
+                .then(response => {
+                    // console.log(response);
+
+                    if (this.memoryListPageInfo.hasNext) {
+                        this.page += 1;
+                        $state.loaded();
+                    } else {
+                        $state.complete();
+                    }
+
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+
+        },
+
+        // fetchMemory(page = 1, limit = 2) {
+        fetchMemory(page, limit) {
             const userNo = this.$store.getters['user/getSignedInUserData'].userNo;
             this.$store.dispatch('memory/MEMORY_LIST', {
                 userNo,
                 page,
                 limit,
+
+                address: '',
+                // category: '', // 얘는 카테고리 검색할때만 보내기
+                startDate: '',
+                endDate: '',
+                searchText: this.searchKeyword,
+
             })
             .then(response => {
                 // console.log(response);
@@ -87,32 +140,20 @@ export default {
 
         editSuccess() {
             this.closeModal('editModalOpened');
+
+            // TODO: 수정필요
             this.fetchMemory(1, 10);
         },
 
-        searchMemory() {
-            // console.log('입력중');
-
-            this.memoryList.forEach((v, i) => {
-                // console.log(v.contents);
-
-            });
-
-            const searchResult = this.memoryList.filter((v, i, arr) => {
-                console.log(v.contents.includes(this.searchKeyword));
-                return v.contents.includes(this.searchKeyword) && this.searchKeyword !== '';
-            });
-
-            console.log(searchResult);
+        resetMemoryList() {
+            this.key += 1;
+            // this.$store.commit('memory/MEMORY_LIST_RESET');
+            // this.page = 1;
         },
-
     },
 
     beforeMount() {
         this.$store.dispatch('memory/MEMORY_RESET');
-    },
-    mounted() {
-        this.fetchMemory(1, 10);
     },
 }
 </script>

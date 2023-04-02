@@ -192,26 +192,26 @@ export default {
 
             // 파일 업로드를 하면 & 기존 파일이 없으면 ok인데
             // (추가) 기존 파일이 있으면 firstPhoto 또는 secondPhoto 또는 thirdMultipartFile 객체를 보내야함.
-            if (this.modal.formData.fileList[0].photoNo) {
+            if (this.modal.formData?.fileList[0]?.photoNo) {
                 formData.append('firstPhoto.photoNo', this.modal.formData.fileList[0].photoNo);
                 formData.append('firstPhoto.photoUrl', this.modal.formData.fileList[0].photoUrl);
             }
-            if (this.modal.formData.fileList[1].photoNo) {
+            if (this.modal.formData?.fileList[1]?.photoNo) {
                 formData.append('secondPhoto.photoNo', this.modal.formData.fileList[1].photoNo);
                 formData.append('secondPhoto.photoUrl', this.modal.formData.fileList[1].photoUrl);
             }
-            if (this.modal.formData.fileList[2].photoNo) {
+            if (this.modal.formData?.fileList[2]?.photoNo) {
                 formData.append('thirdPhoto.photoNo', this.modal.formData.fileList[2].photoNo);
                 formData.append('thirdPhoto.photoUrl', this.modal.formData.fileList[2].photoUrl);
             }
 
-            if (this.modal.formData.fileList[0] && !this.modal.formData.fileList[0].photoNo) {
+            if (this.modal.formData?.fileList[0] && !this.modal.formData?.fileList[0]?.photoNo) {
                 formData.append('firstMultipartFile', this.modal.formData.fileList[0]);
             }
-            if (this.modal.formData.fileList[1] && !this.modal.formData.fileList[1].photoNo) {
+            if (this.modal.formData?.fileList[1] && !this.modal.formData?.fileList[1]?.photoNo) {
                 formData.append('secondMultipartFile', this.modal.formData.fileList[1]);
             }
-            if (this.modal.formData.fileList[2] && !this.modal.formData.fileList[2].photoNo) {
+            if (this.modal.formData?.fileList[2] && !this.modal.formData?.fileList[2]?.photoNo) {
                 formData.append('thirdMultipartFile', this.modal.formData.fileList[2]);
             }
 
