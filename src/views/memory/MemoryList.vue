@@ -9,12 +9,12 @@
                     </div>
                 </div>
                 <div class="wrap">
-                    <p class="total">전체 {{ memoryListPageInfo?.totalElement }}개 중 {{ memoryListPageInfo?.pageSize * (memoryListPageInfo.page + 1) }}개</p>
+                    <p class="total">전체 {{ memoryListPageInfo?.totalElement }}개 중 {{ memoryList.length }}개</p>
                     <div class="btn-add" @click="openModal('editModalOpened')">등록</div>
                 </div>
             </div>
             <div class="list">
-<!--                <div v-for="(v, i) in totalMemoryList" :key="`memory_${i}`" class="item">-->
+                <!--<div v-for="(v, i) in totalMemoryList" :key="`memory_${i}`" class="item">-->
                 <div v-for="(v, i) in memoryList" :key="`memory_${i}`" class="item">
                     <router-link :to="{ path: `/memoryView/${v.memoryNo}`, }">
                         <div class="img">
@@ -28,7 +28,14 @@
                         </div>
                     </router-link>
                 </div>
-                <infinite-loading @infinite="infiniteHandler" :key="key"></infinite-loading>
+                <div v-observe-visibility="{
+                    callback: visibilityChanged,
+                    throttle: 2000,
+                    throttleOptions: {
+                        leading: 'visible',
+                    },
+                }"></div>
+                <!--<infinite-loading @infinite="infiniteHandler"></infinite-loading>-->
             </div>
         </div>
 
@@ -39,7 +46,7 @@
 
 <script>
 import 'vue2-datepicker/index.css';
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 // import {forEach} from 'lodash';
 import EditModal from "@/components/modal/editModal.vue";
 import FilterModal from "@/components/modal/filterModal.vue";
@@ -73,14 +80,19 @@ export default {
             page: 1,
             limit: 10,
             // totalList: [],
+            isVisible: true,
         }
     },
     methods: {
-        infiniteHandler($state) {
-                const page = this.page;
-                const limit = this.limit;
+        // TODO: 뷰페이지 들어갔다가 나오면 클릭한 글 위치에 돌아오도록 하기!!
+        visibilityChanged (isVisible, entry) {
+            this.isVisible = isVisible;
 
-                const userNo = this.$store.getters['user/getSignedInUserData'].userNo;
+            const page = this.page;
+            const limit = this.limit;
+            const userNo = this.$store.getters['user/getSignedInUserData'].userNo;
+
+            if (this.memoryListPageInfo.hasNext && this.isVisible) {
                 this.$store.dispatch('memory/MEMORY_LIST', {
                     userNo,
                     page,
@@ -93,41 +105,13 @@ export default {
                     searchText: this.searchKeyword,
                 })
                 .then(response => {
-                    // console.log(response);
-
-                    if (this.memoryListPageInfo.hasNext) {
-                        this.page += 1;
-                        $state.loaded();
-                    } else {
-                        $state.complete();
-                    }
-
+                    console.log(response);
+                    this.page += 1;
                 })
                 .catch(e => {
                     console.log(e);
                 });
-
-        },
-
-        // fetchMemory(page = 1, limit = 2) {
-        fetchMemory(page, limit) {
-            const userNo = this.$store.getters['user/getSignedInUserData'].userNo;
-            this.$store.dispatch('memory/MEMORY_LIST', {
-                userNo,
-                page,
-                limit,
-
-                address: '',
-                // category: '', // 얘는 카테고리 검색할때만 보내기
-                startDate: '',
-                endDate: '',
-                searchText: this.searchKeyword,
-
-            })
-            .then(response => {
-                // console.log(response);
-            })
-            .catch();
+            }
         },
 
         openModal(modalType) {
@@ -140,20 +124,18 @@ export default {
 
         editSuccess() {
             this.closeModal('editModalOpened');
-
-            // TODO: 수정필요
-            this.fetchMemory(1, 10);
+            this.resetMemoryList();
         },
 
         resetMemoryList() {
-            this.key += 1;
-            // this.$store.commit('memory/MEMORY_LIST_RESET');
-            // this.page = 1;
+            this.$store.commit('memory/MEMORY_LIST_RESET');
+            this.$store.commit('memory/MEMORY_LIST_PAGE_RESET');
+            this.page = 1;
         },
     },
 
     beforeMount() {
-        this.$store.dispatch('memory/MEMORY_RESET');
+        this.resetMemoryList();
     },
 }
 </script>

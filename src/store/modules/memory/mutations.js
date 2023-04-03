@@ -16,6 +16,10 @@ export default {
         state.memoryList = [];
     },
 
+    MEMORY_LIST_PAGE_RESET(state) {
+        state.memoryListPageInfo.hasNext = true;
+    },
+
     MEMORY_RESET(state) {
         state.currentMemory = {
             memoryNo: 0,

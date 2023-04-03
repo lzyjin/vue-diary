@@ -20,5 +20,7 @@ export default {
     },
     memoryList: [],
     totalMemoryList: [],
-    memoryListPageInfo: {},
+    memoryListPageInfo: {
+        hasNext: true,
+    },
 }

@@ -4,12 +4,12 @@ import VueRouter from "vue-router";
 import { router } from "@/routes";
 import {store} from './store'
 import { register } from 'swiper/element/bundle';
-import InfiniteLoading from 'vue-infinite-loading';
+import ObserveVisibility from 'vue-observe-visibility'
 
 Vue.config.productionTip = false;
 
 Vue.use(VueRouter)
-    .use(InfiniteLoading);
+    .use(ObserveVisibility);
 
 register();
 
