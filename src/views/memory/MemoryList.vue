@@ -34,8 +34,7 @@
                     throttleOptions: {
                         leading: 'visible',
                     },
-                }"></div>
-                <!--<infinite-loading @infinite="infiniteHandler"></infinite-loading>-->
+                }" :key="key"></div>
             </div>
         </div>
 
@@ -48,6 +47,7 @@
 import 'vue2-datepicker/index.css';
 import { mapGetters } from "vuex";
 // import {forEach} from 'lodash';
+import { debounce } from "lodash";
 import EditModal from "@/components/modal/editModal.vue";
 import FilterModal from "@/components/modal/filterModal.vue";
 
@@ -71,7 +71,6 @@ export default {
     },
     data() {
         return {
-            key:1,
             modal: {
                 editModalOpened: false,
                 filterModalOpened: false,
@@ -80,12 +79,13 @@ export default {
             page: 1,
             limit: 10,
             // totalList: [],
+            key: 1,
             isVisible: true,
         }
     },
     methods: {
         // TODO: 뷰페이지 들어갔다가 나오면 클릭한 글 위치에 돌아오도록 하기!!
-        visibilityChanged (isVisible, entry) {
+        visibilityChanged: _.debounce(function(isVisible, entry) {
             this.isVisible = isVisible;
 
             const page = this.page;
@@ -102,7 +102,7 @@ export default {
                     // category: '', // 얘는 카테고리 검색할때만 보내기
                     startDate: '',
                     endDate: '',
-                    searchText: this.searchKeyword,
+                    searchText: this.searchKeyword.trim(),
                 })
                 .then(response => {
                     console.log(response);
@@ -112,7 +112,7 @@ export default {
                     console.log(e);
                 });
             }
-        },
+        }, 500),
 
         openModal(modalType) {
             this.modal[`${modalType}`] = true;
@@ -127,11 +127,12 @@ export default {
             this.resetMemoryList();
         },
 
-        resetMemoryList() {
+        resetMemoryList: _.debounce(function() {
             this.$store.commit('memory/MEMORY_LIST_RESET');
             this.$store.commit('memory/MEMORY_LIST_PAGE_RESET');
             this.page = 1;
-        },
+            this.key += 1;
+        }, 300),
     },
 
     beforeMount() {

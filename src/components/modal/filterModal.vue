@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import DatePicker from "vue2-datepicker";
 
 export default {
     name: "filterModal",
@@ -57,14 +58,29 @@ export default {
         'opened',
     ],
     components: {
-
+        DatePicker,
     },
     data() {
         return {
             modal: {
                 opened: this.opened,
+
+                // 검색조건
             }
         };
+    },
+    methods: {
+        openModal(modalType) {
+            this.modal[`${modalType}`] = true;
+        },
+
+        closeModal(modalType) {
+            this.modal[`${modalType}`] = false;
+
+            if (modalType === 'editModalOpened') {
+                this.$emit('closeEditModal');
+            }
+        },
     },
 }
 </script>
