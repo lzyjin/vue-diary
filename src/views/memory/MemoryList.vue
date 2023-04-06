@@ -12,6 +12,7 @@
                     <p class="total">전체 {{ memoryListPageInfo?.totalElement }}개 중 {{ memoryList.length }}개</p>
                     <div class="btn-add" @click="openModal('editModalOpened')">등록</div>
                 </div>
+                <p>필터: 필터 설정되면 여기에 조건 나열해야할 듯?</p>
             </div>
             <div class="list">
                 <!--<div v-for="(v, i) in totalMemoryList" :key="`memory_${i}`" class="item">-->
@@ -38,8 +39,8 @@
             </div>
         </div>
 
-        <edit-modal v-if="modal.editModalOpened" :opened="modal.editModalOpened" @editSuccess="editSuccess" @closeEditModal="closeModal('editModalOpened')"></edit-modal>
-        <filter-modal v-if="modal.filterModalOpened" :opened="modal.filterModalOpened"></filter-modal>
+        <edit-modal v-if="modal.editModalOpened" :opened="modal.editModalOpened" @edit-sccess="editSuccess" @close-edit-modal="closeModal('editModalOpened')"></edit-modal>
+        <filter-modal v-if="modal.filterModalOpened" :opened="modal.filterModalOpened" @set-filter="setFilter"></filter-modal>
     </div>
 </template>
 
@@ -125,6 +126,11 @@ export default {
         editSuccess() {
             this.closeModal('editModalOpened');
             this.resetMemoryList();
+        },
+
+        setFilter(category, regDate, address) {
+            console.log(category, regDate, address);
+            // TODO: 이걸로 조건 추가해서 목록 불러와야함!
         },
 
         resetMemoryList: _.debounce(function() {

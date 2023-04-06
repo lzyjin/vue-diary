@@ -131,7 +131,7 @@ export default {
             this.modal[`${modalType}`] = false;
 
             if (modalType === 'editModalOpened') {
-                this.$emit('closeEditModal');
+                this.$emit('close-edit-modal');
             }
         },
 
@@ -227,7 +227,7 @@ export default {
                         // this.fetchMemory(1, 10);
 
                         this.closeModal('editModalOpened');
-                        this.$emit('editSuccess');
+                        this.$emit('edit-success');
                     }
                 })
                 .catch(e => {

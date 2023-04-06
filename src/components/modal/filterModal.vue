@@ -11,7 +11,7 @@
                     <div class="c-item">
                         <strong>카테고리</strong>
                         <div class="select-wrap">
-                            <select name="" id="" required v-model="modal.formData.category">
+                            <select name="" id="" required v-model="modal.category">
                                 <option value="" disabled>카테고리 선택</option>
                                 <option value="FOOD">음식</option>
                                 <option value="SHOPPING">쇼핑</option>
@@ -28,20 +28,20 @@
                     </div>
                     <div class="c-item">
                         <strong>일자</strong>
-                        <date-picker v-model="modal.formData.regDate" valueType="format" range placeholder="날짜 선택"></date-picker>
+                        <date-picker v-model="modal.regDate" valueType="format" range placeholder="날짜 선택"></date-picker>
                     </div>
                     <div class="c-item">
                         <strong>주소</strong>
                         <div class="input-wrap address">
-                            <input type="text" name="" id="">
+                            <input type="text" name="" id="" placeholder="" v-model="modal.address">
                         </div>
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <button class="btn-delete">
+                    <button class="btn-delete" @click="resetFilter">
                         <i class="xi-refresh"></i>
                     </button>
-                    <button class="btn-save" @click="">적용</button>
+                    <button class="btn-save" @click="setFilter">적용</button>
                 </div>
             </div>
         </div>
@@ -66,6 +66,9 @@ export default {
                 opened: this.opened,
 
                 // 검색조건
+                category: '',
+                address: '',
+                regDate: [], // 배열로 ["2023-04-05", "2023-04-10"] 이런식으로 들어감
             }
         };
     },
@@ -76,10 +79,17 @@ export default {
 
         closeModal(modalType) {
             this.modal[`${modalType}`] = false;
+        },
 
-            if (modalType === 'editModalOpened') {
-                this.$emit('closeEditModal');
-            }
+        resetFilter() {
+            this.modal.category = '';
+            this.modal.regDate = [];
+            this.modal.address = '';
+        },
+
+        setFilter() {
+            // emit으로 상위 컴포넌트로 필터 조건들을 올려야겠네.
+            this.$emit('set-filter', this.modal.category, this.modal.regDate, this.modal.address);
         },
     },
 }
