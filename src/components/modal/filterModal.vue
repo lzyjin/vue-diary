@@ -33,7 +33,7 @@
                     <div class="c-item">
                         <strong>주소</strong>
                         <div class="input-wrap address">
-                            <input type="text" name="" id="" placeholder="" v-model="modal.address">
+                            <input type="text" name="" id="" v-model="modal.address" placeholder="주소 입력">
                         </div>
                     </div>
                 </div>
@@ -56,6 +56,7 @@ export default {
     name: "filterModal",
     props: [
         'opened',
+        'savedFilter',
     ],
     components: {
         DatePicker,
@@ -79,6 +80,10 @@ export default {
 
         closeModal(modalType) {
             this.modal[`${modalType}`] = false;
+
+            if (modalType === 'filterModalOpened') {
+                this.$emit('close-filter-modal');
+            }
         },
 
         resetFilter() {
@@ -90,7 +95,13 @@ export default {
         setFilter() {
             // emit으로 상위 컴포넌트로 필터 조건들을 올려야겠네.
             this.$emit('set-filter', this.modal.category, this.modal.regDate, this.modal.address);
+            this.$emit('set-success');
         },
+    },
+    mounted() {
+        this.modal.category = this.savedFilter.category;
+        this.modal.address = this.savedFilter.address;
+        this.modal.regDate = [ this.savedFilter.startDate, this.savedFilter.endDate];
     },
 }
 </script>

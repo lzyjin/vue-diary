@@ -12,7 +12,9 @@
                     <p class="total">전체 {{ memoryListPageInfo?.totalElement }}개 중 {{ memoryList.length }}개</p>
                     <div class="btn-add" @click="openModal('editModalOpened')">등록</div>
                 </div>
-                <p>필터: 필터 설정되면 여기에 조건 나열해야할 듯?</p>
+                <div class="wrap">
+                    <p><i class="xi-filter"></i> 카테고리: {{ this.filter.category }} / 일자: {{ this.filter.startDate }} ~ {{ this.filter.endDate }} / 주소: {{ this.filter.address }}</p>
+                </div>
             </div>
             <div class="list">
                 <!--<div v-for="(v, i) in totalMemoryList" :key="`memory_${i}`" class="item">-->
@@ -39,8 +41,21 @@
             </div>
         </div>
 
-        <edit-modal v-if="modal.editModalOpened" :opened="modal.editModalOpened" @edit-sccess="editSuccess" @close-edit-modal="closeModal('editModalOpened')"></edit-modal>
-        <filter-modal v-if="modal.filterModalOpened" :opened="modal.filterModalOpened" @set-filter="setFilter"></filter-modal>
+        <edit-modal v-if="modal.editModalOpened"
+                    :opened="modal.editModalOpened"
+                    @edit-sccess="editSuccess"
+                    @close-edit-modal="closeModal('editModalOpened')"></edit-modal>
+        <filter-modal v-if="modal.filterModalOpened"
+                        :opened="modal.filterModalOpened"
+                        :savedFilter="{
+                            address: filter.address,
+                            category: filter.category,
+                            startDate: filter.startDate,
+                            endDate: filter.endDate,
+                        }"
+                        @set-filter="setFilter"
+                        @set-success="closeModal('filterModalOpened')"
+                        @close-filter-modal="closeModal('filterModalOpened')"></filter-modal>
     </div>
 </template>
 
@@ -51,6 +66,7 @@ import { mapGetters } from "vuex";
 import { debounce } from "lodash";
 import EditModal from "@/components/modal/editModal.vue";
 import FilterModal from "@/components/modal/filterModal.vue";
+import ca from "vue2-datepicker/locale/es/ca";
 
 export default {
     name: "MemoryList",
@@ -76,7 +92,15 @@ export default {
                 editModalOpened: false,
                 filterModalOpened: false,
             },
+            filter: {
+                address: '',
+                category: '',
+                startDate: '',
+                endDate: '',
+            },
             searchKeyword: '',
+
+
             page: 1,
             limit: 10,
             // totalList: [],
@@ -89,22 +113,23 @@ export default {
         visibilityChanged: _.debounce(function(isVisible, entry) {
             this.isVisible = isVisible;
 
-            const page = this.page;
-            const limit = this.limit;
-            const userNo = this.$store.getters['user/getSignedInUserData'].userNo;
+            let payload = {
+                userNo: this.$store.getters['user/getSignedInUserData'].userNo,
+                page: this.page,
+                limit: this.limit,
+
+                address: this.filter.address,
+                startDate: this.filter.startDate,
+                endDate: this.filter.endDate,
+                searchText: this.searchKeyword.trim(),
+            };
+
+            if (this.filter.category !== '') {
+                payload.category = this.filter.category; // 얘는 카테고리 검색할때만 보내기
+            }
 
             if (this.memoryListPageInfo.hasNext && this.isVisible) {
-                this.$store.dispatch('memory/MEMORY_LIST', {
-                    userNo,
-                    page,
-                    limit,
-
-                    address: '',
-                    // category: '', // 얘는 카테고리 검색할때만 보내기
-                    startDate: '',
-                    endDate: '',
-                    searchText: this.searchKeyword.trim(),
-                })
+                this.$store.dispatch('memory/MEMORY_LIST', payload)
                 .then(response => {
                     console.log(response);
                     this.page += 1;
@@ -113,7 +138,7 @@ export default {
                     console.log(e);
                 });
             }
-        }, 500),
+        }, 300),
 
         openModal(modalType) {
             this.modal[`${modalType}`] = true;
@@ -130,7 +155,14 @@ export default {
 
         setFilter(category, regDate, address) {
             console.log(category, regDate, address);
+
             // TODO: 이걸로 조건 추가해서 목록 불러와야함!
+            this.filter.category = category;
+            this.filter.startDate = regDate[0];
+            this.filter.endDate = regDate[1];
+            this.filter.address = address;
+
+            this.resetMemoryList();
         },
 
         resetMemoryList: _.debounce(function() {
