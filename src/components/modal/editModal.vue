@@ -13,17 +13,8 @@
                         <strong>카테고리 <span class="asterisk">*</span></strong>
                         <div class="select-wrap">
                             <select name="" id="" required v-model="modal.formData.category">
-                                <option value="" disabled>카테고리 선택</option>
-                                <option value="FOOD">음식</option>
-                                <option value="SHOPPING">쇼핑</option>
-                                <option value="TRIP">여행</option>
-                                <option value="MOVIE">영화</option>
-                                <option value="STUDY">공부</option>
-                                <option value="CAFE">카페</option>
-                                <option value="EXOTIC">이색적인</option>
-                                <option value="CULTURAL_LIFE">문화생활</option>
-                                <option value="EXHIBITION">전시회</option>
-                                <option value="REVIEW">후기</option>
+                                <option value="" disabled hidden="true">카테고리 선택</option>
+                                <option :value="item.en" v-for="item in categories" :key="`${item.en}_${item.ko}`">{{item.ko}}</option>
                             </select>
                         </div>
                     </div>
@@ -80,7 +71,7 @@
 import DatePicker from "vue2-datepicker";
 import DaumPostModal from "@/components/modal/daumPostModal.vue";
 import {mapGetters} from "vuex";
-
+import category from '@/lang/memoryCategory'
 export default {
     name: "editModal",
     props: [
@@ -91,6 +82,9 @@ export default {
         DaumPostModal,
     },
     computed: {
+        categories(){
+          return category
+        },
         ...mapGetters({
             currentMemory: 'memory/currentMemory',
         }),

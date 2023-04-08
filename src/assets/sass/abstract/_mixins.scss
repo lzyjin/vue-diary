@@ -2,9 +2,9 @@
 @mixin font-face($name, $path, $weight: null, $style: null, $exts: otf ttf) {
     $src: null;
     $formats: (
-            otf: 'opentype',
-            ttf: 'truetype',
-            woff: 'woff',
+        otf: 'opentype',
+        ttf: 'truetype',
+        woff: 'woff'
     );
     @each $ext in $exts {
         $format: map-get($formats, $ext);
@@ -20,8 +20,6 @@
 // 사용:
 // @include font-face('Note Serif', '../fonts/NotoSerif-Regular.otf', 400,  null, otf);
 
-
-
 // IR기법(접근성을 위한 대체 텍스트 표시)
 @mixin blind {
     position: absolute;
@@ -34,8 +32,6 @@
     white-space: nowrap;
     clip: rect(0, 0, 0, 0);
 }
-
-
 
 // 말줄임(...)
 @mixin ellipsis($lines: 1) {
@@ -52,16 +48,12 @@
     }
 }
 
-
-
 // 요소 중앙정렬
 @mixin center-element {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
-
 
 // flex
 @mixin flex($direction, $justify, $align, $gap) {
@@ -71,8 +63,6 @@
     align-items: $align;
     gap: $gap;
 }
-
-
 
 // li dot marker
 @mixin list-marker($background-color: #000, $top: 0, $width: 3, $padding-left: 10) {
@@ -92,8 +82,6 @@
 }
 // 사용:
 // li에 @include mixins.list-marker(#fff, 15, 3, 10);
-
-
 
 // 구분선
 @mixin division-bar($width, $height, $background-color, $margin, $top: 0) {
@@ -119,8 +107,6 @@
 // 사용:
 // @include mixins.division-bar(1px, 12px, #888, 17px, 11px);
 
-
-
 // vender prefix
 $set-prefix: '', '-moz-', '-webkit-';
 
@@ -138,8 +124,6 @@ $set-prefix: '', '-moz-', '-webkit-';
 // 사용:
 // @include ProprtySetPrefix(transition, 0.2s);
 
-
-
 // object-fit img
 @mixin objectFitImg($fit, $position) {
     width: 100%;
@@ -147,9 +131,6 @@ $set-prefix: '', '-moz-', '-webkit-';
     object-fit: $fit;
     object-position: $position;
 }
-
-
-
 
 //  RETINA-READY IMAGES
 // https://www.developerdrive.com/10-best-sass-mixins-for-web-developers/

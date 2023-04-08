@@ -16,6 +16,7 @@
 import HeaderLayout from "@/layouts/headerLayout";
 import ContentLayout from "@/layouts/contentLayout";
 
+
 export default {
     name: 'App',
     components: {
