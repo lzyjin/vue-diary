@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="modal" :class="{opened: opened}">
+        <div class="modal" :class="{ opened: opened }">
             <div class="modal-top">
-                <button @click="closeModal('filterModalOpened')" style="margin-left: auto;">
+                <button @click="closeModal('filterModalOpened')" style="margin-left: auto">
                     <i class="xi-close"></i>
                 </button>
             </div>
@@ -28,12 +28,17 @@
                     </div>
                     <div class="c-item">
                         <strong>일자</strong>
-                        <date-picker v-model="modal.regDate" valueType="format" range placeholder="날짜 선택"></date-picker>
+                        <date-picker
+                            v-model="modal.regDate"
+                            valueType="format"
+                            range
+                            placeholder="날짜 선택"
+                        ></date-picker>
                     </div>
                     <div class="c-item">
                         <strong>주소</strong>
                         <div class="input-wrap address">
-                            <input type="text" name="" id="" v-model="modal.address" placeholder="주소 입력">
+                            <input type="text" name="" id="" v-model="modal.address" placeholder="주소 입력" />
                         </div>
                     </div>
                 </div>
@@ -50,16 +55,13 @@
 </template>
 
 <script>
-import DatePicker from "vue2-datepicker";
+import DatePicker from 'vue2-datepicker';
 
 export default {
-    name: "filterModal",
-    props: [
-        'opened',
-        'savedFilter',
-    ],
+    name: 'filterModal',
+    props: ['opened', 'savedFilter'],
     components: {
-        DatePicker,
+        DatePicker
     },
     data() {
         return {
@@ -69,7 +71,7 @@ export default {
                 // 검색조건
                 category: '',
                 address: '',
-                regDate: [], // 배열로 ["2023-04-05", "2023-04-10"] 이런식으로 들어감
+                regDate: [] // 배열로 ["2023-04-05", "2023-04-10"] 이런식으로 들어감
             }
         };
     },
@@ -96,16 +98,14 @@ export default {
             // emit으로 상위 컴포넌트로 필터 조건들을 올려야겠네.
             this.$emit('set-filter', this.modal.category, this.modal.regDate, this.modal.address);
             this.$emit('set-success');
-        },
+        }
     },
     mounted() {
         this.modal.category = this.savedFilter.category;
         this.modal.address = this.savedFilter.address;
-        this.modal.regDate = [ this.savedFilter.startDate, this.savedFilter.endDate];
-    },
-}
+        this.modal.regDate = [this.savedFilter.startDate, this.savedFilter.endDate];
+    }
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

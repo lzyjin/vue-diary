@@ -3,10 +3,7 @@ import axios from 'axios';
 // 회원 - 회원가입
 export async function signUp(userId, password) {
     try {
-        return await axios.post('http://121.161.237.50:50005/api/user/up', {
-            userId,
-            password,
-        });
+        return await post(userApi.up, parameter);
     } catch (e) {
         console.error(e);
     }
