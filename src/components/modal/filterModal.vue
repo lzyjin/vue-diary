@@ -12,17 +12,10 @@
                         <strong>카테고리</strong>
                         <div class="select-wrap">
                             <select name="" id="" required v-model="modal.category">
-                                <option value="" disabled>카테고리 선택</option>
-                                <option value="FOOD">음식</option>
-                                <option value="SHOPPING">쇼핑</option>
-                                <option value="TRIP">여행</option>
-                                <option value="MOVIE">영화</option>
-                                <option value="STUDY">공부</option>
-                                <option value="CAFE">카페</option>
-                                <option value="EXOTIC">이색적인</option>
-                                <option value="CULTURAL_LIFE">문화생활</option>
-                                <option value="EXHIBITION">전시회</option>
-                                <option value="REVIEW">후기</option>
+                                <option value="" disabled hidden>카테고리 선택</option>
+                                <option v-for="item in categories" :value="item.en" :key="`${item.ko}_${item.en}`">
+                                    {{ item.ko }}
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -56,6 +49,7 @@
 
 <script>
 import DatePicker from 'vue2-datepicker';
+import { MEMORY_CATEGORIES } from '@/config/constant';
 
 export default {
     name: 'filterModal',
@@ -74,6 +68,11 @@ export default {
                 regDate: [] // 배열로 ["2023-04-05", "2023-04-10"] 이런식으로 들어감
             }
         };
+    },
+    computed: {
+        categories() {
+            return MEMORY_CATEGORIES;
+        }
     },
     methods: {
         openModal(modalType) {

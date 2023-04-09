@@ -1,46 +1,71 @@
 <template>
     <div>
-        <div class="modal" :class="{opened: opened}">
+        <div class="modal" :class="{ opened: opened }">
             <div class="modal-top">
-                <button @click="closeModal('editModalOpened')" style="margin-left: auto;">
+                <button @click="closeModal('editModalOpened')" style="margin-left: auto">
                     <i class="xi-close"></i>
                 </button>
             </div>
             <div class="modal-content">
                 <div class="category">
-
                     <div class="c-item">
                         <strong>카테고리 <span class="asterisk">*</span></strong>
                         <div class="select-wrap">
                             <select name="" id="" required v-model="modal.formData.category">
-                                <option value="" disabled hidden="true">카테고리 선택</option>
-                                <option :value="item.en" v-for="item in categories" :key="`${item.en}_${item.ko}`">{{item.ko}}</option>
+                                <option value="" disabled hidden>카테고리 선택</option>
+                                <option :value="item.en" v-for="item in categories" :key="`${item.en}_${item.ko}`">
+                                    {{ item.ko }}
+                                </option>
                             </select>
                         </div>
                     </div>
 
                     <div class="c-item">
                         <strong>일자 <span class="asterisk">*</span></strong>
-                        <date-picker v-model="modal.formData.regDate" valueType="format" placeholder="날짜 선택"></date-picker>
+                        <date-picker
+                            v-model="modal.formData.regDate"
+                            valueType="format"
+                            placeholder="날짜 선택"
+                        ></date-picker>
                     </div>
 
                     <div class="c-item">
                         <strong>주소 <span class="asterisk">*</span></strong>
                         <div class="input-wrap address">
-                            <input type="text" name="" id="" @click="openModal('daumPostModalOpened')" readonly required placeholder="주소 검색" v-model="modal.formData.address">
+                            <input
+                                type="text"
+                                name=""
+                                id=""
+                                @click="openModal('daumPostModalOpened')"
+                                readonly
+                                required
+                                placeholder="주소 검색"
+                                v-model="modal.formData.address"
+                            />
                             <!--<input type="text" name="" id="" required placeholder="주소 입력" v-model="modal.formData.address">-->
                         </div>
                     </div>
 
                     <div class="c-item">
                         <strong>내용 <span class="asterisk">*</span></strong>
-                        <textarea name="" id="" required placeholder="추억할 내용을 적어보세요 :)" v-model="modal.formData.contents"></textarea>
+                        <textarea
+                            name=""
+                            id=""
+                            required
+                            placeholder="추억할 내용을 적어보세요 :)"
+                            v-model="modal.formData.contents"
+                        ></textarea>
                     </div>
 
                     <div class="c-item">
                         <strong>사진첨부</strong>
                         <div class="add-photo">
-                            <div class="thumb" v-for="(v, i) in modal.thumbList" :key="i" :style="{ 'background-image' : `url('${v}')` }">
+                            <div
+                                class="thumb"
+                                v-for="(v, i) in modal.thumbList"
+                                :key="i"
+                                :style="{ 'background-image': `url('${v}')` }"
+                            >
                                 <div class="btn-delete" @click="deletePhoto(i)">
                                     <i class="xi-close"></i>
                                 </div>
@@ -48,46 +73,49 @@
                             <label for="btnFileUpload" v-if="modal.formData.fileList.length < 3">
                                 <i class="xi-plus"></i>
                             </label>
-                            <input type="file" name="" id="btnFileUpload" multiple @change="uploadPhoto">
+                            <input type="file" name="" id="btnFileUpload" multiple @change="uploadPhoto" />
                         </div>
                     </div>
-
                 </div>
                 <div class="btn-wrap">
                     <!--<button class="btn-delete">-->
                     <!--<i class="xi-trash"></i>-->
                     <!--</button>-->
-                    <button class="btn-save" @click="saveMemory">{{ currentMemory.memoryNo === 0 ? '등록하기' : '수정하기' }}</button>
+                    <button class="btn-save" @click="saveMemory">
+                        {{ currentMemory.memoryNo === 0 ? '등록하기' : '수정하기' }}
+                    </button>
                 </div>
             </div>
         </div>
         <div class="dimmed"></div>
 
-        <daum-post-modal v-if="modal.daumPostModalOpened" :opened="modal.daumPostModalOpened" @saveAddress="putAddress"></daum-post-modal>
+        <daum-post-modal
+            v-if="modal.daumPostModalOpened"
+            :opened="modal.daumPostModalOpened"
+            @saveAddress="putAddress"
+        ></daum-post-modal>
     </div>
 </template>
 
 <script>
-import DatePicker from "vue2-datepicker";
-import DaumPostModal from "@/components/modal/daumPostModal.vue";
-import {mapGetters} from "vuex";
-import category from '@/lang/memoryCategory'
+import DatePicker from 'vue2-datepicker';
+import DaumPostModal from '@/components/modal/daumPostModal.vue';
+import { mapGetters } from 'vuex';
+import category from '@/lang/memoryCategory';
 export default {
-    name: "editModal",
-    props: [
-        'opened',
-    ],
+    name: 'editModal',
+    props: ['opened'],
     components: {
         DatePicker,
-        DaumPostModal,
+        DaumPostModal
     },
     computed: {
-        categories(){
-          return category
+        categories() {
+            return category;
         },
         ...mapGetters({
-            currentMemory: 'memory/currentMemory',
-        }),
+            currentMemory: 'memory/currentMemory'
+        })
     },
     data() {
         return {
@@ -100,7 +128,7 @@ export default {
 
                 formData: {
                     // 사용자 정보(필수)
-                    user: {...this.$store.getters["user/getSignedInUserData"]}, // store의 state 넣기
+                    user: { ...this.$store.getters['user/getSignedInUserData'] }, // store의 state 넣기
 
                     // 입력한 값(필수)
                     category: '',
@@ -111,10 +139,10 @@ export default {
                     contents: '',
 
                     // 이미지 파일(선택)
-                    fileList: [],
-                },
-            },
-        }
+                    fileList: []
+                }
+            }
+        };
     },
     methods: {
         openModal(modalType) {
@@ -134,12 +162,12 @@ export default {
             this.closeModal('daumPostModalOpened');
         },
 
-        uploadPhoto: function(e) {
+        uploadPhoto: function (e) {
             const files = [...e.target.files];
 
             console.log(files);
 
-            if (files.length > 3 || (files.length + this.modal.formData.fileList.length) > 3) {
+            if (files.length > 3 || files.length + this.modal.formData.fileList.length > 3) {
                 alert('이미지 첨부는 최대 3개까지 가능합니다.');
                 return;
             }
@@ -150,18 +178,18 @@ export default {
                 fileReader.onload = () => {
                     this.modal.thumbList.push(fileReader.result);
                     this.modal.formData.fileList.push(files[i]);
-                }
+                };
             }
 
             e.target.value = '';
         },
 
-        deletePhoto: function(fileIndex) {
+        deletePhoto: function (fileIndex) {
             this.modal.thumbList.splice(fileIndex, 1);
             this.modal.formData.fileList.splice(fileIndex, 1);
         },
 
-        saveMemory: function() {
+        saveMemory: function () {
             const formData = new FormData();
 
             // forEach(this.modal.formData, (v,k) => {
@@ -182,7 +210,6 @@ export default {
             formData.append('address', this.modal.formData.address);
             formData.append('regDate', this.modal.formData.regDate);
             formData.append('contents', this.modal.formData.contents);
-
 
             // 파일 업로드를 하면 & 기존 파일이 없으면 ok인데
             // (추가) 기존 파일이 있으면 firstPhoto 또는 secondPhoto 또는 thirdMultipartFile 객체를 보내야함.
@@ -211,7 +238,8 @@ export default {
 
             console.log(formData.get('memoryNo'));
 
-            this.$store.dispatch('memory/MEMORY_SAVE', formData)
+            this.$store
+                .dispatch('memory/MEMORY_SAVE', formData)
                 .then((response) => {
                     // console.log(response);
 
@@ -224,10 +252,10 @@ export default {
                         this.$emit('edit-success');
                     }
                 })
-                .catch(e => {
+                .catch((e) => {
                     console.log(e);
                 });
-        },
+        }
     },
     mounted() {
         if (this.currentMemory.memoryNo !== 0) {
@@ -243,23 +271,26 @@ export default {
 
             // 썸네일 보여주기 위함
             if (this.currentMemory.firstPhoto.photoUrl) {
-                this.modal.thumbList.push(`http://121.161.237.50:9999/origin/${this.currentMemory.firstPhoto.photoUrl}`);
+                this.modal.thumbList.push(
+                    `http://121.161.237.50:9999/origin/${this.currentMemory.firstPhoto.photoUrl}`
+                );
                 this.modal.formData.fileList.push(this.currentMemory.firstPhoto);
             }
             if (this.currentMemory.secondPhoto.photoUrl) {
-                this.modal.thumbList.push(`http://121.161.237.50:9999/origin/${this.currentMemory.secondPhoto.photoUrl}`);
+                this.modal.thumbList.push(
+                    `http://121.161.237.50:9999/origin/${this.currentMemory.secondPhoto.photoUrl}`
+                );
                 this.modal.formData.fileList.push(this.currentMemory.secondPhoto);
             }
             if (this.currentMemory.thirdPhoto.photoUrl) {
-                this.modal.thumbList.push(`http://121.161.237.50:9999/origin/${this.currentMemory.thirdPhoto.photoUrl}`);
+                this.modal.thumbList.push(
+                    `http://121.161.237.50:9999/origin/${this.currentMemory.thirdPhoto.photoUrl}`
+                );
                 this.modal.formData.fileList.push(this.currentMemory.thirdPhoto);
             }
-
         }
-    },
-}
+    }
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
