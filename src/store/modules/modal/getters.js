@@ -1,5 +1,5 @@
 export default {
-    getModal(state){
-        return state.modal
-    }
-}
+    getModal(state) {
+        return state.modal;
+    },
+};

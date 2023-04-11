@@ -16,46 +16,48 @@
 </template>
 
 <script>
+import EditModal from '@/components/modal/editModal.vue';
+
 export default {
     name: 'selectModal',
-    // props: [
-    //     'opened',
-    //     "modifyMemory"
-    // ],
     props: {
         opened: {
             type: Boolean,
-            default: false
+            default: false,
         },
+
         modifyMemory: {
             type: Function,
-            default: () => {}
+            default: () => {},
         },
+
         deleteMemory: {
             type: Function,
-            default: () => {}
-        }
+            default: () => {},
+        },
     },
     data() {
         return {
             modal: {
-                opened: this.opened
-            }
+                opened: this.opened,
+            },
         };
     },
     methods: {
-        closeModal(modalType) {
+        closeModal() {
             this.$emit('closeModal');
         },
+
         modify() {
             this.closeModal();
             this.modifyMemory(); //'CALL BACK FUNCTION'
         },
+
         remove() {
             this.closeModal();
             this.deleteMemory();
-        }
-    }
+        },
+    },
 };
 </script>
 

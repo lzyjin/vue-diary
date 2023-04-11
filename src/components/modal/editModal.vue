@@ -101,21 +101,34 @@
 import DatePicker from 'vue2-datepicker';
 import DaumPostModal from '@/components/modal/daumPostModal.vue';
 import { mapGetters } from 'vuex';
-import category from '@/lang/memoryCategory';
+import { MEMORY_CATEGORIES } from '@/config/constant';
 export default {
     name: 'editModal',
-    props: ['opened'],
+    props: {
+        opened: {
+            type: Boolean,
+            default: false,
+        },
+        editSuccess: {
+            type: Function,
+            default: () => {},
+        },
+        renderMemory: {
+            type: Function,
+            default: () => {},
+        },
+    },
     components: {
         DatePicker,
-        DaumPostModal
+        DaumPostModal,
     },
     computed: {
         categories() {
-            return category;
+            return MEMORY_CATEGORIES;
         },
         ...mapGetters({
-            currentMemory: 'memory/currentMemory'
-        })
+            currentMemory: 'memory/currentMemory',
+        }),
     },
     data() {
         return {
@@ -139,9 +152,9 @@ export default {
                     contents: '',
 
                     // 이미지 파일(선택)
-                    fileList: []
-                }
-            }
+                    fileList: [],
+                },
+            },
         };
     },
     methods: {
@@ -150,11 +163,13 @@ export default {
         },
 
         closeModal(modalType) {
-            this.modal[`${modalType}`] = false;
+            // this.modal[`${modalType}`] = false;
+            //
+            // if (modalType === 'editModalOpened') {
+            //     this.$emit('close-edit-modal');
+            // }
 
-            if (modalType === 'editModalOpened') {
-                this.$emit('close-edit-modal');
-            }
+            this.$emit('closeModal');
         },
 
         putAddress(params) {
@@ -192,19 +207,7 @@ export default {
         saveMemory: function () {
             const formData = new FormData();
 
-            // forEach(this.modal.formData, (v,k) => {
-            //     if (k === 'user') {
-            //         forEach(v, (v2,k2) => {
-            //             formData.append(`${k}.${k2}`, v2);
-            //         });
-            //     } else {
-            //         formData.append(k, v);
-            //     }
-            // });
-
             formData.append('user.userNo', this.modal.formData.user.userNo);
-
-            // formData.append('memory', this.modal.formData.memoryNo !== undefined ? this.modal.formData.memoryNo : '');
             formData.append('memoryNo', this.currentMemory.memoryNo !== 0 ? this.currentMemory.memoryNo : '');
             formData.append('category', this.modal.formData.category);
             formData.append('address', this.modal.formData.address);
@@ -241,21 +244,20 @@ export default {
             this.$store
                 .dispatch('memory/MEMORY_SAVE', formData)
                 .then((response) => {
-                    // console.log(response);
-
                     if (confirm(this.currentMemory.memoryNo !== 0 ? '수정되었습니다.' : '등록되었습니다.')) {
-                        // 아래 2개를 상위 컴포넌트에서 실행해야 함.
-                        // this.closeEditModal();
-                        // this.fetchMemory(1, 10);
+                        this.$emit('closeModal');
 
-                        this.closeModal('editModalOpened');
-                        this.$emit('edit-success');
+                        if (this.currentMemory.memoryNo !== 0) {
+                            this.editSuccess();
+                        } else {
+                            this.renderMemory();
+                        }
                     }
                 })
                 .catch((e) => {
                     console.log(e);
                 });
-        }
+        },
     },
     mounted() {
         if (this.currentMemory.memoryNo !== 0) {
@@ -289,7 +291,7 @@ export default {
                 this.modal.formData.fileList.push(this.currentMemory.thirdPhoto);
             }
         }
-    }
+    },
 };
 </script>
 

@@ -7,5 +7,5 @@ export default {
     DaumPostModal,
     EditModal,
     FilterModal,
-    SelectModal
+    SelectModal,
 };
