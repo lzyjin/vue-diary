@@ -1,26 +1,35 @@
 <template>
     <div>
-        <div class="modal" :class="{opened: opened}">
+        <div class="modal" :class="{ opened: opened }">
             <div class="modal-top">
-                <button @click="closeModal('daumPostModalOpened')" style="margin-left: auto;">
+                <button @click="closeModal('daumPostModalOpened')" style="margin-left: auto">
                     <i class="xi-close"></i>
                 </button>
             </div>
             <div class="modal-content">
-                <DaumPostcode :on-complete=handleAddress />
+                <DaumPostcode :on-complete="handleAddress" />
             </div>
         </div>
+        <div class="dimmed"></div>
     </div>
 </template>
 
 <script>
 import DaumPostcode from 'vuejs-daum-postcode';
+import EditModal from '@/components/modal/editModal.vue';
 
 export default {
-    name: "daumPostModal",
-    props: [
-        'opened',
-    ],
+    name: 'daumPostModal',
+    props: {
+        opened: {
+            type: Boolean,
+            default: false,
+        },
+        putAddress: {
+            type: Function,
+            default: () => {},
+        },
+    },
     components: {
         DaumPostcode,
     },
@@ -28,12 +37,12 @@ export default {
         return {
             modal: {
                 opened: this.opened,
-            }
+            },
         };
     },
     methods: {
-        closeModal(modalType) {
-            this.modal[`${modalType}`] = false;
+        closeModal() {
+            this.$emit('closeModal');
         },
 
         handleAddress: function (data) {
@@ -44,17 +53,23 @@ export default {
                     extraAddress += data.bname;
                 }
                 if (data.buildingName !== '') {
-                    extraAddress += (extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName);
+                    extraAddress += extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
                 }
-                fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '');
+                fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
             }
 
-            this.$emit('saveAddress', fullAddress);
+            this.$store.commit('memory/MEMORY_SET_ADDRESS', fullAddress);
+            this.closeModal();
+            const payload = {
+                opened: true,
+            };
+            this.$store.commit('modal/setModal', {
+                component: EditModal,
+                data: payload,
+            });
         },
     },
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

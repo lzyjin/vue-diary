@@ -5,7 +5,7 @@ export default {
 
     MEMORY_LIST(state, payload) {
         // state.memoryList = payload;
-        state.memoryList = [...state.memoryList, ...payload]
+        state.memoryList = [...state.memoryList, ...payload];
     },
 
     MEMORY_PAGEINFO(state, payload) {
@@ -23,23 +23,26 @@ export default {
     MEMORY_RESET(state) {
         state.currentMemory = {
             memoryNo: 0,
-                firstPhoto: {
+            firstPhoto: {
                 photoNo: null,
-                    photoUrl: null,
+                photoUrl: null,
             },
             secondPhoto: {
                 photoNo: null,
-                    photoUrl: null,
+                photoUrl: null,
             },
             thirdPhoto: {
                 photoNo: null,
-                    photoUrl: null,
+                photoUrl: null,
             },
             contents: '',
-                regDate: '',
-                address: '',
-                category: '',
+            regDate: '',
+            address: '',
+            category: '',
         };
-    }
-}
+    },
 
+    MEMORY_SET_ADDRESS(state, payload) {
+        state.currentMemory.address = payload;
+    },
+};

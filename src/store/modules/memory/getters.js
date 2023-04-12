@@ -9,5 +9,9 @@ export default {
 
     currentMemory: (state) => {
         return state.currentMemory;
-    }
-}
+    },
+
+    currentMemoryAddress: (state) => {
+        return state.currentMemory?.address;
+    },
+};

@@ -88,12 +88,6 @@
             </div>
         </div>
         <div class="dimmed"></div>
-
-        <daum-post-modal
-            v-if="modal.daumPostModalOpened"
-            :opened="modal.daumPostModalOpened"
-            @saveAddress="putAddress"
-        ></daum-post-modal>
     </div>
 </template>
 
@@ -145,7 +139,7 @@ export default {
 
                     // 입력한 값(필수)
                     category: '',
-                    address: '',
+                    address: this.$store.getters['memory/currentMemoryAddress'],
                     // memoryNo: null, // 서버에서 없으면 등록, 있으면 수정으로 인식함
                     // memoryNo: '',
                     regDate: '',
@@ -160,21 +154,22 @@ export default {
     methods: {
         openModal(modalType) {
             this.modal[`${modalType}`] = true;
+
+            const payload = {
+                opened: true,
+                putAddress: this.putAddress,
+            };
+
+            if (modalType === 'daumPostModalOpened') {
+                this.$store.commit('modal/setModal', {
+                    component: DaumPostModal,
+                    data: payload,
+                });
+            }
         },
 
         closeModal(modalType) {
-            // this.modal[`${modalType}`] = false;
-            //
-            // if (modalType === 'editModalOpened') {
-            //     this.$emit('close-edit-modal');
-            // }
-
             this.$emit('closeModal');
-        },
-
-        putAddress(params) {
-            this.modal.formData.address = params;
-            this.closeModal('daumPostModalOpened');
         },
 
         uploadPhoto: function (e) {
