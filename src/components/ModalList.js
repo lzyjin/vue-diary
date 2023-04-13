@@ -1,7 +1,7 @@
-import DaumPostModal from '@/components/modal/daumPostModal.vue';
-import EditModal from '@/components/modal/editModal.vue';
-import FilterModal from '@/components/modal/filterModal.vue';
-import SelectModal from '@/components/modal/selectModal.vue';
+import DaumPostModal from '@/components/modal/DaumPostModal.vue';
+import EditModal from '@/components/modal/EditModal.vue';
+import FilterModal from '@/components/modal/FilterModal.vue';
+import SelectModal from '@/components/modal/SelectModal.vue';
 
 export default {
     DaumPostModal,

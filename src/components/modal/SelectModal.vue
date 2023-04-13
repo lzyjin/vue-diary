@@ -16,10 +16,10 @@
 </template>
 
 <script>
-import EditModal from '@/components/modal/editModal.vue';
+import EditModal from '@/components/modal/EditModal.vue';
 
 export default {
-    name: 'selectModal',
+    name: 'SelectModal',
     props: {
         opened: {
             type: Boolean,

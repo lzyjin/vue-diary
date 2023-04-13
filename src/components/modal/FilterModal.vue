@@ -52,10 +52,10 @@ import DatePicker from 'vue2-datepicker';
 import { MEMORY_CATEGORIES } from '@/config/constant';
 
 export default {
-    name: 'filterModal',
+    name: 'FilterModal',
     props: ['opened', 'savedFilter'],
     components: {
-        DatePicker
+        DatePicker,
     },
     data() {
         return {
@@ -65,14 +65,14 @@ export default {
                 // 검색조건
                 category: '',
                 address: '',
-                regDate: [] // 배열로 ["2023-04-05", "2023-04-10"] 이런식으로 들어감
-            }
+                regDate: [], // 배열로 ["2023-04-05", "2023-04-10"] 이런식으로 들어감
+            },
         };
     },
     computed: {
         categories() {
             return MEMORY_CATEGORIES;
-        }
+        },
     },
     methods: {
         openModal(modalType) {
@@ -97,13 +97,13 @@ export default {
             // emit으로 상위 컴포넌트로 필터 조건들을 올려야겠네.
             this.$emit('set-filter', this.modal.category, this.modal.regDate, this.modal.address);
             this.$emit('set-success');
-        }
+        },
     },
     mounted() {
         this.modal.category = this.savedFilter.category;
         this.modal.address = this.savedFilter.address;
         this.modal.regDate = [this.savedFilter.startDate, this.savedFilter.endDate];
-    }
+    },
 };
 </script>
 

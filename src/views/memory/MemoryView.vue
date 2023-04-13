@@ -7,15 +7,14 @@
                     <img :src="require(`@/assets/images/noimage.png`)" alt="" />
                 </swiper-slide>
 
-                <!-- TODO: 공통url 변수로 빼기!울랄라@! -->
                 <swiper-slide class="swiper-slide" v-if="currentMemory?.firstPhoto?.photoUrl !== null">
-                    <img :src="`http://121.161.237.50:9999/origin/${currentMemory?.firstPhoto?.photoUrl}`" alt="" />
+                    <img :src="`${imgPrefix}${currentMemory?.firstPhoto?.photoUrl}`" alt="" />
                 </swiper-slide>
                 <swiper-slide class="swiper-slide" v-if="currentMemory?.secondPhoto?.photoUrl !== null">
-                    <img :src="`http://121.161.237.50:9999/origin/${currentMemory?.secondPhoto?.photoUrl}`" alt="" />
+                    <img :src="`${imgPrefix}${currentMemory?.secondPhoto?.photoUrl}`" alt="" />
                 </swiper-slide>
                 <swiper-slide class="swiper-slide" v-if="currentMemory?.thirdPhoto?.photoUrl !== null">
-                    <img :src="`http://121.161.237.50:9999/origin/${currentMemory?.thirdPhoto?.photoUrl}`" alt="" />
+                    <img :src="`${imgPrefix}${currentMemory?.thirdPhoto?.photoUrl}`" alt="" />
                 </swiper-slide>
             </swiper-container>
 
@@ -38,8 +37,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import EditModal from '@/components/modal/editModal.vue';
-import { MEMORY_CATEGORIES } from '@/config/constant';
+import EditModal from '@/components/modal/EditModal.vue';
+import { MEMORY_CATEGORIES, IMAGE_PREFIX } from '@/config/constant';
 import ModalList from '@/components/ModalList';
 
 export default {
@@ -55,6 +54,7 @@ export default {
                 isModify: false,
             },
 
+            imgPrefix: IMAGE_PREFIX,
             categoryKo: '',
         };
     },
@@ -78,10 +78,6 @@ export default {
                     data: payload,
                 });
             }
-        },
-
-        closeModal(modalType) {
-            this.modal[`${modalType}`] = false;
         },
 
         modifyMemory() {

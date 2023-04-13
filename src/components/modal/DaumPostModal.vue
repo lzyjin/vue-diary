@@ -16,7 +16,7 @@
 
 <script>
 import DaumPostcode from 'vuejs-daum-postcode';
-import EditModal from '@/components/modal/editModal.vue';
+import EditModal from '@/components/modal/EditModal.vue';
 
 export default {
     name: 'daumPostModal',

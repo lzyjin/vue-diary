@@ -93,11 +93,11 @@
 
 <script>
 import DatePicker from 'vue2-datepicker';
-import DaumPostModal from '@/components/modal/daumPostModal.vue';
+import DaumPostModal from '@/components/modal/DaumPostModal.vue';
 import { mapGetters } from 'vuex';
 import { MEMORY_CATEGORIES } from '@/config/constant';
 export default {
-    name: 'editModal',
+    name: 'EditModal',
     props: {
         opened: {
             type: Boolean,
@@ -168,8 +168,8 @@ export default {
             }
         },
 
-        closeModal(modalType) {
-            this.$emit('closeModal');
+        closeModal() {
+            this.$emit('closeModal', 'EditModal');
         },
 
         uploadPhoto: function (e) {
