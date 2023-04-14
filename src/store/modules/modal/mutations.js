@@ -6,6 +6,7 @@ export default {
 
     closeModal(state, modalName) {
         state.modal.component.filter((v, i, arr) => {
+            console.log(modalName);
             console.log(v);
             console.log(i);
             console.log(arr);

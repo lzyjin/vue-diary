@@ -184,7 +184,6 @@ export default {
         setFilter(category, regDate, address) {
             console.log(category, regDate, address);
 
-            // TODO: 이걸로 조건 추가해서 목록 불러와야함!
             this.filter.category = category;
             this.filter.startDate = regDate[0];
             this.filter.endDate = regDate[1];

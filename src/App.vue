@@ -2,7 +2,7 @@
     <div id="app">
         <div id="container">
             <header-layout />
-            <!-- MODAL -->
+            <!--<Component :is="modal.component.name" v-bind="modal.data" @closeModal="closeModal" />-->
             <Component :is="modal.component.name" v-bind="modal.data" @closeModal="closeModal" />
             <content-layout />
         </div>
