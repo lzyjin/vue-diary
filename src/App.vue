@@ -2,8 +2,11 @@
     <div id="app">
         <div id="container">
             <header-layout />
-            <!--<Component :is="modal.component.name" v-bind="modal.data" @closeModal="closeModal" />-->
-            <Component :is="modal.component.name" v-bind="modal.data" @closeModal="closeModal" />
+            <Component v-for="(v, i) in modal"
+                       :key="`${v.component.name}_${i}`"
+                       :is="v.component.name"
+                       v-bind="v.data"
+                       @closeModal="closeModal(v.component.name)" />
             <content-layout />
         </div>
     </div>
@@ -21,13 +24,12 @@ export default {
     },
     computed: {
         modal() {
-            // console.log(this.$store.getters['modal/getModal'])
             return this.$store.getters['modal/getModal'];
         },
     },
     methods: {
-        closeModal() {
-            this.$store.commit('modal/closeModal');
+        closeModal(modalName) {
+            this.$store.commit('modal/closeModal', modalName);
         },
     },
 };

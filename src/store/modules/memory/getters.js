@@ -14,4 +14,8 @@ export default {
     currentMemoryAddress: (state) => {
         return state.currentMemory?.address;
     },
+
+    filter: (state) => {
+        return state.filter;
+    },
 };

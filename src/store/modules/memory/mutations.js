@@ -45,4 +45,8 @@ export default {
     MEMORY_SET_ADDRESS(state, payload) {
         state.currentMemory.address = payload;
     },
+
+    MEMORY_SET_FILTER(state, payload) {
+        state.filter = payload;
+    },
 };

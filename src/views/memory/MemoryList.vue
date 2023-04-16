@@ -3,17 +3,16 @@
         <div class="memory-wrap">
             <div class="top">
                 <div class="wrap">
-                    <input
-                        type="text"
+                    <input type="text"
                         v-model="searchKeyword"
                         @input="resetMemoryList"
-                        placeholder="검색어를 입력해주세요"
-                    />
+                        placeholder="검색어를 입력해주세요"/>
                     <div class="btn-filter" @click="openModal('filterModalOpened')">
                         <span>필터</span>
                     </div>
                 </div>
                 <div class="wrap">
+                    <!-- TODO: 카테고리 출력 한글로 수정하기, 필터에서 카테고리 '전체' 항목 만들기 -->
                     <p class="total">전체 {{ memoryListPageInfo?.totalElement }}개 중 {{ memoryList.length }}개</p>
                     <div class="btn-add" @click="openModal('editModalOpened')">등록</div>
                 </div>
@@ -24,27 +23,23 @@
                     </p>
                 </div>
             </div>
+
             <div class="list">
-                <!--<div v-for="(v, i) in totalMemoryList" :key="`memory_${i}`" class="item">-->
                 <div v-for="(v, i) in memoryList" :key="`memory_${i}`" class="item">
                     <router-link :to="{ path: `/memoryView/${v.memoryNo}` }">
                         <div class="img">
-                            <img
-                                :src="`http://121.161.237.50:9999/origin/${v.firstPhoto.photoUrl}`"
+                            <img :src="`http://121.161.237.50:9999/origin/${v.firstPhoto.photoUrl}`"
                                 alt=""
-                                v-if="v.firstPhoto.photoUrl !== null"
-                            />
+                                v-if="v.firstPhoto.photoUrl !== null"/>
                             <img :src="require(`@/assets/images/noimage.png`)" alt="" v-else />
                         </div>
                         <div class="text">
-                            <!--<div class="edit"><i class="xi-ellipsis-h"></i></div>-->
                             <p class="desc">{{ v.contents }}</p>
                             <p class="date">{{ v.regDate }}</p>
                         </div>
                     </router-link>
                 </div>
-                <div
-                    v-observe-visibility="{
+                <div v-observe-visibility="{
                         callback: visibilityChanged,
                         throttle: 2000,
                         throttleOptions: {
@@ -54,30 +49,16 @@
                     :key="key"
                 ></div>
             </div>
+
         </div>
 
         <!-- TODO: Edit 모달 - 등록, 수정 되는지 확인 필요 -->
-
-        <filter-modal
-            v-if="modal.filterModalOpened"
-            :opened="modal.filterModalOpened"
-            :savedFilter="{
-                address: filter.address,
-                category: filter.category,
-                startDate: filter.startDate,
-                endDate: filter.endDate,
-            }"
-            @set-filter="setFilter"
-            @set-success="closeModal('filterModalOpened')"
-            @close-filter-modal="closeModal('filterModalOpened')"
-        ></filter-modal>
     </div>
 </template>
 
 <script>
 import 'vue2-datepicker/index.css';
 import { mapGetters } from 'vuex';
-// import {forEach} from 'lodash';
 import { debounce } from 'lodash';
 import EditModal from '@/components/modal/EditModal.vue';
 import FilterModal from '@/components/modal/FilterModal.vue';
@@ -93,13 +74,8 @@ export default {
         ...mapGetters({
             memoryList: 'memory/memoryList',
             memoryListPageInfo: 'memory/memoryListPageInfo',
+            filter: 'memory/filter',
         }),
-
-        // 여기서 하든가 mutations에서 하든가
-        // totalMemoryList() {
-        //     this.totalList.push(...this.memoryList);
-        //     return this.totalList;
-        // },
     },
     data() {
         return {
@@ -107,17 +83,10 @@ export default {
                 editModalOpened: false,
                 filterModalOpened: false,
             },
-            filter: {
-                address: '',
-                category: '',
-                startDate: '',
-                endDate: '',
-            },
             searchKeyword: '',
 
             page: 1,
             limit: 10,
-            // totalList: [],
             key: 1,
             isVisible: true,
         };
@@ -156,20 +125,29 @@ export default {
         }, 300),
 
         openModal(modalType) {
-            this.modal[`${modalType}`] = true;
+            if (modalType === 'editModalOpened') {
+                const { EditModal } = ModalList;
+                const payload = {
+                    opened: true,
+                    editSuccess: this.editSuccess,
+                };
+                this.$store.commit('modal/setModal', {
+                    component: EditModal,
+                    data: payload,
+                });
+            }
 
-            this.modal.editModalOpened = true;
-            this.modal.isModify = true;
-
-            const { EditModal } = ModalList;
-            const payload = {
-                opened: true,
-                editSuccess: this.editSuccess,
-            };
-            this.$store.commit('modal/setModal', {
-                component: EditModal,
-                data: payload,
-            });
+            if (modalType === 'filterModalOpened') {
+                const { FilterModal } = ModalList;
+                const payload = {
+                    opened: true,
+                    resetMemoryList: this.resetMemoryList,
+                };
+                this.$store.commit('modal/setModal', {
+                    component: FilterModal,
+                    data: payload,
+                });
+            }
         },
 
         closeModal(modalType) {
@@ -180,18 +158,6 @@ export default {
             this.closeModal('editModalOpened');
             this.resetMemoryList();
         },
-
-        setFilter(category, regDate, address) {
-            console.log(category, regDate, address);
-
-            this.filter.category = category;
-            this.filter.startDate = regDate[0];
-            this.filter.endDate = regDate[1];
-            this.filter.address = address;
-
-            this.resetMemoryList();
-        },
-
         resetMemoryList: _.debounce(function () {
             this.$store.commit('memory/MEMORY_LIST_RESET');
             this.$store.commit('memory/MEMORY_LIST_PAGE_RESET');

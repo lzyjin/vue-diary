@@ -2,7 +2,7 @@
     <div>
         <div class="modal" :class="{ opened: opened }">
             <div class="modal-top">
-                <button @click="closeModal('filterModalOpened')" style="margin-left: auto">
+                <button @click="closeModal" style="margin-left: auto">
                     <i class="xi-close"></i>
                 </button>
             </div>
@@ -50,10 +50,20 @@
 <script>
 import DatePicker from 'vue2-datepicker';
 import { MEMORY_CATEGORIES } from '@/config/constant';
+import {mapGetters} from "vuex";
 
 export default {
     name: 'FilterModal',
-    props: ['opened', 'savedFilter'],
+    props: {
+        opened: {
+            type: Boolean,
+            default: false,
+        },
+        resetMemoryList: {
+            type: Function,
+            default: () => {},
+        },
+    },
     components: {
         DatePicker,
     },
@@ -65,7 +75,7 @@ export default {
                 // 검색조건
                 category: '',
                 address: '',
-                regDate: [], // 배열로 ["2023-04-05", "2023-04-10"] 이런식으로 들어감
+                regDate: ['', ''], // 배열로 ["2023-04-05", "2023-04-10"] 이런식으로 들어감
             },
         };
     },
@@ -73,18 +83,18 @@ export default {
         categories() {
             return MEMORY_CATEGORIES;
         },
+
+        ...mapGetters({
+            filter: 'memory/filter',
+        }),
     },
     methods: {
         openModal(modalType) {
             this.modal[`${modalType}`] = true;
         },
 
-        closeModal(modalType) {
-            this.modal[`${modalType}`] = false;
-
-            if (modalType === 'filterModalOpened') {
-                this.$emit('close-filter-modal');
-            }
+        closeModal() {
+            this.$emit('closeModal', 'FilterModal');
         },
 
         resetFilter() {
@@ -94,15 +104,20 @@ export default {
         },
 
         setFilter() {
-            // emit으로 상위 컴포넌트로 필터 조건들을 올려야겠네.
-            this.$emit('set-filter', this.modal.category, this.modal.regDate, this.modal.address);
-            this.$emit('set-success');
+            this.$store.commit('memory/MEMORY_SET_FILTER', {
+                address: this.modal.address,
+                category: this.modal.category,
+                startDate: this.modal.regDate[0],
+                endDate: this.modal.regDate[1],
+            });
+            this.closeModal();
+            this.resetMemoryList();
         },
     },
     mounted() {
-        this.modal.category = this.savedFilter.category;
-        this.modal.address = this.savedFilter.address;
-        this.modal.regDate = [this.savedFilter.startDate, this.savedFilter.endDate];
+        this.modal.category = this.filter.category;
+        this.modal.address = this.filter.address;
+        this.modal.regDate = [this.filter.startDate, this.filter.endDate];
     },
 };
 </script>

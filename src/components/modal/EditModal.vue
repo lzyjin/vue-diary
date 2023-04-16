@@ -234,8 +234,6 @@ export default {
                 formData.append('thirdMultipartFile', this.modal.formData.fileList[2]);
             }
 
-            console.log(formData.get('memoryNo'));
-
             this.$store
                 .dispatch('memory/MEMORY_SAVE', formData)
                 .then((response) => {

@@ -23,4 +23,10 @@ export default {
     memoryListPageInfo: {
         hasNext: true,
     },
+    filter: {
+        address: '',
+        category: '',
+        startDate: '',
+        endDate: '',
+    },
 }
