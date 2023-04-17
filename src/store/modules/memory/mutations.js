@@ -4,7 +4,6 @@ export default {
     },
 
     MEMORY_LIST(state, payload) {
-        // state.memoryList = payload;
         state.memoryList = [...state.memoryList, ...payload];
     },
 

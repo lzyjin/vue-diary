@@ -1,5 +1,4 @@
 import axios from 'axios';
-import he from 'vue2-datepicker/locale/es/he';
 
 const prefix = 'http://121.161.237.50:50005/api/';
 

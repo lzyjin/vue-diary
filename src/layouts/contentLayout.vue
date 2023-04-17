@@ -1,17 +1,17 @@
 <template>
-  <div>
-    <div class="content">
-      <router-view></router-view>
+    <div>
+        <div class="content">
+            <!--<keep-alive>-->
+            <router-view></router-view>
+            <!--</keep-alive>-->
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
 export default {
-  name: "contentLayout",
-}
+    name: 'contentLayout',
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -78,9 +78,6 @@
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <!--<button class="btn-delete">-->
-                    <!--<i class="xi-trash"></i>-->
-                    <!--</button>-->
                     <button class="btn-save" @click="saveMemory">
                         {{ currentMemory.memoryNo === 0 ? '등록하기' : '수정하기' }}
                     </button>

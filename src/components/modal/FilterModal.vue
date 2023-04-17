@@ -13,6 +13,7 @@
                         <div class="select-wrap">
                             <select name="" id="" required v-model="modal.category">
                                 <option value="" disabled hidden>카테고리 선택</option>
+                                <option value="">전체</option>
                                 <option v-for="item in categories" :value="item.en" :key="`${item.ko}_${item.en}`">
                                     {{ item.ko }}
                                 </option>
@@ -50,7 +51,7 @@
 <script>
 import DatePicker from 'vue2-datepicker';
 import { MEMORY_CATEGORIES } from '@/config/constant';
-import {mapGetters} from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
     name: 'FilterModal',
@@ -74,6 +75,7 @@ export default {
 
                 // 검색조건
                 category: '',
+                categoryKo: '',
                 address: '',
                 regDate: ['', ''], // 배열로 ["2023-04-05", "2023-04-10"] 이런식으로 들어감
             },
@@ -104,9 +106,16 @@ export default {
         },
 
         setFilter() {
+            MEMORY_CATEGORIES.forEach((v, i) => {
+                if (this.modal.category === v.en) {
+                    this.modal.categoryKo = v.ko;
+                }
+            });
+
             this.$store.commit('memory/MEMORY_SET_FILTER', {
                 address: this.modal.address,
                 category: this.modal.category,
+                categoryKo: this.modal.categoryKo,
                 startDate: this.modal.regDate[0],
                 endDate: this.modal.regDate[1],
             });

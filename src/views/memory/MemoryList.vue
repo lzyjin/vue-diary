@@ -3,23 +3,24 @@
         <div class="memory-wrap">
             <div class="top">
                 <div class="wrap">
-                    <input type="text"
+                    <input
+                        type="text"
                         v-model="searchKeyword"
                         @input="resetMemoryList"
-                        placeholder="검색어를 입력해주세요"/>
+                        placeholder="검색어를 입력해주세요"
+                    />
                     <div class="btn-filter" @click="openModal('filterModalOpened')">
                         <span>필터</span>
                     </div>
                 </div>
                 <div class="wrap">
-                    <!-- TODO: 카테고리 출력 한글로 수정하기, 필터에서 카테고리 '전체' 항목 만들기 -->
                     <p class="total">전체 {{ memoryListPageInfo?.totalElement }}개 중 {{ memoryList.length }}개</p>
                     <div class="btn-add" @click="openModal('editModalOpened')">등록</div>
                 </div>
                 <div class="wrap">
                     <p>
-                        <i class="xi-filter"></i> 카테고리: {{ this.filter.category }} / 일자:
-                        {{ this.filter.startDate }} ~ {{ this.filter.endDate }} / 주소: {{ this.filter.address }}
+                        <i class="xi-filter"></i> 카테고리: {{ filter.categoryKo }} / 일자: {{ filter.startDate }} ~
+                        {{ filter.endDate }} / 주소: {{ filter.address }}
                     </p>
                 </div>
             </div>
@@ -28,9 +29,11 @@
                 <div v-for="(v, i) in memoryList" :key="`memory_${i}`" class="item">
                     <router-link :to="{ path: `/memoryView/${v.memoryNo}` }">
                         <div class="img">
-                            <img :src="`http://121.161.237.50:9999/origin/${v.firstPhoto.photoUrl}`"
+                            <img
+                                :src="`http://121.161.237.50:9999/origin/${v.firstPhoto.photoUrl}`"
                                 alt=""
-                                v-if="v.firstPhoto.photoUrl !== null"/>
+                                v-if="v.firstPhoto.photoUrl !== null"
+                            />
                             <img :src="require(`@/assets/images/noimage.png`)" alt="" v-else />
                         </div>
                         <div class="text">
@@ -39,7 +42,8 @@
                         </div>
                     </router-link>
                 </div>
-                <div v-observe-visibility="{
+                <div
+                    v-observe-visibility="{
                         callback: visibilityChanged,
                         throttle: 2000,
                         throttleOptions: {
@@ -49,10 +53,9 @@
                     :key="key"
                 ></div>
             </div>
-
         </div>
 
-        <!-- TODO: Edit 모달 - 등록, 수정 되는지 확인 필요 -->
+        <!-- TODO: Edit 모달 - 등록, 수정 되는지 확인 필요 (CORS 에러 해결해야함) -->
     </div>
 </template>
 
