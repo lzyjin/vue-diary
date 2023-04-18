@@ -87,7 +87,7 @@ export async function saveCalendar(payload) {
 // 캘린더 - 삭제
 // parameter:
 export async function removeCalendar(diaryNo) {
-    return delete calendarApi.delete(diaryNo);
+    return remove(calendarApi.delete(diaryNo));
 }
 
 // 추억 - 등록
@@ -120,5 +120,5 @@ export async function getMemory(memoryNo) {
 
 // 추억 - 삭제
 export async function deleteMemory(memoryNo) {
-    return delete memoryApi.delete(memoryNo);
+    return remove(memoryApi.delete(memoryNo));
 }
