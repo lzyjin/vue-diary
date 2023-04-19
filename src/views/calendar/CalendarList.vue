@@ -17,12 +17,17 @@
                     <div class="day">일</div>
                 </div>
                 <div class="cal-content">
-                    <div v-for="(item, index) in calendarData" :key="index"
+                    <div
+                        v-for="(item, index) in calendarData"
+                        :key="index"
                         class="date"
                         :class="{
                             disable: item.disable,
-                            today: currentYear === today.year && currentMonth === today.month && item.date === today.date }"
-                        @click="openListModal(item)">
+                            today:
+                                currentYear === today.year && currentMonth === today.month && item.date === today.date,
+                        }"
+                        @click="openListModal(item)"
+                    >
                         <span>{{ item.date }}</span>
                         <em v-if="item?.data && item?.data?.length > 0" class="mark">💜</em>
                     </div>
@@ -30,50 +35,59 @@
             </div>
         </div>
         <div v-if="modal.listModalOpened">
-            <div class="modal" :class="{opened: modal.listModalOpened}">
-            <div class="modal-top">
-              <p class="date">{{ modal.date }}일 {{ modal.day }}요일</p>
-              <button>
-                <i class="xi-close" @click="closeListModal"></i>
-              </button>
-            </div>
-            <div class="modal-content">
-              <p class="m-count">총 {{ modal.scheduleList.length }}개</p>
-              <ul>
+            <div class="modal" :class="{ opened: modal.listModalOpened }">
+                <div class="modal-top">
+                    <p class="date">{{ modal.date }}일 {{ modal.day }}요일</p>
+                    <button>
+                        <i class="xi-close" @click="closeListModal"></i>
+                    </button>
+                </div>
+                <div class="modal-content">
+                    <p class="m-count">총 {{ modal.scheduleList.length }}개</p>
+                    <ul>
+                        <li
+                            v-for="(schedule, index) in modal.scheduleList"
+                            :key="index"
+                            @click="openViewModal(schedule)"
+                        >
+                            <p>{{ schedule.contents }}</p>
+                        </li>
 
-                <li v-for="(schedule, index) in modal.scheduleList" :key="index" @click="openViewModal(schedule)">
-                  <p>{{ schedule.contents }}</p>
-                </li>
-
-                <li class="m-content" @click="openViewModal({
-                  contents: '',
-                  diaryNo: 0,
-                  regDate: '',
-                  userNo: 0,
-                })">
-                  <p><i class="xi-plus"></i> 일정 추가하기</p>
-                </li>
-
-              </ul>
-            </div>
+                        <li
+                            class="m-content"
+                            @click="
+                                openViewModal({
+                                    contents: '',
+                                    diaryNo: 0,
+                                    regDate: '',
+                                    userNo: 0,
+                                })
+                            "
+                        >
+                            <p><i class="xi-plus"></i> 일정 추가하기</p>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="dimmed"></div>
         </div>
         <div v-if="modal.viewModalOpened">
-            <div class="modal" :class="{opened: modal.viewModalOpened}">
+            <div class="modal" :class="{ opened: modal.viewModalOpened }">
                 <div class="modal-top">
                     <p class="date">{{ modal.date }}일 {{ modal.day }}요일</p>
                     <button @click="closeViewModal">
-                    <i class="xi-close"></i>
-                  </button>
+                        <i class="xi-close"></i>
+                    </button>
                 </div>
                 <div class="modal-content">
                     <textarea class="content-wrap" v-model="calContent"></textarea>
                     <div class="btn-wrap">
-                        <button class="btn-delete" v-if="diaryNo !== ''" @click="removeCalendar(diaryNo);">
-                        <i class="xi-trash"></i>
+                        <button class="btn-delete" v-if="diaryNo !== ''" @click="removeCalendar(diaryNo)">
+                            <i class="xi-trash"></i>
                         </button>
-                    <button class="btn-save" @click="saveCalendar()">{{ diaryNo === '' ? '저장' : '수정' }}</button>
+                        <!-- TODO: 등록하면 날짜 안맞게 등록됌 -->
+                        <!-- TODO: 등록인데 수정으로 뜸, 수정해야함 -->
+                        <button class="btn-save" @click="saveCalendar()">{{ diaryNo === '' ? '저장' : '수정' }}</button>
                     </div>
                 </div>
             </div>
@@ -82,20 +96,19 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
-    name: "CalendarList",
+    name: 'CalendarList',
 
     computed: {
-    ...mapGetters({
+        ...mapGetters({
             calendarList: 'calendar/calendarList',
             getSignedInUserData: 'user/getSignedInUserData',
         }),
     },
 
-    components: {
-    },
+    components: {},
 
     data() {
         return {
@@ -103,7 +116,7 @@ export default {
                 year: '',
                 month: '',
                 date: '',
-                day: ''
+                day: '',
             },
 
             lastMonthLastDate: 0,
@@ -127,11 +140,11 @@ export default {
 
             calContent: '',
             diaryNo: '',
-        }
+        };
     },
 
     methods: {
-        renderCalendar(thisMonthDate)  {
+        renderCalendar(thisMonthDate) {
             // month 는 0이 1월, 1이 2월 ... 11이 12월
             // day는 0이 일요일, 1이 월요일 ... 6이 토요일
             this.currentYear = thisMonthDate.getFullYear();
@@ -155,7 +168,7 @@ export default {
             // 지난달 렌더링
             for (let i = this.lastMonthLastDate - this.lastMonthLastDay + 1; i <= this.lastMonthLastDate; i++) {
                 calendarData.push({
-                    date : i,
+                    date: i,
                     disable: true,
                 });
             }
@@ -163,15 +176,15 @@ export default {
             // 이번달 렌더링
             for (let i = 1; i < this.thisMonthLastDate + 1; i++) {
                 calendarData.push({
-                    date : i,
+                    date: i,
                     disable: false,
                     data: [],
                 });
 
                 // 이번달의 날짜에 해당하는 일정을 calendarDate.data 배열에 push
                 this.calendarList.filter((v) => {
-                    if (i ===  new Date(v.regDate).getDate()) {
-                        calendarData[i+1].data.push(v);
+                    if (i === new Date(v.regDate).getDate()) {
+                        calendarData[i + 1].data.push(v);
                     }
                 });
             }
@@ -179,28 +192,28 @@ export default {
             // 다음달 렌더링
             for (let i = 1; i <= (this.thisMonthLastDay === 0 ? 0 : 7 - this.thisMonthLastDay); i++) {
                 calendarData.push({
-                    date : i,
+                    date: i,
                     disable: true,
                 });
             }
 
             this.calendarData = calendarData;
-
         },
 
         fetchCalendar() {
             const userNo = this.getSignedInUserData.userNo;
-            this.$store.dispatch('calendar/CALENDAR_LIST', {
-                userNo,
-                year: this.currentYear,
-                month: this.currentMonth + 1,
-            })
-            .then(() => {
-                this.renderCalendar( new Date( this.currentYear, this.currentMonth, this.currentDate ) );
-            })
-            .catch(e => {
-                console.log(e);
-            });
+            this.$store
+                .dispatch('calendar/CALENDAR_LIST', {
+                    userNo,
+                    year: this.currentYear,
+                    month: this.currentMonth + 1,
+                })
+                .then(() => {
+                    this.renderCalendar(new Date(this.currentYear, this.currentMonth, this.currentDate));
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
         },
 
         renderPrevMonth() {
@@ -255,7 +268,7 @@ export default {
         },
 
         closeViewModal() {
-            this.calContent= '';
+            this.calContent = '';
             this.modal.viewModalOpened = false;
         },
 
@@ -271,39 +284,41 @@ export default {
 
             // console.log(userNo, contents, regDate);
 
-            if ( confirm(diaryNo === '' ? '저장하시겠습니까?' : '수정하시겠습니까?') ) {
-                this.$store.dispatch('calendar/CALENDAR_SAVE', {
-                    userNo,
-                    contents,
-                    regDate,
-                    diaryNo,
-                })
-                .then(response => {
-                    if (confirm(diaryNo === '' ? '저장되었습니다.' : '수정되었습니다.')) {
-                        this.fetchCalendar();
-                        this.closeViewModal();
-                        this.closeListModal();
-                    }
-                })
-                .catch(e => {
-                    console.log(e);
-                });
+            if (confirm(diaryNo === '' ? '저장하시겠습니까?' : '수정하시겠습니까?')) {
+                this.$store
+                    .dispatch('calendar/CALENDAR_SAVE', {
+                        userNo,
+                        contents,
+                        regDate,
+                        diaryNo,
+                    })
+                    .then((response) => {
+                        if (confirm(diaryNo === '' ? '저장되었습니다.' : '수정되었습니다.')) {
+                            this.fetchCalendar();
+                            this.closeViewModal();
+                            this.closeListModal();
+                        }
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
             }
         },
 
         removeCalendar(diaryNo) {
-            if ( confirm('삭제하시겠습니까?')) {
-                this.$store.dispatch('calendar/CALENDAR_REMOVE', diaryNo)
-                .then(response => {
-                    if ( confirm('삭제되었습니다.') ) {
-                        this.fetchCalendar();
-                        this.closeViewModal();
-                        this.closeListModal();
-                    }
-                })
-                .catch(e => {
-                    console.log(e);
-                })
+            if (confirm('삭제하시겠습니까?')) {
+                this.$store
+                    .dispatch('calendar/CALENDAR_REMOVE', diaryNo)
+                    .then((response) => {
+                        if (confirm('삭제되었습니다.')) {
+                            this.fetchCalendar();
+                            this.closeViewModal();
+                            this.closeListModal();
+                        }
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
             }
         },
     },
@@ -325,9 +340,7 @@ export default {
 
         this.fetchCalendar();
     },
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

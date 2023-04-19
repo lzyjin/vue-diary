@@ -22,7 +22,7 @@ const post = (url, parameter, headers) => {
     return axios.request({
         url: url,
         method: 'post',
-        params: parameter,
+        data: parameter,
         headers: headers,
     });
 };
